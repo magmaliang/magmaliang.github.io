@@ -1,0 +1,2 @@
+# magmaliang.github.io
+magmasblog
