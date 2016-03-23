@@ -1,21 +1,23 @@
-# jekyll+gitpages[windows]
-
-标签（空格分隔）： tool
-
+---
+layout: post
+title:  "how to config a gitpage"
+date:   2016-03-23 16:21:45 +0800
+categories: tools
 ---
 
-##安装
-jekyll是ruby写的，通过rubygem安装，所以先安装rubygem。
 
-安装完了rubygem,执行gem install jekyll来安装jekyll,极有可能因为SSL的原因报错。
-下面这个链接解决了SSL的问题：[gem ssl的问题解决方法][1]
+## 安装
+jekyll 是 ruby 写的，通过 rubygem 安装，所以先安装 rubygem。
 
-##使用
+安装完了rubygem,执行 gem install jekyll 来安装 jekyll,极有可能因为 SSL 的原因报错。
+下面这个链接解决了 SSL 的问题：[gem ssl的问题解决方法][1]
+
+## 使用
 这个年代什么第三方的搬运工都不如官方文档
 [jekyll中文网][2]
 
-##gitpages
-初始化之后的jekyll项目push到同名github pages项目上就可以访问了，github天然支持jekyll,所以只管push完整的jekyll项目。
+## gitpages
+初始化之后的 jekyll 项目 push 到同名 github pages 项目上就可以访问了，github 天然支持 jekyll,所以只管 push 完整的 jekyll 项目。
 
-  [1]: https://gist.github.com/fnichol/867550
-  [2]: http://jekyll.bootcss.com/
+[1]:https://gist.github.com/fnichol/867550
+[2]:http://jekyll.bootcss.com/
