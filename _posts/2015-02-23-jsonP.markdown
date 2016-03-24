@@ -1,0 +1,43 @@
+---
+layout: post
+title:  "jsonP"
+date:   2015-02-23 
+author: "UI框架开发团队"
+categories: teck
+---
+
+## 概述
+同源策略指同协议、同端口、同域名的情况下可以互通资源，一般情况下对于不同协议或者不同端口，是无能为力的。
+
+对于仅仅是域名不同的情况，则有一些方法可以实现跨域，比如降域、CORS、jsonP。
+
+这里只讨论jsonP。
+
+## 探索
+jsonP利用了script标签的跨域能力。
+
+script标签可以访问很多静态资源，js就是其中，平常我们用script标签引入的js脚本立即就会执行——这是jsonP用到的所有背景知识了，所以它并不是新的东西，不过是在既有规则下的再创造。
+
+首先我们来探索，请看下面一个script标签
+
+```html
+<!-->这是百度地图的一个支持jsonP的接口，你猜的没错，只有特别设计的接口才能支持jsonP<-->
+<script type="text/javascript" src="http://api.map.baidu.com/geosearch/v3/bound?ak=tGmbg9YRMBgtzh6xevg2SQdl&geotable_id=105956&bounds=119.686,38.770;125.49,43.000"></script>
+```
+如果像上面这样写，是会报错的，因为这个接口普通方式调用返回的是一个 json 数据。json数据并不是可执行的 js 脚本。
+
+如果把上面的标签改成这样呢？(注意我们在url后面加了一段&callback=abc)
+
+```html
+<!-->这是百度地图的一个支持jsonP的接口，你猜的没错，只有特别设计的接口才能支持jsonP<-->
+<script type="text/javascript" src="http://api.map.baidu.com/geosearch/v3/bound?ak=tGmbg9YRMBgtzh6xevg2SQdl&geotable_id=105956&bounds=119.686,38.770;125.49,43.000&callback=abc"></script>
+```
+你可以直接复制上面的url，输入到浏览器的地址栏，看看到底发生了什么？
+
+看到了吧，想必到这里，对于稍微有点聪明的人，立马思维就会爆炸。但是别急，这已经被别人创造过了，犯不着着急，唉，我们还是拾人牙慧，好好过下这玩意吧，谁叫我们只能生在一个英雄后的时代呢？
+
+## 实现
+
+不过单纯的前端，没有一点后端知识的前端是不大可能想到这个方法的。因为在前端的眼里我们用script标签访问的js脚本是静态的，所以说创造力这东西不仅和天分有关，和知识面也有关系，广阔的知识面总能让人思维更容易激活。
+
+
