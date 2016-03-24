@@ -51,7 +51,7 @@ Corebone.AppRetriever = (function(){
 ### 组件加载扩展资源(伪代码描述)
 
 ```javascript
-//组件已经渲染完成 ，并且此组件所有扩展标记
+//组件已经渲染完成 ，并且此组件有扩展标记
 if(cmp.displayed && cmp.extended){
 	//以此组件的id去corebone.Extension中寻找隶属的扩展资源
 	//再次强调是伪代码，这个传入的cmp.id只是能标志cmp唯一性的概念，并不是实际的参数
@@ -62,4 +62,8 @@ if(cmp.displayed && cmp.extended){
 
 ```
 
+### 流程图
+![flow][2]
+
 [1]:/img/extension.png
+[2]:/img/flow_extend.png
