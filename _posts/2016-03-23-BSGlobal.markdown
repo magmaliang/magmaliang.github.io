@@ -1,0 +1,81 @@
+---
+layout: post
+title:  "BSGlobal数据解析"
+date:   2016-03-23
+author: "UI框架开发团队"
+categories: frame
+---
+## 样例
+
+>这是 [http://cloud.italent.cn/beisenclouddemo][1] 的首页源代码<br/>
+>（仅截取全部 BSGlobal 相关的json,查看**完整数据**请访问上面的网站）
+
+```javascript
+var BSGlobal = {root: "/" 
+	,start: new Date//记录页面渲染开始的时间，便于统计首页性能
+	,prefillingData: {} 
+	//平台框架启动时顶层的容器，所有动态生成的组件都将被限制在此节点下
+	,container: "#bs_layout_container"
+};
+//应用名
+BSGlobal.application = "BeisenCloudDemo";
+//租户信息
+BSGlobal.tenantInfo = {
+	"Id":100013
+	,"Alias":"BeisenTestAR"
+	,"Name":"BeisenTestAR"
+	,"Address":"北京市海淀区农大南路1号2A-30111"
+	,"PostalCode":"000000"
+	,"Email":""
+	,"LogoUrl":"http://stcms.beisen.com/Image/100013/d9ec04243d5e4a2399214eb2abb1566f.png"
+	,"TelephoneExchange":""
+	,"Domain":"BsAR"
+	,"Statue":1
+};
+//登录的用户信息
+BSGlobal.loginUserInfo = {
+	"Id":108165983
+	,"UserID":108165983
+	,"UserName":"多人1"
+	,"Name":"多人1"
+	,"TenantID":100013
+	,"PictureURL":""
+};
+BSGlobal.ProductList= [];
+BSGlobal.generalData = {};
+BSGlobal.generalData.RootUrl = "http://tms.beisen.com/";
+BSGlobal.generalData.DomainName = "BeisenCloudDemo";
+//扩展api的根url
+BSGlobal.ExtendApiRootUrl = "dynamicrest/";
+BSGlobal.apiPath = "http://webapi.italent-inc.cn"
+BSGlobal.titaHost = "http://www.italent-inc.cn"
+//退出登录的跳转的url
+BSGlobal.generalData.logoutUrl = "http://www.italent.cn/Account/Logout";
+
+//[已废弃]默认入口的hash，比如下面设置为home，进入的首页就是url#hash
+BSGlobal.entryPageId = "home";
+//tabmenu的配置
+BSGlobal.MenuConfig = {
+	"RootAsModule":false,//顶层节点是否为模块，如果为模块就会渲染出applist
+	"ModultRoutes":["beisenclouddemo"]//显示的模块，有关这个复杂且不优雅的计算方式请见...
+};
+
+//requrejs执行时的baseUrl
+BSGlobal.staticPath = 'http://stnew03.beisen.com/ux/platform-components/release/app'
+```
+
+## 说明
+上面样例的注释已经覆盖了全部的数据，这里例出的是和框架相关的部分
+
+#### BSGlobal.MenuConfig
+
+> 因为某种临时方案的原因，年久失修，竟然根深蒂固，成为标准了。
+这个节点的数据渗合了比较随意的逻辑，如果你有更好的解决方案和精力，我们十分欢迎你操刀割了这一坨。
+
+为了了解此节点的意义，我们得先看TabsView接口返回的数据(数据量过大，这里用截图替代,图片无法看清请缩放页面)
+![tabsmenu][2]
+
+
+
+[1]:http://cloud.italent.cn/beisenclouddemo
+[2]:/img/tabmenus.png

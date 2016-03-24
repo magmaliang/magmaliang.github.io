@@ -2,6 +2,7 @@
 layout: post
 title:  "前端框架与配置文件"
 date:   2016-03-23
+author: "UI框架开发团队"
 categories: frame
 ---
 

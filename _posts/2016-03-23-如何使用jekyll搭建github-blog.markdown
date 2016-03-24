@@ -2,6 +2,7 @@
 layout: post
 title:  "how to config a gitpage"
 date:   2016-03-23 16:21:45 +0800
+author: "UI框架开发团队"
 categories: tools
 ---
 
