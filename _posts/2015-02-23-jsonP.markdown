@@ -2,10 +2,9 @@
 layout: post
 title:  "jsonP"
 date:   2015-02-23 
-author: "UI框架开发团队"
+author: "magma"
 categories: teck
 ---
-
 ## 概述
 同源策略指同协议、同端口、同域名的情况下可以互通资源，一般情况下对于不同协议或者不同端口，是无能为力的。
 
@@ -40,4 +39,53 @@ script标签可以访问很多静态资源，js就是其中，平常我们用scr
 
 不过单纯的前端，没有一点后端知识的前端是不大可能想到这个方法的。因为在前端的眼里我们用script标签访问的js脚本是静态的，所以说创造力这东西不仅和天分有关，和知识面也有关系，广阔的知识面总能让人思维更容易激活。
 
+**原生的js实现**
 
+>这里是偏向应用的，我之所以这么郑重其事地分两个子标题，是因为理论与实践之间通常有巨大的鸿沟。
+
+```javascript
+//实现一个jsonP load的方法
+var jsonPLoad = function(url,callback){
+	var sEle = document.createElement("script");
+	//如果传入的url中是有别的参数的
+	if(url.indexOf("?")!=-1){
+		sEle.src = url+"&callback="+callback;
+	}else{
+		sEle.src = url+"?callback="+callback;
+	}
+	document.getElementsByTagName("body")[0].appendChild(sEle);
+
+	//资源加载成功后，删除这个script标签
+	sEle.onload = function(){
+		sEle.onload = null;
+		sEle.remove();
+	}
+}
+//定义我们的回调函数
+var myCallBack = function(data){
+	console.log(data)
+}
+//使用jsonPLoad使用jsonP数据
+jsonPLoad("http://api.map.baidu.com/geosearch/v3/bound?ak=tGmbg9YRMBgtzh6xevg2SQdl&geotable_id=105956&bounds=119.686,38.770;125.49,43.000",'myCallBack')
+```
+
+**jQuery的jsonp api**
+
+```javascript
+$.ajax({
+    url: 'http://api.map.baidu.com/geosearch/v3/bound?ak=tGmbg9YRMBgtzh6xevg2SQdl&geotable_id=105956&bounds=119.686,38.770;125.49,43.000',
+ 
+    //传给后端接口用来指定回调函数的字段，比如下面指定了callback,则拼接成的url会是...&callback=yourfunction
+    jsonp: "callback",
+ 
+    // 指定数据类型为jsonp
+    dataType: "jsonp",
+ 
+    // 所需要的数据会直接被传入到success的response
+    success: function( response ) {
+        console.log( response );
+    }
+});
+
+```
+其实有了上面原生js的实现方式，这个jQuery的api背后到底干了什么，会很容易理解。

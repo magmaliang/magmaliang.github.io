@@ -36,13 +36,10 @@ categories: frame
 </File>
 ```
 
-上面的xml文件有两个节点：
-* common-header
-  这个节点的数据会被完整加载到首页的head元素中。
-* common-footer
-  这个节点的数据会加载到body元素中。
-
-* 扩展资源的配置文件如下（大体与platform-components相同）：
+上面的xml文件有两个节点：<br/>
+**common-header:**  这个节点的数据会被完整加载到首页的head元素中。<br/>
+**common-footer:** 这个节点的数据会加载到body元素中。<br/>
+ 扩展资源的配置文件如下（大体与platform-components相同）：
 
 ```xml
 <File Name="common-header">
@@ -65,9 +62,10 @@ categories: frame
 ```
 
 注意上面的**common-fooer**节点中的 BSGlobal.appjssrc 属性，它指定了扩展js的位置。
+
 >打开任一基于platform-components开发的项目，查看其网页源代码可以看到配置文件与首页的关系。
 
-3. 介绍完上面两个配置文件后，我们来看扩展资源是如何加载到platfrom-components中：
+3.介绍完上面两个配置文件后，我们来看扩展资源是如何加载到platfrom-components中：
 
 {% highlight javascript linenos %}
 /**

@@ -1,10 +1,14 @@
 ---
 layout: post
-title:  "BSGlobal数据解析"
+title:  "BSGlobal数据说明"
 date:   2016-03-23
 author: "UI框架开发团队"
 categories: frame
 ---
+
+## 概述
+BSGlobal存放的是与
+
 ## 样例
 
 >这是 [http://cloud.italent.cn/beisenclouddemo][1] 的首页源代码<br/>
@@ -93,6 +97,11 @@ BSGlobal.MenuConfig = {
 **ModultRoutes**(请不要吐槽：如此随意的命名？)：当RootAsModule的值为true时，此数组生效。数组中存放的是sub_cmps中menu对象的actionUrl值，请记住：
 
 > 只有被 ModultRoutes 选中的 menu 才能显示出来，否则就算你在 TabViews 接口中返回了也没有用。就是这么任性！！！
+
+#### BSGlobal.ExtendApiRootUrl
+扩展资源中请求的非标准的、不是平台托管的接口，在发请求的时候请在你的url前，加上这一字段，如下：
+
+> BSGlobal.ExtendApiRootUrl + yoururl
 
 
 
