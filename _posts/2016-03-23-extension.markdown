@@ -6,7 +6,7 @@ author: "UI框架开发团队"
 categories: frame
 ---
 ### 概述
-本章描述的是当前CoreBone（暂时就叫CoreBone吧，我们正在设计实现更棒的框架）实现扩展的方式，非常简单，并没有什么高深的东西！
+本章描述的是当前CoreBone（暂时就叫CoreBone吧，我们正在设计实现更棒的框架）实现扩展的方式，非常简单，并没有什么复杂的东西！
 
 ### 框图
 ![img][1]
@@ -65,5 +65,7 @@ if(cmp.displayed && cmp.extended){
 ### 流程图
 ![flow][2]
 
+当前框架只支持在组件渲染完之后加载扩展方法，类似于调用了一个回调函数。
+
 [1]:/img/extension.png
-[2]:/img/flow_extend.png
+[2]:/img/flow_extension.png
