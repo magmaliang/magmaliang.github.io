@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "bad code"
+date:   2016-05-27 
+author: "UI框架开发团队"
+categories: tools
+---
 # 坏代码实例
 
 # 重复地取值
