@@ -7,4 +7,56 @@ categories: tools
 ---
 # 坏代码实例
 
-# 重复地取值
+## 遇到新需求加参数，加if else，在底层代码中也不惜如此。
+
+影响：经常出现的问题就是，A同学为了增加功能改变了底层函数的输出，极其恶劣的行径是增加的输出完全不同于其他输出的结构。这样其他同学基于输出类型和结构作的一些推断，基本都会出错。
+
+``` javascript
+export function immutableUpdatePathConstructor(path){
+    if(path.length ===0 ){
+        return null;
+    }
+    //看这个新增的类型
+    if(path.length === 1){
+        return "FirstLevel";
+    }
+
+    let immutableUpatePath = [];
+    for(let i=1; i< path.length; i++){
+        immutableUpatePath.push('sub_cmps');
+        immutableUpatePath.push(path[i]);
+    }
+
+    return immutableUpatePath;
+
+};
+```
+此函数就是把path
+
+## 意识 
+
+```javascript
+//template engine
+export function Template(template) {
+    this._temp = template;
+    this.mergeData = function(data) {
+        let targets = this._temp.match(/{([^{}]+)}/g)||[];
+        let final = this._temp;
+
+        //targets === null ==> error
+        targets.map(x=>{
+            //get value from data
+            let node = x.replace("{","").replace("}","").split(".");
+            let value = Immutable.fromJS(data).toJS() ;
+            for (let i = 0; i < node.length; i++) {
+                value = value[node[i]]
+                if (!value) {break}
+            }
+            //replace
+            final = final.replace(x,value)
+        })
+        
+        return final
+    }
+}
+```
