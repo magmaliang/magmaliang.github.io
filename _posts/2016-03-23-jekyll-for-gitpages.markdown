@@ -2,7 +2,7 @@
 layout: post
 title:  "how to config a gitpage with jekyll"
 date:   2015-02-21 
-author: "UI框架开发团队"
+author: "magma"
 categories: tools
 ---
 
