@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "value assign"
+title:  "js 引用类型的赋值"
 date:   2016-08-02
 author: "magma"
 categories: js
