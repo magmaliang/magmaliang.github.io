@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "美与速度"
-date:   2015-02-23 
+date:   2016-08-10 
 author: "magma"
 categories: teck
 ---
