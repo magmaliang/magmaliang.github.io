@@ -75,5 +75,10 @@ a:hover { text-decoration: none; }
     padding-left: 20px;
 }
 
+/*文章相关*/
+article>p{
+	text-indent: 2em;
+}
+
 
 

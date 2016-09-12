@@ -403,7 +403,6 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
 .lotus p, .lotus pre, .lotus ul, .lotus ol, .lotus dl, .lotus form, .lotus hr, .lotus table,
 .lotus-p, .lotus-pre, .lotus-ul, .lotus-ol, .lotus-dl, .lotus-form, .lotus-hr, .lotus-table { margin-bottom: 1em; vertical-align: middle; }
 
-.lotus blockquote p { margin-bottom: 0.4em; }
 .lotus blockquote p:before {
     content: "“";
     font-size: 38px;
@@ -411,18 +410,8 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
     position: relative;
     color: #c8c8c8;
     overflow: hidden;
-    top: 18px;
 }
 
-.lotus blockquote p:after {
-    content: "”";
-    font-size: 38px;
-    line-height: 18px;
-    position: relative;
-    color: #c8c8c8;
-    overflow: hidden;
-    top: 14px;
-}
 h1, h2, h3, h4, h5, h6{ font-weight: 500; font-weight: 700\9; color:#333; }
 
 .lotus h1, .lotus h2, .lotus h3, .lotus h4, .lotus h5, .lotus h6,
