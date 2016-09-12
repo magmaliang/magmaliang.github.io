@@ -1,18 +1,119 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
+# Where things are
+source: .
+destination: ./_site
+plugins_dir: ./_plugins
+layouts_dir: ./_layouts
+data_dir: ./_data
+includes_dir: ./_includes
+collections: null
 
-# Site settings
-title:  magmaliang's blog
-email: magmaliang@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-   只是一些碎碎念罢了.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://github.io" # the base hostname & protocol for your site
-github_username:  magmaliang
+# Handling Reading
+safe: false
+include: [".htaccess"]
+exclude: []
+keep_files: [".git", ".svn"]
+encoding: "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
-# Build settings
+# Filtering Content
+show_drafts: null
+limit_posts: 0
+future: true
+unpublished: false
+
+# Plugins
+whitelist: []
+gems: ["jekyll-paginate"]
+
+# Conversion
 markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
+
+# Serving
+detach: false
+port: 4000
+host: 127.0.0.1
+baseurl: "" # does not include hostname
+
+# Outputting
+permalink: date
+paginate: 8
+paginate_path: /page:num
+timezone: Asia/Shanghai
+
+quiet: false
+defaults: []
+
+# Markdown Processors
+kramdown:
+  auto_ids: true
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  smart_quotes: lsquo,rsquo,ldquo,rdquo
+  enable_coderay: false
+
+  coderay:
+    coderay_wrap: div
+    coderay_line_numbers: inline
+    coderay_line_number_start: 1
+    coderay_tab_width: 4
+    coderay_bold_every: 10
+    coderay_css: style
+
+#iLotus configs
+iLotus:
+  columns: 1
+  begin: 2011
+
+#站点基础配置
+title: 梁龙飞的个人博客
+subTitle: 折腾了那么多，最后竟然选了个静态博客.
+description: 
+url: http://localhost:4000
+feed: /feed.xml
+  
+#菜单配置
+nav:
+  - text: 首页
+    url: /index.html
+    icon: icon-home
+    code: '&#xe614;'
+    class: home
+  - text: 文章归档
+    url: /archives.html
+    icon: icon-reorder
+    code: '&#xe6ab;'
+    class: none
+  - text: 标签
+    url: /tags.html
+    icon: icon-envelope-alt
+    code: '&#xe613;'
+    class: none
+  - text: 关于我
+    url: /contact.html
+    icon: icon-envelope-alt
+    code: '&#xe61f;'
+    class: none
+
+mytag:
+  - name: js
+  - name: tool
+  - name: 感悟
+
+page:
+  - text: 文章分类
+    url: /archives.html
+    last: true
+  - text: 友情链接
+    url: /links.html
+    last: true
+  - text: 关于我
+    url: /contact.html
+    last: false
+
+author:
+  name: magma

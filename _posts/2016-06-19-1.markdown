@@ -4,6 +4,7 @@ title:  "量力而行"
 date:   2016-05-27 
 author: "magma"
 categories: tools
+tags: 感悟
 ---
 
 ## 两件难忘的事

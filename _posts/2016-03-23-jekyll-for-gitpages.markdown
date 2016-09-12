@@ -3,7 +3,7 @@ layout: post
 title:  "how to config a gitpage with jekyll"
 date:   2015-02-21 
 author: "magma"
-categories: tools
+tags: tool
 ---
 
 

@@ -1,0 +1,19 @@
+---
+layout: default
+title: 标签
+---
+<p class="lotus-breadcrub">
+    <a href="{{ site.url }}/index.html" rel="nofollow" rel="nofollow" title="首页">Home</a>
+    <span> &gt; </span>
+    {{ page.title }}
+</p>
+
+<h2 class="post_title">{{page.title}}</h2>
+<ul>
+	{% for tag in site.mytag %}
+		<h2>{{tag.name}}</h2>
+		{% for post in site.tags[tag.name] %}
+			<a href="{{ post.url }}" title="{{ post.title }}">{{post.title}}</a><br/>
+		{% endfor %}
+	{% endfor %}
+</ul>

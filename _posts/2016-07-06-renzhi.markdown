@@ -4,6 +4,7 @@ title:  "认知"
 date:   2016-07-06
 author: "magma"
 categories: thoughts
+tags: "感悟"
 ---
 
 人类的认知通常有两种看似相反的过程。
