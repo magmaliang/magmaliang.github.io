@@ -80,5 +80,13 @@ article>p{
 	text-indent: 2em;
 }
 
+article{
+	padding-bottom: 35px;
+}
+
+.ds-powered-by{
+	display: none;
+}
+
 
 
