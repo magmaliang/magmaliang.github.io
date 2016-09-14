@@ -33,7 +33,7 @@ _我在 google 里搜索 brower kernel 并没有结果。_
 	</thead>
 	<tbody>
 		<tr><td>Trident</td><td>IE 开发使用的内核。360 早期仅使用 Trident，后来又引入 chromium 成为双内核浏览器。</td></tr>
-		<tr><td>Webkit</td><td>起源于 KDE。webkit 是目前最屌的内核，chrome 和 safari 以及几乎所有的移动端浏览器都是在 webkit 的的基础上衍生的。</td></tr>
+		<tr><td>Webkit</td><td>起源于 KDE。webkit 是目前最屌的内核，chrome 和 safari 以及几乎所有的移动端浏览器都是在 webkit 的的基础上衍生的。chrome 28+之后，使用基于webkit开发的 <a href="https://en.wikipedia.org/wiki/Blink_(web_engine)">Blink</a></td></tr>
 		<tr><td>Gecko</td><td>由 Netscape 开发。继承衣钵的 FirFox 自然采用了此内核。</td></tr>
 		<tr><td>Presto</td><td>Opera 浏览器采用的渲染引擎，不过 opera software 在2013年已经放弃它了，决定使用webkit + v8。</td></tr>
 	</tbody>
