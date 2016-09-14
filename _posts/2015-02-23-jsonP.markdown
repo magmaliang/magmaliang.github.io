@@ -3,7 +3,6 @@ layout: post
 title:  "jsonP"
 date:   2015-02-23 
 author: "magma"
-categories: teck
 tags: js
 ---
 ## 概述

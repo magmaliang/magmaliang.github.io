@@ -71,7 +71,7 @@ a:hover{color:#e41e40}
 a:active,a:focus{color:#e41e40;outline:none}
 hr{border-bottom:1px solid #f7bdc7;border-left:none;border-right:none;border-top:none;margin:1.5em 0}
 img,picture{margin:0;max-width:100%}
-blockquote{border-left:2px solid #f7bdc7;color:#595959;margin-left:2em}
+blockquote{border-left:2px solid #f7bdc7;color:#595959}
 cite{color:#737373;font-style:italic}
 cite:before{content:'\2014 \00A0'}
 pre{font-family:"Source Code Pro", Courier, monospace}
