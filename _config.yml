@@ -103,6 +103,7 @@ mytag:
   - name: js
   - name: tool
   - name: 感悟
+  - name: design
 
 page:
   - text: 文章分类

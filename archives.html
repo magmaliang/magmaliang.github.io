@@ -22,7 +22,7 @@ title: 文章归档
             <ul>
   {% endif %}
 
-                <li>{{ post.date | date: "%B %e" }} : <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></li>
+                <li>{{ post.date | date: "%m-%d" }} : <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></li>
 
   {% if forloop.last %}
             </ul>
