@@ -13,7 +13,7 @@ template,[hidden]{display:none}
 a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}
 abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}
 b,strong{font-weight:inherit}
-b,strong{font-weight:bolder}
+b,strong{font-weight:bolder;color:#f60;}
 dfn{font-style:italic}
 h1{font-size:2em;margin:0.67em 0}
 mark{background-color:#ff0;color:#000}
