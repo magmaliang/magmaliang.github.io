@@ -90,7 +90,7 @@ removeCmp(new cmp())
 
 <img src="/assets/img/20160921-01.png" alt="" style="width:70%">
 
-我们先调用的是removeCmp，_close是这个函数体的一部分，这玩意没执行完，如何轮到其内部setTimeout推上去的代码？
+我们先调用的是removeCmp(上图山楂红部分)，_close是这个函数体的一部分，这玩意没执行完，如何轮到其内部setTimeout推上去的代码？
 
 
 
