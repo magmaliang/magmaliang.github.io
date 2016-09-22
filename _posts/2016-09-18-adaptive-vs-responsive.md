@@ -2,7 +2,8 @@
 layout: post
 title:  "自适应设计 vs 响应式设计"
 date:   2016-09-18 
-author: "magma"
+author: "梁龙飞"
+keywords: 响应式,自适应,web设计
 tags: design
 ---
 

@@ -2,9 +2,9 @@
 layout: post
 title:  "量力而行"
 date:   2016-05-27 
-author: "magma"
-categories: tools
-tags: 感悟
+author: "梁龙飞"
+keywords: 梁龙飞
+tags: 胡思乱想
 ---
 
 ## 两件难忘的事

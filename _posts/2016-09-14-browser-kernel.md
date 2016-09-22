@@ -2,8 +2,9 @@
 layout: post
 title:  "浏览器内核"
 date:   2016-09-14
-author: "magma"
-tags: 前端
+author: 梁龙飞
+keywords: js,浏览器内核
+tags: js
 ---
 
 ## 概念

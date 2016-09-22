@@ -2,7 +2,7 @@
 layout: post
 title:  "setTimeout 与 js单线程"
 date:   2016-09-19
-author: "magma"
+author: 梁龙飞
 tags: js
 ---
 

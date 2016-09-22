@@ -2,7 +2,8 @@
 layout: post
 title:  "jsonP"
 date:   2015-02-23 
-author: "magma"
+author: "梁龙飞"
+keywords: js,jsonp,前端
 tags: js
 ---
 ## 概述

@@ -3,7 +3,7 @@ layout: post
 title:  "js 引用类型的赋值"
 date:   2016-08-02
 author: "magma"
-categories: js
+keywords: js 数据类型
 tags: js
 ---
 

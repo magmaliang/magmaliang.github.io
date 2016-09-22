@@ -2,7 +2,8 @@
 layout: post
 title:  "响应式设计"
 date:   2016-09-19
-author: "magma"
+author: "梁龙飞"
+keywords: 响应式,设计,design
 tags: design
 ---
 ![jif](/assets/img/responsive_web_design.png)

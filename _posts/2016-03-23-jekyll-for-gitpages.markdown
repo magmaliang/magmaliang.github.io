@@ -2,7 +2,8 @@
 layout: post
 title:  "how to config a gitpage with jekyll"
 date:   2015-02-21 
-author: "magma"
+author: "梁龙飞"
+keywords: jekyll blog
 tags: tool
 ---
 

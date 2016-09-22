@@ -3,8 +3,8 @@ layout: post
 title:  "能者少劳"
 date:   2016-07-04 
 author: "magma"
-categories: tools
-tags: "感悟"
+keywords: 梁龙飞
+tags: 胡思乱想
 ---
 
 经历过沧海桑田的人说的禅语并非是为了阐述学问，大多是自己感悟的提炼。这些话语对将知未知的人最为有用，多能让人有拨云见日、醍醐灌顶之感。
