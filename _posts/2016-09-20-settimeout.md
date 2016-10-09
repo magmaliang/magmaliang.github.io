@@ -42,7 +42,9 @@ setTimeout(fooa,100);
 setTimeout(foob,200);
 
 ```
+
 在我的电脑上执行结果如下：
+
 ```
 start wait 2000:104
 VM4557:11 end wait 2000:2106
