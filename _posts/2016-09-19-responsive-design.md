@@ -4,7 +4,7 @@ title:  "响应式设计"
 date:   2016-09-19
 author: "梁龙飞"
 keywords: 响应式,设计,design
-tags: design
+tags: 设计
 ---
 ![jif](/assets/img/responsive_web_design.png)
 

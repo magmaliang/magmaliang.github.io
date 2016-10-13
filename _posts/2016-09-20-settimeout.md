@@ -3,7 +3,7 @@ layout: post
 title:  "setTimeout 与 js单线程"
 date:   2016-09-19
 author: 梁龙飞
-tags: js
+tags: 编程
 ---
 
 ## 预备知识
@@ -15,9 +15,11 @@ setTimeout在window环境下执行，this总是指向window(无论严格模式�
 setTimeout(fooa,100);
 setTimeout(foob,200);
 ```
+
 <img src="/assets/img/settimeout.png" alt="" style="width:70%">
 
 如图，假设fooa执行的时间超过100ms，那么纵使执行流上预定了在200ms之后执行foob也没用，必须等fooa执行完。我们可以检验下：
+
 ```javascript
 function wait(t){
 	return ()=>{

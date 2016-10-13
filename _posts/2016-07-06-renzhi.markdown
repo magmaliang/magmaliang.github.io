@@ -4,7 +4,7 @@ title:  "认知"
 date:   2016-07-06
 author: "magma"
 keywords: 梁龙飞
-tags: 胡思乱想
+tags: 思考
 ---
 
 人类的认知通常有两种看似相反的过程。

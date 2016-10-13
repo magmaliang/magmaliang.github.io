@@ -4,7 +4,7 @@ title:  "how to config a gitpage with jekyll"
 date:   2015-02-21 
 author: "梁龙飞"
 keywords: jekyll blog
-tags: tool
+tags: 工具
 ---
 
 

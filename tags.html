@@ -8,12 +8,17 @@ title: 标签
     {{ page.title }}
 </p>
 
-<h2 class="post_title">{{page.title}}</h2>
 <ul>
 	{% for tag in site.mytag %}
-		<h2>{{tag.name}}</h2>
-		{% for post in site.tags[tag.name] %}
-			<a href="{{ post.url }}" title="{{ post.title }}">{{post.title}}</a><br/>
-		{% endfor %}
+		<ul>
+			<li>
+			<span>{{tag.name}}</span>
+			<ul>
+			{% for post in site.tags[tag.name] %}
+				<li><a href="{{ post.url }}" title="{{ post.title }}">{{post.title}}</a><br/></li>
+			{% endfor %}
+			</ul>
+			</li>
+		</ul>
 	{% endfor %}
 </ul>

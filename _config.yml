@@ -100,10 +100,10 @@ nav:
     class: none
 
 mytag:
-  - name: js
-  - name: tool
-  - name: 胡思乱想
-  - name: design
+  - name: 编程
+  - name: 工具
+  - name: 思考
+  - name: 设计
 
 page:
   - text: 文章分类

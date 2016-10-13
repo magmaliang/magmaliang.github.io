@@ -4,7 +4,7 @@ title:  "js 引用类型的赋值"
 date:   2016-08-02
 author: "magma"
 keywords: js 数据类型
-tags: js
+tags: 编程
 ---
 
 > 基本数据类型存放在栈上，引用类型存放于堆上。在js中这种差别最直观的显现在赋值和比较上。

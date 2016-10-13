@@ -4,7 +4,7 @@ title:  "浏览器内核"
 date:   2016-09-14
 author: 梁龙飞
 keywords: js,浏览器内核
-tags: js
+tags: 编程
 ---
 
 ## 概念

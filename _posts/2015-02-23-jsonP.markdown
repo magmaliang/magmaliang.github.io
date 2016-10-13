@@ -4,7 +4,7 @@ title:  "jsonP"
 date:   2015-02-23 
 author: "梁龙飞"
 keywords: js,jsonp,前端
-tags: js
+tags: 编程
 ---
 ## 概述
 同源策略指同协议、同端口、同域名的情况下可以互通资源，一般情况下对于不同协议或者不同端口，是无能为力的。
