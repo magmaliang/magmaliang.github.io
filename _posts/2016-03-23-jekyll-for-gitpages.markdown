@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "how to config a gitpage with jekyll"
+title:  "使用jekyll搭建静态博客"
 date:   2015-02-21 
 author: "梁龙飞"
 keywords: jekyll blog
