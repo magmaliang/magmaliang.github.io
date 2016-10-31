@@ -102,6 +102,7 @@ define将模块格式化为一个数组：
 ```
 
 当此Module被上层函数依赖时，则返回其exports到上层函数的arguments中，执行这个操作的关键函数为：
+
 ```javascript
  /**
  * Executes a module callback function. Broken out as a separate function
