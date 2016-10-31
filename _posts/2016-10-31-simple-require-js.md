@@ -15,6 +15,7 @@ requirejs先加载入口文件，如果入口文件有依赖，则加载这些�
 ```javascript
 define(id?,deps?,factory)
 ```
+
 ### requirejs的内部变量
 id 和 deps都不是必选的，factory才是模块的内容。那么define到底做了什么事呢？这得说到requirejs内部的一些对象，下面的代码是requirejs一开始定义的变量，它秉承了先声明后使用的原则把内部所用的变量一股脑声明在了函数内部的最前面：
 
@@ -45,6 +46,7 @@ id 和 deps都不是必选的，factory才是模块的内容。那么define到�
         globalDefQueue = [],
         useInteractive = false;
 ```
+
 除了contexts之外，其他的类似于程序设计中的静态单例，或是辅助空间，所有的逻辑还是隐藏在了contexts中。在这个2.3.2的版本中，用来生成contexts实例的newContext函数从200行开始，直到1798行结束。。。所以没办法，我们打开newContext函数，把它的变量也扒出来。
 
 ### newContext
@@ -85,9 +87,11 @@ var inCheckLoaded, Module, context, handlers,
 我们回到前面的问题，define到底做了什么？
 
 define将模块格式化为一个数组：
+
 ```javascript
 [id,deps,factory]
 ```
+
 并将其 push 进全局变量 globalDefQueue 中 —— 上面说过，这是个缓冲池。然后contexts会从其中拿数据并构建为Module对象存放于自己内部变量中,Module对象主要模式如下：
 
 ```javascript
