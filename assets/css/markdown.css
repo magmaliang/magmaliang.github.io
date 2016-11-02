@@ -57,7 +57,7 @@ div.flashes div.notice a:hover{color:#2d060c}
 div.flashes div.success{background:#E6EFC2;color:#56651a}
 div.flashes div.success a{color:#333c10}
 div.flashes div.success a:hover{color:black}
-body{-webkit-font-smoothing:antialiased;color:#333333;font-family:"Raleway", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;font-size:14px;line-height:1.5}
+body{-webkit-font-smoothing:antialiased;color:#333333;font-family:"Noto Serif", serif;font-size:16px;line-height:1.5}
 h1,h2,h3,h4,h5,h6{font-family:"Raleway", "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;line-height:1.25;margin:0;text-rendering:optimizeLegibility}
 h1{font-size:36px}
 h2{font-size:19.2px}
