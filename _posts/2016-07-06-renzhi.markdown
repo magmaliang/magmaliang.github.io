@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "认知"
+title:  "两种认知方式"
 date:   2016-07-06
 author: "magma"
 keywords: 梁龙飞
