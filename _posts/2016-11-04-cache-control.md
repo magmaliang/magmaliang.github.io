@@ -32,6 +32,7 @@ Cache-Control的常用取值（其实是我理解的，其他的不理解不敢�
 ### Last-Modified/If-Modified-Since
 
 如果服务器开启此功能，其运行机制如下：
+
 1. 客户端第一次请求资源A时，返回资源A的 response-header 中有 Last-Modified字段
 2. 第二次请求A资源，并且此资源过期（Expires的设置，或者Cache-Control设置），客户端发送一个带有If-Modified-Since字段的请求去服务器，服务器对比A资源的最后修改时间T与客户端发送过来的If-Modified-Since。如果T>If-Modified-Since,返回状态码200，并完全返回资源A的数据。如果 T = If-Modified-Since，返回304，客户端从缓存中读取A的数据。如果T < If-Modified-Since,那么这是个非法请求。
 
@@ -41,7 +42,7 @@ Etag与Last-Modified的机制一样，不同的是Etag有生成规则，用以�
 
 1. Last-Modified只能精确到秒级，如果1秒内多次修改，可能造成缓存到客户端的不是最新的资源。
 2. 某些文件定时更新，客户端关心的资源并没有变化，但Last-Modified改变了，将无法使用缓存。
-3. 服务器时间与客户端时间不一致使。
+3. 有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形。
 
 注意，当Etag和Last-Modified一起设置时，Etag的优先级高于Last-Modified，但并不是覆盖。
 
