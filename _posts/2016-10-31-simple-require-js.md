@@ -249,7 +249,3 @@ require = function(options){
 ### 使用
 
 这个劣质轮子的使用非常简单，我写了个[demo](https://github.com/magmaliang/simple_require),一看便知。
-
-### 
-
-

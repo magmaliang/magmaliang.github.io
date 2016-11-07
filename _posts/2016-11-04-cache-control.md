@@ -59,9 +59,6 @@ Etag与Last-Modified的机制一样，不同的是Etag有生成规则，用以�
 
 
 
-
-
-
 ## 关联知识
 
 - GMT时间，格林尼治时间，北京时间是东八区，这个八就是相对格林尼治，所以北京时间减8个小时就是GMT。
@@ -69,4 +66,5 @@ Etag与Last-Modified的机制一样，不同的是Etag有生成规则，用以�
 
 ## 参考
 [http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html](http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html)
+[https://www.mnot.net/cache_docs/](https://www.mnot.net/cache_docs/)
 
