@@ -36,12 +36,12 @@ define(['jquery'], function ($) {
 
 定义语法如下：
 
-```javascript
-define(factory(){
+> define(factory(){
 	var dep1 = require("dep1");
 	var dep2 = require("dep2");
 })
-```
+
+
 CommonJS号称 as lazy as possible。
 
 下面同样定义一个foo模块，依赖于jquery:

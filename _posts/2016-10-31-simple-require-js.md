@@ -249,3 +249,10 @@ require = function(options){
 ### 使用
 
 这个劣质轮子的使用非常简单，我写了个[demo](https://github.com/magmaliang/simple_require),一看便知。
+
+
+
+### 延伸
+
+前端性能优化肯定需要把所有依赖合并成一个文件，然后压缩。。。grunt里面有一个插件 grunt-contrib-requirejs就是干这事的。然后本地使用requirejs调试，根本不需要预编译（合并，压缩）,发布时直接跑下grunt任务（多数是在代码仓库端执行的），不得不说开发与发布都非常方便。
+
