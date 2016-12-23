@@ -7,7 +7,7 @@ tags: 编程
 ---
 
 
-requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载，它也支持在web works中使用（当然不是insert node）。
+requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。
 
 ## 原理
 requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖...直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的：
@@ -21,30 +21,30 @@ id 和 deps都不是必选的，factory才是模块的内容。那么define到�
 
 ```javascript
  var req, s, head, baseElement, dataMain, src,
-        interactiveScript, currentlyAddingScript, mainScript, subPath,
-        version = '2.3.2',
-        commentRegExp = /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/mg,
-        cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
-        jsSuffixRegExp = /\.js$/,
-        currDirRegExp = /^\.\//,
-        op = Object.prototype,
-        ostring = op.toString,
-        hasOwn = op.hasOwnProperty,
-        isBrowser = !!(typeof window !== 'undefined' && typeof navigator !== 'undefined' && window.document),
-        isWebWorker = !isBrowser && typeof importScripts !== 'undefined',
-        //PS3 indicates loaded and complete, but need to wait for complete
-        //specifically. Sequence is 'loading', 'loaded', execution,
-        // then 'complete'. The UA check is unfortunate, but not sure how
-        //to feature test w/o causing perf issues.
-        readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ?
-                      /^complete$/ : /^(complete|loaded)$/,
-        defContextName = '_',
-        //Oh the tragedy, detecting opera. See the usage of isOpera for reason.
-        isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]',
-        contexts = {},
-        cfg = {},
-        globalDefQueue = [],
-        useInteractive = false;
+interactiveScript, currentlyAddingScript, mainScript, subPath,
+version = '2.3.2',
+commentRegExp = /\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/mg,
+cjsRequireRegExp = /[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g,
+jsSuffixRegExp = /\.js$/,
+currDirRegExp = /^\.\//,
+op = Object.prototype,
+ostring = op.toString,
+hasOwn = op.hasOwnProperty,
+isBrowser = !!(typeof window !== 'undefined' && typeof navigator !== 'undefined' && window.document),
+isWebWorker = !isBrowser && typeof importScripts !== 'undefined',
+//PS3 indicates loaded and complete, but need to wait for complete
+//specifically. Sequence is 'loading', 'loaded', execution,
+// then 'complete'. The UA check is unfortunate, but not sure how
+//to feature test w/o causing perf issues.
+readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ?
+              /^complete$/ : /^(complete|loaded)$/,
+defContextName = '_',
+//Oh the tragedy, detecting opera. See the usage of isOpera for reason.
+isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]',
+contexts = {},
+cfg = {},
+globalDefQueue = [],
+useInteractive = false;
 ```
 
 除了contexts之外，其他的类似于程序设计中的静态单例，或是辅助空间，所有的逻辑还是隐藏在了contexts中。在这个2.3.2的版本中，用来生成contexts实例的newContext函数从200行开始，直到1798行结束。。。所以没办法，我们打开newContext函数，把它的变量也扒出来。
@@ -53,31 +53,31 @@ id 和 deps都不是必选的，factory才是模块的内容。那么define到�
 
 ```javascript
 var inCheckLoaded, Module, context, handlers,
-            checkLoadedTimeoutId,
-            config = {
-                //Defaults. Do not set a default for map
-                //config to speed up normalize(), which
-                //will run faster if there is no default.
-                waitSeconds: 7,
-                baseUrl: './',
-                paths: {},
-                bundles: {},
-                pkgs: {},
-                shim: {},
-                config: {}
-            },
-            registry = {},
-            //registry of just enabled modules, to speed
-            //cycle breaking code when lots of modules
-            //are registered, but not activated.
-            enabledRegistry = {},
-            undefEvents = {},
-            defQueue = [],
-            defined = {},
-            urlFetched = {},
-            bundlesMap = {},
-            requireCounter = 1,
-            unnormalizedCounter = 1;
+checkLoadedTimeoutId,
+config = {
+    //Defaults. Do not set a default for map
+    //config to speed up normalize(), which
+    //will run faster if there is no default.
+    waitSeconds: 7,
+    baseUrl: './',
+    paths: {},
+    bundles: {},
+    pkgs: {},
+    shim: {},
+    config: {}
+},
+registry = {},
+//registry of just enabled modules, to speed
+//cycle breaking code when lots of modules
+//are registered, but not activated.
+enabledRegistry = {},
+undefEvents = {},
+defQueue = [],
+defined = {},
+urlFetched = {},
+bundlesMap = {},
+requireCounter = 1,
+unnormalizedCounter = 1;
 ```
 
 通过官方文档我们知道入口文件用 requirejs.config 来启动的，这个函数执行时即开始加载依赖，我们把这个入口文件叫做依赖树的根——尽管存在一个文件可能被好几个上级资源依赖的情况，这里为叙述方便仍称其为树。除了根之外节点都会被构建为Module（newContext内部定义的模块对象）对象，临时存放于**enabledRegistry**这个变量中。需要注意的是，只是刚刚激活的模块才会在这个变量中短暂停留，随后就会被清除，它的作用像是一个buffer。
