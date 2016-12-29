@@ -94,5 +94,10 @@ pre{
     tab-size:      4;
 }
 
+/*github上的jekyll编译生成的index列*/
+.gutter{
+	display: none;
+}
+
 
 
