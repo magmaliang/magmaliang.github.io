@@ -57,5 +57,5 @@ render tree 上都是可见的、将要被渲染的元素。
 
 ## 参考
 
-(render-tree-construction)[https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction]
-(What are reflows and repaints and how to avoid them)[http://javascript.tutorialhorizon.com/2015/06/06/what-are-reflows-and-repaints-and-how-to-avoid-them/]
+[render-tree-construction](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction)
+[What are reflows and repaints and how to avoid them](http://javascript.tutorialhorizon.com/2015/06/06/what-are-reflows-and-repaints-and-how-to-avoid-them/)
