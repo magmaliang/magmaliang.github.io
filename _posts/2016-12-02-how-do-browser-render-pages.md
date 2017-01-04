@@ -20,7 +20,7 @@ render tree 上都是可见的、将要被渲染的元素。
 
 ## repaint
 
-很多地方说repaint仅指不带有回流行为的再次 paint,但实际上 repaint 就是重新执行 paint，跟有没有回流没有什么关系，它们是两个不同的概念。当页面需要渲染成跟之前不一样的时候，浏览器就会重绘。绝大多数reflow都会引起repaint,但是repaint不一定都是由reflow引起的，比如滚动页面，render tree 和 Laout 完全不需要任何计算，仅需要重绘即可。
+很多地方说repaint仅指不带有回流行为的再次 paint,但实际上 repaint 就是重新执行 paint，跟有没有回流没有什么关系，它们是两个不同的概念。当页面需要渲染成跟之前不一样的时候，浏览器就会重绘。绝大多数reflow都会引起repaint,但是repaint不一定都是由reflow引起的，比如滚动页面，render tree 和 Laout 完全不需要任何计算，仅需要重绘即可。再比如将一个元素的 visibility 的值设置为hidden，没有reflow，只有repaint。
 
 
 
@@ -43,10 +43,18 @@ render tree 上都是可见的、将要被渲染的元素。
 根据浏览器呈现页面的步骤，可以做以下的性能优化（仅仅针对reflow,repaint并没有多少程序员可以介入的地方——而且阻止了reflow，则很多无效的repaint自然而然就优化掉了）：
 
 1. 将包含动画的元素独立出元素较多的文档流，这样动画引发的 reflow 仅需要 layout 动画所在的文档流。
+
 2. 需要频繁操作一个元素及其后代的css属性，引起多次reflow的，可以使用切换类的方式，或者将此元素隐藏，操作完之后再显示。生成元素也是如此，一次将元素生成完整再将其插入到dom中。
+
 3. 如果对window绑定了resize事件，做一个debounce。
+
 4. 避免使用table布局，除了table之外，其他的元素渲染都是流式的（从左到右，从上到下），后代元素的渲染不会影响前面元素的位置，但是table中各个cell的渲染会彼此影响。所以改变任何cell都有可能引起整个table的reflow,而且这种reflow计算的成本比遵守流式布局的元素大很多。
+
 5. 不要频繁读取一个元素的 computed style，这类style是动态的，而且是lazy属性的，读取的时候会触发layout去计算它的值，比如offsetWidth等等。
+
+## 动画优化
+设计总是需要不断调整和固化某些复杂的组合，以适应现实的场景。比如对动画的需求，催生了一些js动画库，基本原理就是循环改变元素的属性达到渐变的效果。这样疯狂的reflow和repaint铁定是无法避免了。
+
 
 
 

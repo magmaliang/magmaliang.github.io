@@ -9,7 +9,7 @@ audio,canvas,progress,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
 progress{vertical-align:baseline}
 template,[hidden]{display:none}
-.highlighter-rouge{margin-left:2em;background-color:#ebebeb}
+.highlighter-rouge{background-color:#ebebeb}
 a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}
 abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}
 b,strong{font-weight:inherit}
