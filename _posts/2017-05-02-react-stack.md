@@ -146,7 +146,11 @@ render((
 
 ```
 
-react在某个版本自己分离成了react + react-dom，我之前一直在关注react，中间突然分开着实坑了我一把 —— 这也让我设计规划的时候更加大胆，更改api和模块结构也在所不惜，因为我发现很多开源库都这样。。。
+react在某个版本自己分离成了react + react-dom，我之前一直在关注react，中间突然分开着实坑了我一把 —— 这也让我设计规划的时候更加大胆，更改api和模块结构也在所不惜，因为我发现很多开源库都这样 —— 为了更好，再所不惜。
+
+## 参考
+
+[https://github.com/ReactTraining/react-router/blob/v3/docs/Introduction.md](https://github.com/ReactTraining/react-router/blob/v3/docs/Introduction.md)
 
 
 
