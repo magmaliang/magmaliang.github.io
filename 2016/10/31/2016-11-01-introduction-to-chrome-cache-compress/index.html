@@ -98,19 +98,19 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="chrome 缓存压缩--记一次脚本加载时间过长的分析">
 <meta property="og:url" content="http://yoursite.com/2016/10/31/2016-11-01-introduction-to-chrome-cache-compress/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="magma&#39;s fe blog">
 <meta property="og:description" content="本文的结论在很久前就注意过，并且了解到浏览器的缓存压缩，但是没有记录、没有深入调研，不够了解自然不能运用自如。  问题这个问题很早就出现，因为其他更紧急的事，没有分析。情况是这样的，我们有几个比较大的js脚本，平均在1MB~2MB之间（压缩前），在chrome下304的情况下加载都需要平均600毫秒的时间。 问题分析经过 以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。">
-<meta property="og:image" content="http://yoursite.com/assets/img/chrome-200.png">
-<meta property="og:image" content="http://yoursite.com/assets/img/pinglocal.png">
-<meta property="og:image" content="http://yoursite.com/assets/img/chrome-200cache.png">
-<meta property="og:image" content="http://yoursite.com/assets/img/safari-200cache.png">
-<meta property="og:image" content="http://yoursite.com/assets/img/ping.jpg">
-<meta property="og:image" content="http://yoursite.com/assets/img/firefox_304.png">
-<meta property="og:updated_time" content="2017-06-17T14:48:07.000Z">
+<meta property="og:image" content="http://yoursite.com/image/chrome-200.png">
+<meta property="og:image" content="http://yoursite.com/image/pinglocal.png">
+<meta property="og:image" content="http://yoursite.com/image/chrome-200cache.png">
+<meta property="og:image" content="http://yoursite.com/image/safari-200cache.png">
+<meta property="og:image" content="http://yoursite.com/image/ping.jpg">
+<meta property="og:image" content="http://yoursite.com/image/firefox_304.png">
+<meta property="og:updated_time" content="2017-06-17T15:00:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="chrome 缓存压缩--记一次脚本加载时间过长的分析">
 <meta name="twitter:description" content="本文的结论在很久前就注意过，并且了解到浏览器的缓存压缩，但是没有记录、没有深入调研，不够了解自然不能运用自如。  问题这个问题很早就出现，因为其他更紧急的事，没有分析。情况是这样的，我们有几个比较大的js脚本，平均在1MB~2MB之间（压缩前），在chrome下304的情况下加载都需要平均600毫秒的时间。 问题分析经过 以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。">
-<meta name="twitter:image" content="http://yoursite.com/assets/img/chrome-200.png">
+<meta name="twitter:image" content="http://yoursite.com/image/chrome-200.png">
 
 
 
@@ -144,7 +144,7 @@
 
 
 
-  <title>chrome 缓存压缩--记一次脚本加载时间过长的分析 | Hexo</title>
+  <title>chrome 缓存压缩--记一次脚本加载时间过长的分析 | magma's fe blog</title>
   
 
 
@@ -180,7 +180,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">magma's fe blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -272,7 +272,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -335,18 +335,18 @@
 <p>以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。</p>
 </blockquote>
 <h3 id="一-是否是服务器原因"><a href="#一-是否是服务器原因" class="headerlink" title="一.是否是服务器原因"></a>一.是否是服务器原因</h3><p>之所以会考虑这个原因，是因为我们使用了nginx rewrite模块，这还不算完，rewrite之后还要使用proxy_pass代理到node启的端口上，我害怕这条路太过曲折。所以我把一个大文件直接在nginx里location出去。</p>
-<p>然后……chrome下<br><br><br><img src="/assets/img/chrome-200.png" alt="/assets/img/chrome-200.png"></p>
+<p>然后……chrome下<br><br><br><img src="/image/chrome-200.png" alt="/image/chrome-200.png"></p>
 <h3 id="二-是否是网络原因"><a href="#二-是否是网络原因" class="headerlink" title="二.是否是网络原因"></a>二.是否是网络原因</h3><p>因为使用的是本地的静态资源服务器(127.0.0.1)，网络出现原因只能是到本地服务器的建连时间。但是我还是手贱地ping了下</p>
-<p><img src="/assets/img/pinglocal.png" style="width:70%;"></p>
+<p><img src="/image/pinglocal.png" style="width:70%;"></p>
 <p>这个时间，业界良心，没得说了。</p>
 <p>如何彻底绝了这念想，我只好触发200 from cache了。</p>
 <p>chrome下的结果：</p>
-<p><img src="/assets/img/chrome-200cache.png" alt="/assets/img/chrome-200.png"></p>
+<p><img src="/image/chrome-200cache.png" alt="/image/chrome-200.png"></p>
 <p>完全跟网络无关的加载都如此耗时，这….绝逼是浏览器的原因了，为了证实此问题。</p>
 <h3 id="三-证明是chrome的原因"><a href="#三-证明是chrome的原因" class="headerlink" title="三.证明是chrome的原因"></a>三.证明是chrome的原因</h3><p>这时候我打开了尘封已久的safari,看了下资源304时的timeline.</p>
-<p><img src="/assets/img/safari-200cache.png" alt="/assets/img/chrome-200.png"></p>
-<p>尼玛，这数据似曾相识？<br><br><br><img src="/assets/img/ping.jpg" width="30%"></p>
-<p>我又浪费公司带宽去下载了一个80MB的firefox,304缓存时间如下：<br><br><br><img src="/assets/img/firefox_304.png"></p>
+<p><img src="/image/safari-200cache.png" alt="/image/chrome-200.png"></p>
+<p>尼玛，这数据似曾相识？<br><br><br><img src="/image/ping.jpg" width="30%"></p>
+<p>我又浪费公司带宽去下载了一个80MB的firefox,304缓存时间如下：<br><br><br><img src="/image/firefox_304.png"></p>
 <h3 id="四-理论依据"><a href="#四-理论依据" class="headerlink" title="四.理论依据"></a>四.理论依据</h3><p>作为一个程序员，仅仅用事实说话是不行的……还得用代码说话。。。只可惜。。<br>我看不懂chrome的代码，那时候整天哔哔哔微软不开源，现在开源的也看不懂，尴尬。所以又去读了几遍chrome timing相关的<a href="https://developers.google.com/web/tools/chrome-devtools/network-performance/resource-loading#view-network-timing-details-for-a-specific-resource" target="_blank" rel="external">文档</a>，还是没搞明白。</p>
 <p>只好low爆地去搜，“Chrome spend too much time downloading resourece from cache”，结果只找到了这一篇<a href="http://stackoverflow.com/questions/33250802/why-does-chrome-spend-time-downloading-content-from-cache" target="_blank" rel="external">Why does Chrome spend time “downloading” content from cache?</a>,这个回答指引我找到了最终的答案，但只有可怜的3个赞，我顺手一点，结果说我声望不够，不准我点赞，于是我又google如何获取声望~~~。</p>
 <p>这位兄台说到：</p>

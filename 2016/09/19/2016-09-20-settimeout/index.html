@@ -98,15 +98,15 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="setTimeout 与 js单线程">
 <meta property="og:url" content="http://yoursite.com/2016/09/19/2016-09-20-settimeout/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="magma&#39;s fe blog">
 <meta property="og:description" content="预备知识js是单线程的，所有的代码只会在一个线程上运行，串行执行任务。 setTimeout在window环境下执行，this总是指向window(无论严格模式还是普通模式)。setTimeout会将作为参数传入的代码塞到js执行线程上，预设的时间过后再执行。但是要注意,并不是在setTimeout预设的时间后，一定轮到其塞入的代码执行: 12setTimeout(fooa,100);setTim">
-<meta property="og:image" content="http://yoursite.com/assets/img/settimeout.png">
-<meta property="og:image" content="http://yoursite.com/assets/img/20160921-01.png">
-<meta property="og:updated_time" content="2017-06-17T14:48:07.000Z">
+<meta property="og:image" content="http://yoursite.com/image/settimeout.png">
+<meta property="og:image" content="http://yoursite.com/image/20160921-01.png">
+<meta property="og:updated_time" content="2017-06-17T15:00:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="setTimeout 与 js单线程">
 <meta name="twitter:description" content="预备知识js是单线程的，所有的代码只会在一个线程上运行，串行执行任务。 setTimeout在window环境下执行，this总是指向window(无论严格模式还是普通模式)。setTimeout会将作为参数传入的代码塞到js执行线程上，预设的时间过后再执行。但是要注意,并不是在setTimeout预设的时间后，一定轮到其塞入的代码执行: 12setTimeout(fooa,100);setTim">
-<meta name="twitter:image" content="http://yoursite.com/assets/img/settimeout.png">
+<meta name="twitter:image" content="http://yoursite.com/image/settimeout.png">
 
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>setTimeout 与 js单线程 | Hexo</title>
+  <title>setTimeout 与 js单线程 | magma's fe blog</title>
   
 
 
@@ -176,7 +176,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">magma's fe blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -268,7 +268,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -326,7 +326,7 @@
         <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>js是单线程的，所有的代码只会在一个线程上运行，串行执行任务。</p>
 <p>setTimeout在window环境下执行，this总是指向window(无论严格模式还是普通模式)。setTimeout会将作为参数传入的代码塞到js执行线程上，预设的时间过后再执行。但是要注意,<strong>并不是在setTimeout预设的时间后，一定轮到其塞入的代码执行:</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
-<p><img src="/assets/img/settimeout.png" alt="" style="width:70%"></p>
+<p><img src="/image/settimeout.png" alt="" style="width:70%"></p>
 <p>如图，假设fooa执行的时间超过100ms，那么纵使执行流上预定了在200ms之后执行foob也没用，必须等fooa执行完。我们可以检验下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">wait</span>(<span class="params">t</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"start wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">		<span class="keyword">var</span> start = <span class="built_in">Date</span>.now();</div><div class="line"></div><div class="line">		<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">			<span class="keyword">if</span>(<span class="built_in">Date</span>.now() - start &gt; t)&#123;</div><div class="line">				<span class="keyword">break</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"end wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> startT = <span class="built_in">Date</span>.now()</div><div class="line"></div><div class="line">fooa = wait(<span class="number">2000</span>);</div><div class="line">foob = wait(<span class="number">10</span>);</div><div class="line"></div><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
 <p>在我的电脑上执行结果如下：</p>
@@ -336,7 +336,7 @@
 <p>实际的例子较为复杂，这里在不丧失细节的情况做了抽象（原来的是react的项目）:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个组件的定义</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">cmp</span> </span>&#123;</div><div class="line">	<span class="keyword">constructor</span>(props)&#123;</div><div class="line">		<span class="keyword">this</span>.dom = &#123;&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	willReceiveProps(props)&#123;</div><div class="line">		setTimeout((<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">this</span>.dom.a=<span class="number">1</span></div><div class="line">		&#125;).bind(<span class="keyword">this</span>),<span class="number">0</span>)</div><div class="line">	&#125;</div><div class="line">	willUnmount()&#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">	_close()&#123;</div><div class="line">		<span class="keyword">delete</span> <span class="keyword">this</span>.dom;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//一个移除组件的方法，模仿react移除组件</span></div><div class="line"><span class="comment">//在移除组件之前，假设触发了willReceiveProps——</span></div><div class="line"><span class="comment">//实际上在复杂的应用中这是不可避免的，这个方法总是被不断地触发,如果你写了这个方法的话</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeCmp</span>(<span class="params">cmp</span>)</span>&#123;</div><div class="line">	cmp.willRecieveProps();</div><div class="line">	cmp._close();</div><div class="line">&#125;</div><div class="line"></div><div class="line">removeCmp(<span class="keyword">new</span> cmp())</div></pre></td></tr></table></figure>
 <p>这个代码是会报错的，<strong>虽然setTimeout的时间设置为0，但是推到执行流上的函数并没有立即执行，反而先执行了_close</strong>。原因在于（如下图）：</p>
-<p><img src="/assets/img/20160921-01.png" alt="" style="width:70%"></p>
+<p><img src="/image/20160921-01.png" alt="" style="width:70%"></p>
 <p>我们先调用的是removeCmp(上图山楂红部分)，_close是这个函数体的一部分，这玩意没执行完，如何轮到其内部setTimeout推上去的代码？</p>
 
       
@@ -380,8 +380,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/18/2016-09-18-adaptive-vs-responsive/" rel="next" title="自适应设计 vs 响应式设计">
-                <i class="fa fa-chevron-left"></i> 自适应设计 vs 响应式设计
+              <a href="/2016/09/19/2016-09-19-responsive-design/" rel="next" title="响应式设计">
+                <i class="fa fa-chevron-left"></i> 响应式设计
               </a>
             
           </div>
@@ -390,8 +390,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/19/2016-09-19-responsive-design/" rel="prev" title="响应式设计">
-                响应式设计 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/22/2016-09-22-react-component-design/" rel="prev" title="react组件设计">
+                react组件设计 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

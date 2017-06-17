@@ -94,11 +94,11 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="magma&#39;s fe blog">
 <meta property="og:url" content="http://yoursite.com/page/2/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="magma&#39;s fe blog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="magma&#39;s fe blog">
 
 
 
@@ -132,7 +132,7 @@
 
 
 
-  <title>Hexo</title>
+  <title>magma's fe blog</title>
   
 
 
@@ -170,7 +170,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">magma's fe blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -262,7 +262,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -388,7 +388,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -592,7 +592,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -733,7 +733,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -880,7 +880,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -1026,7 +1026,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -1086,7 +1086,7 @@
         
           
             <h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>项目中性能相关的日志绑定到组件的生命周期，一瞬间渲染多个组件会发出非常多的日志请求。也是大意，因为日志请求与其他数据请求不同域，就觉得没有问题。然后上线之后，主要的数据请求竟然出现了排队的现象。原因是瞬间的log达到上百条，经过一翻查找，原来浏览器并发连接是有限制的，而且一般不超过15个。——这个很久之前看过一篇文章，但是忘记了。所以这里再详细地记录下这个问题。</p>
-<h2 id="相关数据"><a href="#相关数据" class="headerlink" title="相关数据"></a>相关数据</h2><p><img src="/assets/img/ua_connections.png"></p>
+<h2 id="相关数据"><a href="#相关数据" class="headerlink" title="相关数据"></a>相关数据</h2><p><img src="/image/ua_connections.png"></p>
 <p>这个数据来源于 <a href="http://www.browserscope.org/?category=network&amp;v=top" target="_blank" rel="external">http://www.browserscope.org/?category=network&amp;v=top</a></p>
 <p>浏览器对每个域名的并发基本是个位数，无关域名的并发也不大。</p>
 <h2 id="针对此特性的性能优化"><a href="#针对此特性的性能优化" class="headerlink" title="针对此特性的性能优化"></a>针对此特性的性能优化</h2><p>这节是凑字数的，因为仅仅是记录上面那些这篇文章未免太短小了。</p>
@@ -1148,7 +1148,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -1282,7 +1282,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -1373,8 +1373,8 @@
 <li>有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形。</li>
 </ol>
 <p>注意，当Etag和Last-Modified一起设置时，Etag的优先级高于Last-Modified，但并不是覆盖。</p>
-<h2 id="缓存应用流程图"><a href="#缓存应用流程图" class="headerlink" title="缓存应用流程图"></a>缓存应用流程图</h2><h3 id="客户端第一次请求资源"><a href="#客户端第一次请求资源" class="headerlink" title="客户端第一次请求资源"></a>客户端第一次请求资源</h3><p><img src="/assets/img/first_request.png"></p>
-<h3 id="客户端第二次请求资源"><a href="#客户端第二次请求资源" class="headerlink" title="客户端第二次请求资源"></a>客户端第二次请求资源</h3><p><img src="/assets/img/second_request.png"></p>
+<h2 id="缓存应用流程图"><a href="#缓存应用流程图" class="headerlink" title="缓存应用流程图"></a>缓存应用流程图</h2><h3 id="客户端第一次请求资源"><a href="#客户端第一次请求资源" class="headerlink" title="客户端第一次请求资源"></a>客户端第一次请求资源</h3><p><img src="/image/first_request.png"></p>
+<h3 id="客户端第二次请求资源"><a href="#客户端第二次请求资源" class="headerlink" title="客户端第二次请求资源"></a>客户端第二次请求资源</h3><p><img src="/image/second_request.png"></p>
 <p>哈哈~，这两张图是盗的，来自于参考项的文章中。</p>
 <h2 id="关联知识"><a href="#关联知识" class="headerlink" title="关联知识"></a>关联知识</h2><ul>
 <li>GMT时间，格林尼治时间，北京时间是东八区，这个八就是相对格林尼治，所以北京时间减8个小时就是GMT。</li>
@@ -1433,7 +1433,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -1568,7 +1568,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -1635,18 +1635,18 @@
 <p>以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。</p>
 </blockquote>
 <h3 id="一-是否是服务器原因"><a href="#一-是否是服务器原因" class="headerlink" title="一.是否是服务器原因"></a>一.是否是服务器原因</h3><p>之所以会考虑这个原因，是因为我们使用了nginx rewrite模块，这还不算完，rewrite之后还要使用proxy_pass代理到node启的端口上，我害怕这条路太过曲折。所以我把一个大文件直接在nginx里location出去。</p>
-<p>然后……chrome下<br><br><br><img src="/assets/img/chrome-200.png" alt="/assets/img/chrome-200.png"></p>
+<p>然后……chrome下<br><br><br><img src="/image/chrome-200.png" alt="/image/chrome-200.png"></p>
 <h3 id="二-是否是网络原因"><a href="#二-是否是网络原因" class="headerlink" title="二.是否是网络原因"></a>二.是否是网络原因</h3><p>因为使用的是本地的静态资源服务器(127.0.0.1)，网络出现原因只能是到本地服务器的建连时间。但是我还是手贱地ping了下</p>
-<p><img src="/assets/img/pinglocal.png" style="width:70%;"></p>
+<p><img src="/image/pinglocal.png" style="width:70%;"></p>
 <p>这个时间，业界良心，没得说了。</p>
 <p>如何彻底绝了这念想，我只好触发200 from cache了。</p>
 <p>chrome下的结果：</p>
-<p><img src="/assets/img/chrome-200cache.png" alt="/assets/img/chrome-200.png"></p>
+<p><img src="/image/chrome-200cache.png" alt="/image/chrome-200.png"></p>
 <p>完全跟网络无关的加载都如此耗时，这….绝逼是浏览器的原因了，为了证实此问题。</p>
 <h3 id="三-证明是chrome的原因"><a href="#三-证明是chrome的原因" class="headerlink" title="三.证明是chrome的原因"></a>三.证明是chrome的原因</h3><p>这时候我打开了尘封已久的safari,看了下资源304时的timeline.</p>
-<p><img src="/assets/img/safari-200cache.png" alt="/assets/img/chrome-200.png"></p>
-<p>尼玛，这数据似曾相识？<br><br><br><img src="/assets/img/ping.jpg" width="30%"></p>
-<p>我又浪费公司带宽去下载了一个80MB的firefox,304缓存时间如下：<br><br><br><img src="/assets/img/firefox_304.png"></p>
+<p><img src="/image/safari-200cache.png" alt="/image/chrome-200.png"></p>
+<p>尼玛，这数据似曾相识？<br><br><br><img src="/image/ping.jpg" width="30%"></p>
+<p>我又浪费公司带宽去下载了一个80MB的firefox,304缓存时间如下：<br><br><br><img src="/image/firefox_304.png"></p>
 <h3 id="四-理论依据"><a href="#四-理论依据" class="headerlink" title="四.理论依据"></a>四.理论依据</h3><p>作为一个程序员，仅仅用事实说话是不行的……还得用代码说话。。。只可惜。。<br>我看不懂chrome的代码，那时候整天哔哔哔微软不开源，现在开源的也看不懂，尴尬。所以又去读了几遍chrome timing相关的<a href="https://developers.google.com/web/tools/chrome-devtools/network-performance/resource-loading#view-network-timing-details-for-a-specific-resource" target="_blank" rel="external">文档</a>，还是没搞明白。</p>
 <p>只好low爆地去搜，“Chrome spend too much time downloading resourece from cache”，结果只找到了这一篇<a href="http://stackoverflow.com/questions/33250802/why-does-chrome-spend-time-downloading-content-from-cache" target="_blank" rel="external">Why does Chrome spend time “downloading” content from cache?</a>,这个回答指引我找到了最终的答案，但只有可怜的3个赞，我顺手一点，结果说我声望不够，不准我点赞，于是我又google如何获取声望~~~。</p>
 <p>这位兄台说到：</p>

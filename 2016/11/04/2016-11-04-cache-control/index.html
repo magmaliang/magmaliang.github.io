@@ -98,15 +98,15 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="服务器配置静态资源的缓存策略">
 <meta property="og:url" content="http://yoursite.com/2016/11/04/2016-11-04-cache-control/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="magma&#39;s fe blog">
 <meta property="og:description" content="这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。  环境、前提 以下测试阐述用例使用的是nginx 1.8.1。  Expires资源的过期时间，">
-<meta property="og:image" content="http://yoursite.com/assets/img/first_request.png">
-<meta property="og:image" content="http://yoursite.com/assets/img/second_request.png">
-<meta property="og:updated_time" content="2017-06-17T14:48:07.000Z">
+<meta property="og:image" content="http://yoursite.com/image/first_request.png">
+<meta property="og:image" content="http://yoursite.com/image/second_request.png">
+<meta property="og:updated_time" content="2017-06-17T15:00:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器配置静态资源的缓存策略">
 <meta name="twitter:description" content="这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。  环境、前提 以下测试阐述用例使用的是nginx 1.8.1。  Expires资源的过期时间，">
-<meta name="twitter:image" content="http://yoursite.com/assets/img/first_request.png">
+<meta name="twitter:image" content="http://yoursite.com/image/first_request.png">
 
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>服务器配置静态资源的缓存策略 | Hexo</title>
+  <title>服务器配置静态资源的缓存策略 | magma's fe blog</title>
   
 
 
@@ -176,7 +176,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">magma's fe blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -268,7 +268,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -355,8 +355,8 @@
 <li>有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形。</li>
 </ol>
 <p>注意，当Etag和Last-Modified一起设置时，Etag的优先级高于Last-Modified，但并不是覆盖。</p>
-<h2 id="缓存应用流程图"><a href="#缓存应用流程图" class="headerlink" title="缓存应用流程图"></a>缓存应用流程图</h2><h3 id="客户端第一次请求资源"><a href="#客户端第一次请求资源" class="headerlink" title="客户端第一次请求资源"></a>客户端第一次请求资源</h3><p><img src="/assets/img/first_request.png"></p>
-<h3 id="客户端第二次请求资源"><a href="#客户端第二次请求资源" class="headerlink" title="客户端第二次请求资源"></a>客户端第二次请求资源</h3><p><img src="/assets/img/second_request.png"></p>
+<h2 id="缓存应用流程图"><a href="#缓存应用流程图" class="headerlink" title="缓存应用流程图"></a>缓存应用流程图</h2><h3 id="客户端第一次请求资源"><a href="#客户端第一次请求资源" class="headerlink" title="客户端第一次请求资源"></a>客户端第一次请求资源</h3><p><img src="/image/first_request.png"></p>
+<h3 id="客户端第二次请求资源"><a href="#客户端第二次请求资源" class="headerlink" title="客户端第二次请求资源"></a>客户端第二次请求资源</h3><p><img src="/image/second_request.png"></p>
 <p>哈哈~，这两张图是盗的，来自于参考项的文章中。</p>
 <h2 id="关联知识"><a href="#关联知识" class="headerlink" title="关联知识"></a>关联知识</h2><ul>
 <li>GMT时间，格林尼治时间，北京时间是东八区，这个八就是相对格林尼治，所以北京时间减8个小时就是GMT。</li>

@@ -98,14 +98,14 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器的最大连接">
 <meta property="og:url" content="http://yoursite.com/2016/11/14/2016-11-14-browser-max-connections/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="magma&#39;s fe blog">
 <meta property="og:description" content="场景项目中性能相关的日志绑定到组件的生命周期，一瞬间渲染多个组件会发出非常多的日志请求。也是大意，因为日志请求与其他数据请求不同域，就觉得没有问题。然后上线之后，主要的数据请求竟然出现了排队的现象。原因是瞬间的log达到上百条，经过一翻查找，原来浏览器并发连接是有限制的，而且一般不超过15个。——这个很久之前看过一篇文章，但是忘记了。所以这里再详细地记录下这个问题。 相关数据 这个数据来源于 ht">
-<meta property="og:image" content="http://yoursite.com/assets/img/ua_connections.png">
-<meta property="og:updated_time" content="2017-06-17T14:48:07.000Z">
+<meta property="og:image" content="http://yoursite.com/image/ua_connections.png">
+<meta property="og:updated_time" content="2017-06-17T15:00:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器的最大连接">
 <meta name="twitter:description" content="场景项目中性能相关的日志绑定到组件的生命周期，一瞬间渲染多个组件会发出非常多的日志请求。也是大意，因为日志请求与其他数据请求不同域，就觉得没有问题。然后上线之后，主要的数据请求竟然出现了排队的现象。原因是瞬间的log达到上百条，经过一翻查找，原来浏览器并发连接是有限制的，而且一般不超过15个。——这个很久之前看过一篇文章，但是忘记了。所以这里再详细地记录下这个问题。 相关数据 这个数据来源于 ht">
-<meta name="twitter:image" content="http://yoursite.com/assets/img/ua_connections.png">
+<meta name="twitter:image" content="http://yoursite.com/image/ua_connections.png">
 
 
 
@@ -139,7 +139,7 @@
 
 
 
-  <title>浏览器的最大连接 | Hexo</title>
+  <title>浏览器的最大连接 | magma's fe blog</title>
   
 
 
@@ -175,7 +175,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">magma's fe blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -267,7 +267,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="magma's fe blog">
     </span>
 
     
@@ -323,7 +323,7 @@
 
       
         <h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>项目中性能相关的日志绑定到组件的生命周期，一瞬间渲染多个组件会发出非常多的日志请求。也是大意，因为日志请求与其他数据请求不同域，就觉得没有问题。然后上线之后，主要的数据请求竟然出现了排队的现象。原因是瞬间的log达到上百条，经过一翻查找，原来浏览器并发连接是有限制的，而且一般不超过15个。——这个很久之前看过一篇文章，但是忘记了。所以这里再详细地记录下这个问题。</p>
-<h2 id="相关数据"><a href="#相关数据" class="headerlink" title="相关数据"></a>相关数据</h2><p><img src="/assets/img/ua_connections.png"></p>
+<h2 id="相关数据"><a href="#相关数据" class="headerlink" title="相关数据"></a>相关数据</h2><p><img src="/image/ua_connections.png"></p>
 <p>这个数据来源于 <a href="http://www.browserscope.org/?category=network&amp;v=top" target="_blank" rel="external">http://www.browserscope.org/?category=network&amp;v=top</a></p>
 <p>浏览器对每个域名的并发基本是个位数，无关域名的并发也不大。</p>
 <h2 id="针对此特性的性能优化"><a href="#针对此特性的性能优化" class="headerlink" title="针对此特性的性能优化"></a>针对此特性的性能优化</h2><p>这节是凑字数的，因为仅仅是记录上面那些这篇文章未免太短小了。</p>
