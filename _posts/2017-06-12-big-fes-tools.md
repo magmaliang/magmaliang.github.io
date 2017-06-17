@@ -18,7 +18,7 @@ tags: 编程
 
 ## [sketch](http://www.sketchcn.com/)
 
-虽然没有 photoshop 强大, 但专注 web 界面设计的工具，切图复用、方便快搜，配合插件可以快速标记导出成型的html文件。
+虽然没有 photoshop 强大, 但专注 web 界面设计的工具，切图复用、方便快捷，配合插件可以快速标记导出成型的html文件。
 
 ## [lighthouse](https://github.com/GoogleChrome/lighthouse)
 
