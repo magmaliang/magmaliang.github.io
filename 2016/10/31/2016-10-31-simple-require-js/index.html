@@ -1,0 +1,704 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。 原理requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖…直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的： 1define(id?,deps?,factory) requirejs的内部变量">
+<meta name="keywords" content="编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简述AMD的实现库: requirejs">
+<meta property="og:url" content="http://yoursite.com/2016/10/31/2016-10-31-simple-require-js/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。 原理requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖…直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的： 1define(id?,deps?,factory) requirejs的内部变量">
+<meta property="og:updated_time" content="2017-06-17T14:48:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简述AMD的实现库: requirejs">
+<meta name="twitter:description" content="requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。 原理requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖…直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的： 1define(id?,deps?,factory) requirejs的内部变量">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/31/2016-10-31-simple-require-js/"/>
+
+
+
+
+
+  <title>简述AMD的实现库: requirejs | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/31/2016-10-31-simple-require-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">简述AMD的实现库: requirejs</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-31T00:00:00+08:00">
+                2016-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖…直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">define(id?,deps?,factory)</div></pre></td></tr></table></figure>
+<h3 id="requirejs的内部变量"><a href="#requirejs的内部变量" class="headerlink" title="requirejs的内部变量"></a>requirejs的内部变量</h3><p>id 和 deps都不是必选的，factory才是模块的内容。那么define到底做了什么事呢？这得说到requirejs内部的一些对象，下面的代码是requirejs一开始定义的变量，它秉承了先声明后使用的原则把内部所用的变量一股脑声明在了函数内部的最前面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> req, s, head, baseElement, dataMain, src,</div><div class="line">interactiveScript, currentlyAddingScript, mainScript, subPath,</div><div class="line">version = <span class="string">'2.3.2'</span>,</div><div class="line">commentRegExp = <span class="regexp">/\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/mg</span>,</div><div class="line">cjsRequireRegExp = <span class="regexp">/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g</span>,</div><div class="line">jsSuffixRegExp = <span class="regexp">/\.js$/</span>,</div><div class="line">currDirRegExp = <span class="regexp">/^\.\//</span>,</div><div class="line">op = <span class="built_in">Object</span>.prototype,</div><div class="line">ostring = op.toString,</div><div class="line">hasOwn = op.hasOwnProperty,</div><div class="line">isBrowser = !!(<span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> &amp;&amp; <span class="keyword">typeof</span> navigator !== <span class="string">'undefined'</span> &amp;&amp; <span class="built_in">window</span>.document),</div><div class="line">isWebWorker = !isBrowser &amp;&amp; <span class="keyword">typeof</span> importScripts !== <span class="string">'undefined'</span>,</div><div class="line"><span class="comment">//PS3 indicates loaded and complete, but need to wait for complete</span></div><div class="line"><span class="comment">//specifically. Sequence is 'loading', 'loaded', execution,</span></div><div class="line"><span class="comment">// then 'complete'. The UA check is unfortunate, but not sure how</span></div><div class="line"><span class="comment">//to feature test w/o causing perf issues.</span></div><div class="line">readyRegExp = isBrowser &amp;&amp; navigator.platform === <span class="string">'PLAYSTATION 3'</span> ?</div><div class="line">              <span class="regexp">/^complete$/</span> : <span class="regexp">/^(complete|loaded)$/</span>,</div><div class="line">defContextName = <span class="string">'_'</span>,</div><div class="line"><span class="comment">//Oh the tragedy, detecting opera. See the usage of isOpera for reason.</span></div><div class="line">isOpera = <span class="keyword">typeof</span> opera !== <span class="string">'undefined'</span> &amp;&amp; opera.toString() === <span class="string">'[object Opera]'</span>,</div><div class="line">contexts = &#123;&#125;,</div><div class="line">cfg = &#123;&#125;,</div><div class="line">globalDefQueue = [],</div><div class="line">useInteractive = <span class="literal">false</span>;</div></pre></td></tr></table></figure>
+<p>除了contexts之外，其他的类似于程序设计中的静态单例，或是辅助空间，所有的逻辑还是隐藏在了contexts中。在这个2.3.2的版本中，用来生成contexts实例的newContext函数从200行开始，直到1798行结束。。。所以没办法，我们打开newContext函数，把它的变量也扒出来。</p>
+<h3 id="newContext"><a href="#newContext" class="headerlink" title="newContext"></a>newContext</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> inCheckLoaded, Module, context, handlers,</div><div class="line">checkLoadedTimeoutId,</div><div class="line">config = &#123;</div><div class="line">    <span class="comment">//Defaults. Do not set a default for map</span></div><div class="line">    <span class="comment">//config to speed up normalize(), which</span></div><div class="line">    <span class="comment">//will run faster if there is no default.</span></div><div class="line">    waitSeconds: <span class="number">7</span>,</div><div class="line">    <span class="attr">baseUrl</span>: <span class="string">'./'</span>,</div><div class="line">    <span class="attr">paths</span>: &#123;&#125;,</div><div class="line">    <span class="attr">bundles</span>: &#123;&#125;,</div><div class="line">    <span class="attr">pkgs</span>: &#123;&#125;,</div><div class="line">    <span class="attr">shim</span>: &#123;&#125;,</div><div class="line">    <span class="attr">config</span>: &#123;&#125;</div><div class="line">&#125;,</div><div class="line">registry = &#123;&#125;,</div><div class="line"><span class="comment">//registry of just enabled modules, to speed</span></div><div class="line"><span class="comment">//cycle breaking code when lots of modules</span></div><div class="line"><span class="comment">//are registered, but not activated.</span></div><div class="line">enabledRegistry = &#123;&#125;,</div><div class="line">undefEvents = &#123;&#125;,</div><div class="line">defQueue = [],</div><div class="line">defined = &#123;&#125;,</div><div class="line">urlFetched = &#123;&#125;,</div><div class="line">bundlesMap = &#123;&#125;,</div><div class="line">requireCounter = <span class="number">1</span>,</div><div class="line">unnormalizedCounter = <span class="number">1</span>;</div></pre></td></tr></table></figure>
+<p>通过官方文档我们知道入口文件用 requirejs.config 来启动的，这个函数执行时即开始加载依赖，我们把这个入口文件叫做依赖树的根——尽管存在一个文件可能被好几个上级资源依赖的情况，这里为叙述方便仍称其为树。除了根之外节点都会被构建为Module（newContext内部定义的模块对象）对象，临时存放于<strong>enabledRegistry</strong>这个变量中。需要注意的是，只是刚刚激活的模块才会在这个变量中短暂停留，随后就会被清除，它的作用像是一个buffer。</p>
+<h3 id="define函数的作用"><a href="#define函数的作用" class="headerlink" title="define函数的作用"></a>define函数的作用</h3><p>我们回到前面的问题，define到底做了什么？</p>
+<p>define将模块格式化为一个数组：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[id,deps,factory]</div></pre></td></tr></table></figure>
+<p>并将其 push 进全局变量 globalDefQueue 中 —— 上面说过，这是个缓冲池。然后contexts会从其中拿数据并构建为Module对象存放于自己内部变量中,Module对象主要模式如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">exports</span>:define中factory执行返回的对象，如果factory不是可执行函数则直接返回factory</div><div class="line">    ,<span class="attr">factory</span>:即define中的factory</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当此Module被上层函数依赖时，则返回其exports到上层函数的arguments中，执行这个操作的关键函数为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">/**</span></div><div class="line"> * Executes a module callback function. Broken out as a separate function</div><div class="line"> * solely to allow the build system to sequence the files in the built</div><div class="line"> * layer in the right sequence.</div><div class="line"> *</div><div class="line"> * @private</div><div class="line"> */</div><div class="line">execCb: <span class="function"><span class="keyword">function</span> (<span class="params">name, callback, args, exports</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> callback.apply(exports, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="简单的requirejs实现"><a href="#简单的requirejs实现" class="headerlink" title="简单的requirejs实现"></a>简单的requirejs实现</h2><p>好了，专业库因为要考虑很多方面，不容易直接洞察其主要逻辑。其实我些年的经验时，需求是最好的文档，当你了解需求，直接读源码就行了——甚至直接去造轮子了。下面我们就造个劣质小轮子 —— 这是了解一个库最好的方式了。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> define,<span class="built_in">require</span>;</div><div class="line"><span class="built_in">require</span> = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>)</span>&#123;</div><div class="line">	<span class="keyword">let</span> &#123;entry,baseUrl&#125; = options;</div><div class="line">	<span class="comment">//存放所有生成的模块</span></div><div class="line">	<span class="keyword">var</span> modules  = &#123;&#125;,</div><div class="line">		unLoadedModules = [];<span class="comment">//每当有script_onload触发时，则shift一个模块，生成Module</span></div><div class="line"></div><div class="line">	<span class="comment">//根据id加载一个模块，数据结构如下</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">loadModule</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> node = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">        node.setAttribute(<span class="string">'data-modid'</span>, id);</div><div class="line">        node.src = baseUrl+id+<span class="string">".js"</span>;</div><div class="line"></div><div class="line">    	node.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">    		<span class="comment">//当前脚本加载的模块名</span></div><div class="line">    		<span class="keyword">var</span> id = e.target.getAttribute(<span class="string">"data-modid"</span>);</div><div class="line">    		completeLoaded(id);</div><div class="line"></div><div class="line">    		<span class="comment">//对所有可以导出export的模块进行导出</span></div><div class="line">    		tryLoading()</div><div class="line">    	&#125;, <span class="literal">false</span>);</div><div class="line"></div><div class="line">    	<span class="built_in">document</span>.head.appendChild(node);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/*   *   *   *   *   *   *   *   *   *   *</span></div><div class="line">	 *  Module用于构建存放于modules中的模块实例    </div><div class="line">	 *   *   *   *   *   *   *   *   *   *   */</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">Module</span>(<span class="params">id,deps,factory</span>)</span>&#123;</div><div class="line">		<span class="keyword">this</span>.id = id;</div><div class="line">		<span class="keyword">this</span>.deps = deps;<span class="comment">//["a","b"]</span></div><div class="line">		<span class="keyword">this</span>.factory = factory;</div><div class="line">		<span class="keyword">this</span>.loaded = <span class="literal">false</span>;</div><div class="line">		<span class="keyword">this</span>.export = <span class="literal">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	Module.prototype = &#123;</div><div class="line">		<span class="attr">getExport</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="comment">//如果export不存在，则构建</span></div><div class="line">			<span class="keyword">if</span> (!<span class="keyword">this</span>.export) &#123;</div><div class="line">				<span class="keyword">var</span> _args = <span class="keyword">this</span>.deps.map(<span class="function"><span class="params">item</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">return</span> modules[item].export;</div><div class="line">				&#125;)</div><div class="line">				<span class="keyword">this</span>.export = <span class="keyword">this</span>.factory.apply(<span class="literal">null</span>,_args);</div><div class="line">				<span class="keyword">this</span>.loaded = <span class="literal">true</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.export;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//当一个远程脚本完成加载时,从unLoadedModules中左移出一个模块.</span></div><div class="line">	<span class="comment">//将此模块格式化成Module对象，存放于modules中</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">completeLoaded</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (unLoadedModules.length) &#123;</div><div class="line">			<span class="keyword">var</span> mod = unLoadedModules.shift();</div><div class="line">			mod[<span class="number">0</span>] = id;</div><div class="line"></div><div class="line">			modules[id] = <span class="keyword">new</span> Module(mod[<span class="number">0</span>],mod[<span class="number">1</span>],mod[<span class="number">2</span>]);</div><div class="line"></div><div class="line">			<span class="comment">//如果是无依赖模块，则立即得到它的export()</span></div><div class="line">			<span class="keyword">if</span> (mod[<span class="number">1</span>].length == <span class="number">0</span>) &#123;</div><div class="line">				modules[id].getExport()</div><div class="line">			&#125;</div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//尝试对modules中依赖加载完成的模块生成export</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">tryLoading</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> _modsname = <span class="built_in">Object</span>.keys(modules);</div><div class="line"></div><div class="line">		_modsname.map(<span class="function"><span class="params">modname</span>=&gt;</span>&#123;</div><div class="line">			<span class="keyword">var</span> __Mod = modules[modname];</div><div class="line"></div><div class="line">			<span class="keyword">var</span> deps = __Mod.deps;</div><div class="line">			<span class="keyword">var</span> canExport = <span class="literal">true</span>;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">				<span class="comment">//检测是否所有依赖都已完成加载</span></div><div class="line">				deps.map(<span class="function"><span class="params">depname</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">if</span> (!modules[depname] || modules[depname].loaded == <span class="literal">false</span>) &#123;</div><div class="line">						canExport = <span class="literal">false</span>;</div><div class="line">					&#125;</div><div class="line">				&#125;)</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (canExport &amp;&amp; __Mod.loaded == <span class="literal">false</span>) &#123;</div><div class="line">				__Mod.getExport()</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//两个参数都是必须的</span></div><div class="line">	define = <span class="function"><span class="keyword">function</span>(<span class="params">deps,factory</span>)</span>&#123;</div><div class="line">		unLoadedModules.push([<span class="literal">null</span>,deps,factory]);</div><div class="line">		<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">			deps.map(<span class="function"><span class="params">_mod</span>=&gt;</span>&#123;</div><div class="line">				loadModule(_mod);</div><div class="line">			&#125;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//从入口启动</span></div><div class="line">	loadModule(entry)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">waitForEntry</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (modules[entry] &amp;&amp; modules[entry].loaded == <span class="literal">false</span>) &#123;</div><div class="line">			tryLoading();</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			setTimeout(waitForEntry,<span class="number">50</span>)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	waitForEntry()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实现requirejs有几个重要的点</p>
+<ul>
+<li>在根据名称加载依赖时，依赖的define未知。即依赖的名称如何与返回的脚本定义绑定。当然可以在定义的时候把id也写上，但是这样就需要跟文件名再来一次绑定，增加了复杂度。上面这个例子中利用插入script标签的顺序，和这些标签的onload事件触发的顺序完成一致这个特性来完成绑定的。<strong>如果当中有标签加载失败，则会导致它们的顺序错乱而对应不上。</strong></li>
+<li>其次只有一个模块的依赖全部加载完，才能执行factory生成export。上面这个简单的例子，是每次有一个模块load完的时候，就检测所有模块是否具有执行factory的条件。这显然不是一个好方法。而且最后的入口模块无法检测（所以我写了个循环，waitForEntry）。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>这个劣质轮子的使用非常简单，我写了个<a href="https://github.com/magmaliang/simple_require" target="_blank" rel="external">demo</a>,一看便知。</p>
+<h3 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h3><p>前端性能优化肯定需要把所有依赖合并成一个文件，然后压缩。。。grunt里面有一个插件 grunt-contrib-requirejs就是干这事的。然后本地使用requirejs调试，根本不需要预编译（合并，压缩）,发布时直接跑下grunt任务（多数是在代码仓库端执行的），不得不说开发与发布都非常方便。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/31/2016-11-01-introduction-to-chrome-cache-compress/" rel="next" title="chrome 缓存压缩--记一次脚本加载时间过长的分析">
+                <i class="fa fa-chevron-left"></i> chrome 缓存压缩--记一次脚本加载时间过长的分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/04/2016-11-04-cache-control/" rel="prev" title="服务器配置静态资源的缓存策略">
+                服务器配置静态资源的缓存策略 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="magma" />
+          <p class="site-author-name" itemprop="name">magma</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#requirejs的内部变量"><span class="nav-number">1.1.</span> <span class="nav-text">requirejs的内部变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#newContext"><span class="nav-number">1.2.</span> <span class="nav-text">newContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#define函数的作用"><span class="nav-number">1.3.</span> <span class="nav-text">define函数的作用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的requirejs实现"><span class="nav-number">2.</span> <span class="nav-text">简单的requirejs实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#源码"><span class="nav-number">2.1.</span> <span class="nav-text">源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#延伸"><span class="nav-number">2.3.</span> <span class="nav-text">延伸</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magma</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
