@@ -3,8 +3,8 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle:
+title: magma's fe blog
+subtitle: 
 description:
 author: magma
 language: zh-Hans
@@ -68,4 +68,6 @@ theme: hexo-theme-next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: https://github.com/magmaliang/magmaliang.github.io
+  branch: master
