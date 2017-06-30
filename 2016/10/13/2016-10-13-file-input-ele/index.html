@@ -93,17 +93,17 @@
 
 
 
-<meta name="description" content="特点file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。 在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+,chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值为">
+<meta name="description" content="特点file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。 在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+, chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值">
 <meta name="keywords" content="编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="file input 元素">
 <meta property="og:url" content="http://yoursite.com/2016/10/13/2016-10-13-file-input-ele/index.html">
 <meta property="og:site_name" content="magma&#39;s fe blog">
-<meta property="og:description" content="特点file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。 在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+,chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值为">
-<meta property="og:updated_time" content="2017-06-17T14:48:07.000Z">
+<meta property="og:description" content="特点file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。 在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+, chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值">
+<meta property="og:updated_time" content="2017-06-23T08:45:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="file input 元素">
-<meta name="twitter:description" content="特点file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。 在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+,chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值为">
+<meta name="twitter:description" content="特点file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。 在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+, chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值">
 
 
 
@@ -335,10 +335,11 @@
 
 </blockquote>
 <h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p>file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。</p>
-<p>在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+,chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值为””(空字符串)，区别是IE会触发change事件，其它浏览器不会。可以看出IE的设计非常讲究逻辑，而不是易用和习惯——这在很多IE诟病的地方都得到体现。</p>
+<p>在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+, chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值为””(空字符串)，区别是IE会触发change事件，其它浏览器不会。可以看出IE的设计非常讲究逻辑，而不是易用和习惯——这在很多IE诟病的地方都得到体现。</p>
 <h2 id="为何不能通过脚本改上传元素的value值？"><a href="#为何不能通过脚本改上传元素的value值？" class="headerlink" title="为何不能通过脚本改上传元素的value值？"></a>为何不能通过脚本改上传元素的value值？</h2><p>首先是逻辑问题，js并没有访问硬盘的能力，那么它就不知道有些什么文件，既然这样用js去更改上传文件元素的value值没什么意义。</p>
 <p>然后就是安全问题，脚本瞎尼玛猜+改了一个文件名，上传了不想被传的文件。其实目前几乎所有新版本的浏览器在上传的时候，都不会暴露本地文件目录。一般value值会变成”c:/fakepath/文件名”。</p>
-<h2 id="为什么可以被设置为空值？"><a href="#为什么可以被设置为空值？" class="headerlink" title="为什么可以被设置为空值？"></a>为什么可以被设置为空值？</h2>
+<h2 id="为什么可以被设置为空值？"><a href="#为什么可以被设置为空值？" class="headerlink" title="为什么可以被设置为空值？"></a>为什么可以被设置为空值？</h2><p>设置为空值主要是为了重置，清空已选文件。</p>
+
       
     </div>
 
@@ -390,8 +391,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/10/31/2016-11-01-introduction-to-chrome-cache-compress/" rel="prev" title="chrome 缓存压缩--记一次脚本加载时间过长的分析">
-                chrome 缓存压缩--记一次脚本加载时间过长的分析 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/10/31/2016-10-31-simple-require-js/" rel="prev" title="简述AMD的实现库: requirejs">
+                简述AMD的实现库: requirejs <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -464,7 +465,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -477,7 +478,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
