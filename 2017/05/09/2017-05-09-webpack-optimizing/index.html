@@ -100,7 +100,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/05/09/2017-05-09-webpack-optimizing/index.html">
 <meta property="og:site_name" content="magma&#39;s fe blog">
 <meta property="og:description" content="概述程序的编译基本都是链接转化合并压缩，有这过程中有很多可以优化的地方。js虽然是轻量的脚本语言，但近几年的发展让它已经有了开发大型程序的能力，webpack 引入了后端高级语言的编译打包功能，其构建流程已经成为了前端的标准。对于后端同学，这没有什么神奇的地方，但对于前端，打包的逻辑还是挺新鲜的。本文总结webpack打包时一些的一些优化配置。 写了个demo说明以下所有的优化： https://">
-<meta property="og:updated_time" content="2017-07-03T12:54:15.000Z">
+<meta property="og:updated_time" content="2017-07-03T12:55:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack打包优化">
 <meta name="twitter:description" content="概述程序的编译基本都是链接转化合并压缩，有这过程中有很多可以优化的地方。js虽然是轻量的脚本语言，但近几年的发展让它已经有了开发大型程序的能力，webpack 引入了后端高级语言的编译打包功能，其构建流程已经成为了前端的标准。对于后端同学，这没有什么神奇的地方，但对于前端，打包的逻辑还是挺新鲜的。本文总结webpack打包时一些的一些优化配置。 写了个demo说明以下所有的优化： https://">
@@ -360,7 +360,7 @@
 </blockquote>
 <p>它的使用很简单，只需在plugins结点中添加如下代码：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimize.ModuleConcatenationPlugin()</div></pre></td></tr></table></figure>
-<p>PS: 请注意这是webpack2才有的功能</p>
+<p>PS: 请注意这是webpack3才有的功能</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
 <li><a href="https://webpack.js.org/guides/code-splitting-css/#components/sidebar/sidebar.jsx" target="_blank" rel="external">https://webpack.js.org/guides/code-splitting-css/#components/sidebar/sidebar.jsx</a></li>
 </ul>
