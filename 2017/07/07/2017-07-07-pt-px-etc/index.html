@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="响应式,自适应,web设计" />
+  <meta name="keywords" content="编程," />
 
 
 
@@ -93,19 +93,19 @@
 
 
 
-<meta name="description" content="这两个词都是随着移动端的爆发而火起来的。pc时代使用固宽和留白基本搞定了一切。移动设备尺寸众多且与pc端有本质区别，需要专业的技术和理论来构建。  自适应设计(adaptive web design，AWD) 自适应设计针对特定的设备，使用媒体查询技术，应用特定的样式。这里的适应指网页适应设备，并非指元素适应容器宽度。  AWD 写多套特定尺寸的样式，可以对元素使用固定宽度。设备加载页面时只加">
-<meta name="keywords" content="响应式,自适应,web设计">
+<meta name="description" content="一直被各种图像、排版软件中的长度单位整的糊涂，这里总结下。 px最容易让人混乱的莫过于像素，device pixel, device-independent pixel, css pixel。 device pixel (physical pixel)设备像素(物里像素)指设备可以显示的最小单元，对于具体的显示设备，它是个固定值，不能被改变。 css pixel (和DIP, device ind">
+<meta name="keywords" content="编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自适应设计 vs 响应式设计">
-<meta property="og:url" content="http://yoursite.com/2016/09/18/2016-09-18-adaptive-vs-responsive/index.html">
+<meta property="og:title" content="web 长度单位">
+<meta property="og:url" content="http://yoursite.com/2017/07/07/2017-07-07-pt-px-etc/index.html">
 <meta property="og:site_name" content="magma&#39;s fe blog">
-<meta property="og:description" content="这两个词都是随着移动端的爆发而火起来的。pc时代使用固宽和留白基本搞定了一切。移动设备尺寸众多且与pc端有本质区别，需要专业的技术和理论来构建。  自适应设计(adaptive web design，AWD) 自适应设计针对特定的设备，使用媒体查询技术，应用特定的样式。这里的适应指网页适应设备，并非指元素适应容器宽度。  AWD 写多套特定尺寸的样式，可以对元素使用固定宽度。设备加载页面时只加">
-<meta property="og:image" content="http://yoursite.com/image/RWD_vs_AWD.gif">
-<meta property="og:updated_time" content="2017-06-17T14:59:19.000Z">
+<meta property="og:description" content="一直被各种图像、排版软件中的长度单位整的糊涂，这里总结下。 px最容易让人混乱的莫过于像素，device pixel, device-independent pixel, css pixel。 device pixel (physical pixel)设备像素(物里像素)指设备可以显示的最小单元，对于具体的显示设备，它是个固定值，不能被改变。 css pixel (和DIP, device ind">
+<meta property="og:image" content="http://yoursite.com/image/DRP.png">
+<meta property="og:updated_time" content="2017-07-11T12:42:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自适应设计 vs 响应式设计">
-<meta name="twitter:description" content="这两个词都是随着移动端的爆发而火起来的。pc时代使用固宽和留白基本搞定了一切。移动设备尺寸众多且与pc端有本质区别，需要专业的技术和理论来构建。  自适应设计(adaptive web design，AWD) 自适应设计针对特定的设备，使用媒体查询技术，应用特定的样式。这里的适应指网页适应设备，并非指元素适应容器宽度。  AWD 写多套特定尺寸的样式，可以对元素使用固定宽度。设备加载页面时只加">
-<meta name="twitter:image" content="http://yoursite.com/image/RWD_vs_AWD.gif">
+<meta name="twitter:title" content="web 长度单位">
+<meta name="twitter:description" content="一直被各种图像、排版软件中的长度单位整的糊涂，这里总结下。 px最容易让人混乱的莫过于像素，device pixel, device-independent pixel, css pixel。 device pixel (physical pixel)设备像素(物里像素)指设备可以显示的最小单元，对于具体的显示设备，它是个固定值，不能被改变。 css pixel (和DIP, device ind">
+<meta name="twitter:image" content="http://yoursite.com/image/DRP.png">
 
 
 
@@ -133,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/09/18/2016-09-18-adaptive-vs-responsive/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/07/2017-07-07-pt-px-etc/"/>
 
 
 
 
 
-  <title>自适应设计 vs 响应式设计 | magma's fe blog</title>
+  <title>web 长度单位 | magma's fe blog</title>
   
 
 
@@ -268,7 +268,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/18/2016-09-18-adaptive-vs-responsive/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/2017-07-07-pt-px-etc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="magma">
@@ -285,7 +285,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">自适应设计 vs 响应式设计</h1>
+          <h1 class="post-title" itemprop="name headline">web 长度单位</h1>
         
 
         <div class="post-meta">
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-18T00:00:00+08:00">
-                2016-09-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T00:00:00+08:00">
+                2017-07-07
               </time>
             
 
@@ -332,26 +332,18 @@
       
 
       
-        <p><img src="/image/RWD_vs_AWD.gif" alt="jif"></p>
-<blockquote>
-<p>这两个词都是随着移动端的爆发而火起来的。pc时代使用固宽和留白基本搞定了一切。移动设备尺寸众多且与pc端有本质区别，需要专业的技术和理论来构建。</p>
-</blockquote>
-<h2 id="自适应设计-adaptive-web-design，AWD"><a href="#自适应设计-adaptive-web-design，AWD" class="headerlink" title="自适应设计(adaptive web design，AWD)"></a>自适应设计(adaptive web design，AWD)</h2><blockquote>
-<p>自适应设计针对特定的设备，使用媒体查询技术，应用特定的样式。这里的适应指网页适应设备，并非指元素适应容器宽度。</p>
-</blockquote>
-<p>AWD 写多套特定尺寸的样式，可以对元素使用固定宽度。设备加载页面时只加载其中一套样式。因此，如果使用模拟的尺寸（比如用pc端浏览器模拟移动端），那么在变化尺寸时，样式不再发生变化。</p>
-<p>一些老的站点，比如只有pc端的，因为不想动旧的代码使用AWD是个不错的选择。因为是重新设计，使用AWD的网页应用在PC端和移动端上看起来可能差别非常之大 —— 自适应设计可能针对不同的设备尺寸，尝试展现更合理的内容和布局，这包括元素和功能的缺失增加。</p>
-<p>实际上 AWD 主要就是为老 PC 站点提供非 PC 端页面。</p>
-<h2 id="响应式设计-reponsive-web-design-RWD"><a href="#响应式设计-reponsive-web-design-RWD" class="headerlink" title="响应式设计(reponsive web design,RWD)"></a>响应式设计(reponsive web design,RWD)</h2><blockquote>
-<p>响应式设计主要针对屏幕宽度范围应用样式。很显然相对于 AWD 的点式针对，RWD是连续的。</p>
-</blockquote>
-<p>RWD 强调 fluid 和 flexibility，在页面宽度的变化过程中可以看到元素的排列变化。与 AWD 相比，它更强调元素在不同尺寸范围下的“响应”，不会有元素和功能的缺失增多，它们在内容上保持着高度的一致 —— 它只有一套样式一种设计，因为样式是流式和伸缩的，才在各种设备上变形。</p>
-<p>说 RWD 是一套设计有时候并不严格，因为在一些局部，比如导航条和列表上，实际是有不同的微设计，只是在整体上它基本还是一套样式，多套设备上的展现有非常高的相关相似性。</p>
-<h2 id="组合使用"><a href="#组合使用" class="headerlink" title="组合使用"></a>组合使用</h2><p>好的方案是多方相辅相成、互相妥协的合成物，超级纯粹的东西一般是为了研究需要。实际上媒体查询针对性地写样式，在流式伸缩性技法为主的 RWD 中也经常使用，比如上面提到的导航条处理：在空间充足的情况下横向排列，在空间逼仄时变为竖向。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://css-tricks.com/the-difference-between-responsive-and-adaptive-design/" target="_blank" rel="external">https://css-tricks.com/the-difference-between-responsive-and-adaptive-design/</a></li>
-<li><a href="https://www.interaction-design.org/literature/article/adaptive-vs-responsive-design" target="_blank" rel="external">https://www.interaction-design.org/literature/article/adaptive-vs-responsive-design</a></li>
-</ul>
+        <p>一直被各种图像、排版软件中的长度单位整的糊涂，这里总结下。</p>
+<h2 id="px"><a href="#px" class="headerlink" title="px"></a>px</h2><p>最容易让人混乱的莫过于像素，device pixel, device-independent pixel, css pixel。</p>
+<h3 id="device-pixel-physical-pixel"><a href="#device-pixel-physical-pixel" class="headerlink" title="device pixel (physical pixel)"></a>device pixel (physical pixel)</h3><p>设备像素(物里像素)指设备可以显示的最小单元，对于具体的显示设备，它是个固定值，不能被改变。</p>
+<h3 id="css-pixel-和DIP-device-independent-pixel-意义一样"><a href="#css-pixel-和DIP-device-independent-pixel-意义一样" class="headerlink" title="css pixel (和DIP, device independent pixel 意义一样 )"></a>css pixel (和DIP, device independent pixel 意义一样 )</h3><p>css 像素是个抽象逻辑单位，它就是 device-independent pixel，web渲染时具体映射成多少物理像素是由渲染策略决定的——在retita出现之前，基本都是1：1。</p>
+<p>参考：<a href="https://www.sitepoint.com/css-techniques-for-retina-displays/" target="_blank" rel="external">https://www.sitepoint.com/css-techniques-for-retina-displays/</a></p>
+<h2 id="pt-point"><a href="#pt-point" class="headerlink" title="pt(point)"></a>pt(point)</h2><p>在排版打印的设计中，1pt = 1/72 inch。 这个单位主要为打印设计，像 word 类似的软件出稿打印的目的较多，字体就是使用pt（磅）。</p>
+<h2 id="DPI"><a href="#DPI" class="headerlink" title="DPI"></a>DPI</h2><p>dots per inch，每英寸中点数。注意这个点，在一个设备中它是固定值。因为设置 DPI 为更大的值时，其实放大的是 logical inch. 比如windows的操作系统显示一般都是 96 dpi，在你手动调整为 144 dpi时，dot大小没有变化，但是logical inch 变成了原来的 1/96*144 = 1.5 倍，所以系统显示会变成150%</p>
+<h2 id="PPI"><a href="#PPI" class="headerlink" title="PPI"></a>PPI</h2><p>pixels per inch.</p>
+<p>参考：<a href="https://www.quirksmode.org/blog/archives/2012/06/devicepixelrati.html" target="_blank" rel="external">https://www.quirksmode.org/blog/archives/2012/06/devicepixelrati.html</a></p>
+<h2 id="devicePixelRatio"><a href="#devicePixelRatio" class="headerlink" title="devicePixelRatio"></a>devicePixelRatio</h2><p>devicePixelRatio = physical pixels / dips，需要注意的是这两个单位都是复数——所以它的意思是指在固定物理长度内，物理像素数量与css像素数量之间的比值; chrome 里按 command &amp; + 会放大页面，而physical pixels不可改变，那么就是dip（css pixel）变大了，导致单位内dips变小。</p>
+<p>可以理解为，单位css像素内物理像素质，即物理像素密度。<br><img src="/image/DRP.png" alt="" style="width:70%"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ff684173(v=vs.85" target="_blank" rel="external">https://msdn.microsoft.com/en-us/library/windows/desktop/ff684173(v=vs.85).aspx</a>.aspx)<br><br></p>
 
       
     </div>
@@ -381,7 +373,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/设计/" rel="tag"># 设计</a>
+            <a href="/tags/编程/" rel="tag"># 编程</a>
           
         </div>
       
@@ -394,8 +386,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/14/2016-09-14-browser-kernel/" rel="next" title="浏览器内核">
-                <i class="fa fa-chevron-left"></i> 浏览器内核
+              <a href="/2017/06/12/2017-06-12-big-fes-tools/" rel="next" title="前端相关工具集">
+                <i class="fa fa-chevron-left"></i> 前端相关工具集
               </a>
             
           </div>
@@ -403,10 +395,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/19/2016-09-20-settimeout/" rel="prev" title="setTimeout 与 js单线程">
-                setTimeout 与 js单线程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -526,7 +514,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自适应设计-adaptive-web-design，AWD"><span class="nav-number">1.</span> <span class="nav-text">自适应设计(adaptive web design，AWD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应式设计-reponsive-web-design-RWD"><span class="nav-number">2.</span> <span class="nav-text">响应式设计(reponsive web design,RWD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合使用"><span class="nav-number">3.</span> <span class="nav-text">组合使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#px"><span class="nav-number">1.</span> <span class="nav-text">px</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#device-pixel-physical-pixel"><span class="nav-number">1.1.</span> <span class="nav-text">device pixel (physical pixel)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#css-pixel-和DIP-device-independent-pixel-意义一样"><span class="nav-number">1.2.</span> <span class="nav-text">css pixel (和DIP, device independent pixel 意义一样 )</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pt-point"><span class="nav-number">2.</span> <span class="nav-text">pt(point)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DPI"><span class="nav-number">3.</span> <span class="nav-text">DPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PPI"><span class="nav-number">4.</span> <span class="nav-text">PPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#devicePixelRatio"><span class="nav-number">5.</span> <span class="nav-text">devicePixelRatio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

@@ -263,6 +263,141 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/31/2016-10-31-simple-require-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/31/2016-10-31-simple-require-js/" itemprop="url">简述AMD的实现库: requirejs</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-31T00:00:00+08:00">
+                2016-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖…直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">define(id?,deps?,factory)</div></pre></td></tr></table></figure>
+<h3 id="requirejs的内部变量"><a href="#requirejs的内部变量" class="headerlink" title="requirejs的内部变量"></a>requirejs的内部变量</h3><p>id 和 deps都不是必选的，factory才是模块的内容。那么define到底做了什么事呢？这得说到requirejs内部的一些对象，下面的代码是requirejs一开始定义的变量，它秉承了先声明后使用的原则把内部所用的变量一股脑声明在了函数内部的最前面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> req, s, head, baseElement, dataMain, src,</div><div class="line">interactiveScript, currentlyAddingScript, mainScript, subPath,</div><div class="line">version = <span class="string">'2.3.2'</span>,</div><div class="line">commentRegExp = <span class="regexp">/\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/mg</span>,</div><div class="line">cjsRequireRegExp = <span class="regexp">/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g</span>,</div><div class="line">jsSuffixRegExp = <span class="regexp">/\.js$/</span>,</div><div class="line">currDirRegExp = <span class="regexp">/^\.\//</span>,</div><div class="line">op = <span class="built_in">Object</span>.prototype,</div><div class="line">ostring = op.toString,</div><div class="line">hasOwn = op.hasOwnProperty,</div><div class="line">isBrowser = !!(<span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> &amp;&amp; <span class="keyword">typeof</span> navigator !== <span class="string">'undefined'</span> &amp;&amp; <span class="built_in">window</span>.document),</div><div class="line">isWebWorker = !isBrowser &amp;&amp; <span class="keyword">typeof</span> importScripts !== <span class="string">'undefined'</span>,</div><div class="line"><span class="comment">//PS3 indicates loaded and complete, but need to wait for complete</span></div><div class="line"><span class="comment">//specifically. Sequence is 'loading', 'loaded', execution,</span></div><div class="line"><span class="comment">// then 'complete'. The UA check is unfortunate, but not sure how</span></div><div class="line"><span class="comment">//to feature test w/o causing perf issues.</span></div><div class="line">readyRegExp = isBrowser &amp;&amp; navigator.platform === <span class="string">'PLAYSTATION 3'</span> ?</div><div class="line">              <span class="regexp">/^complete$/</span> : <span class="regexp">/^(complete|loaded)$/</span>,</div><div class="line">defContextName = <span class="string">'_'</span>,</div><div class="line"><span class="comment">//Oh the tragedy, detecting opera. See the usage of isOpera for reason.</span></div><div class="line">isOpera = <span class="keyword">typeof</span> opera !== <span class="string">'undefined'</span> &amp;&amp; opera.toString() === <span class="string">'[object Opera]'</span>,</div><div class="line">contexts = &#123;&#125;,</div><div class="line">cfg = &#123;&#125;,</div><div class="line">globalDefQueue = [],</div><div class="line">useInteractive = <span class="literal">false</span>;</div></pre></td></tr></table></figure>
+<p>除了contexts之外，其他的类似于程序设计中的静态单例，或是辅助空间，所有的逻辑还是隐藏在了contexts中。在这个2.3.2的版本中，用来生成contexts实例的newContext函数从200行开始，直到1798行结束。。。所以没办法，我们打开newContext函数，把它的变量也扒出来。</p>
+<h3 id="newContext"><a href="#newContext" class="headerlink" title="newContext"></a>newContext</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> inCheckLoaded, Module, context, handlers,</div><div class="line">checkLoadedTimeoutId,</div><div class="line">config = &#123;</div><div class="line">    <span class="comment">//Defaults. Do not set a default for map</span></div><div class="line">    <span class="comment">//config to speed up normalize(), which</span></div><div class="line">    <span class="comment">//will run faster if there is no default.</span></div><div class="line">    waitSeconds: <span class="number">7</span>,</div><div class="line">    <span class="attr">baseUrl</span>: <span class="string">'./'</span>,</div><div class="line">    <span class="attr">paths</span>: &#123;&#125;,</div><div class="line">    <span class="attr">bundles</span>: &#123;&#125;,</div><div class="line">    <span class="attr">pkgs</span>: &#123;&#125;,</div><div class="line">    <span class="attr">shim</span>: &#123;&#125;,</div><div class="line">    <span class="attr">config</span>: &#123;&#125;</div><div class="line">&#125;,</div><div class="line">registry = &#123;&#125;,</div><div class="line"><span class="comment">//registry of just enabled modules, to speed</span></div><div class="line"><span class="comment">//cycle breaking code when lots of modules</span></div><div class="line"><span class="comment">//are registered, but not activated.</span></div><div class="line">enabledRegistry = &#123;&#125;,</div><div class="line">undefEvents = &#123;&#125;,</div><div class="line">defQueue = [],</div><div class="line">defined = &#123;&#125;,</div><div class="line">urlFetched = &#123;&#125;,</div><div class="line">bundlesMap = &#123;&#125;,</div><div class="line">requireCounter = <span class="number">1</span>,</div><div class="line">unnormalizedCounter = <span class="number">1</span>;</div></pre></td></tr></table></figure>
+<p>通过官方文档我们知道入口文件用 requirejs.config 来启动的，这个函数执行时即开始加载依赖，我们把这个入口文件叫做依赖树的根——尽管存在一个文件可能被好几个上级资源依赖的情况，这里为叙述方便仍称其为树。除了根之外节点都会被构建为Module（newContext内部定义的模块对象）对象，临时存放于<strong>enabledRegistry</strong>这个变量中。需要注意的是，只是刚刚激活的模块才会在这个变量中短暂停留，随后就会被清除，它的作用像是一个buffer。</p>
+<h3 id="define函数的作用"><a href="#define函数的作用" class="headerlink" title="define函数的作用"></a>define函数的作用</h3><p>我们回到前面的问题，define到底做了什么？</p>
+<p>define将模块格式化为一个数组：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[id,deps,factory]</div></pre></td></tr></table></figure>
+<p>并将其 push 进全局变量 globalDefQueue 中 —— 上面说过，这是个缓冲池。然后contexts会从其中拿数据并构建为Module对象存放于自己内部变量中,Module对象主要模式如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">exports</span>:define中factory执行返回的对象，如果factory不是可执行函数则直接返回factory</div><div class="line">    ,<span class="attr">factory</span>:即define中的factory</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当此Module被上层函数依赖时，则返回其exports到上层函数的arguments中，执行这个操作的关键函数为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">/**</span></div><div class="line"> * Executes a module callback function. Broken out as a separate function</div><div class="line"> * solely to allow the build system to sequence the files in the built</div><div class="line"> * layer in the right sequence.</div><div class="line"> *</div><div class="line"> * @private</div><div class="line"> */</div><div class="line">execCb: <span class="function"><span class="keyword">function</span> (<span class="params">name, callback, args, exports</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> callback.apply(exports, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="简单的requirejs实现"><a href="#简单的requirejs实现" class="headerlink" title="简单的requirejs实现"></a>简单的requirejs实现</h2><p>好了，专业库因为要考虑很多方面，不容易直接洞察其主要逻辑。其实我些年的经验时，需求是最好的文档，当你了解需求，直接读源码就行了——甚至直接去造轮子了。下面我们就造个劣质小轮子 —— 这是了解一个库最好的方式了。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> define,<span class="built_in">require</span>;</div><div class="line"><span class="built_in">require</span> = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>)</span>&#123;</div><div class="line">	<span class="keyword">let</span> &#123;entry,baseUrl&#125; = options;</div><div class="line">	<span class="comment">//存放所有生成的模块</span></div><div class="line">	<span class="keyword">var</span> modules  = &#123;&#125;,</div><div class="line">		unLoadedModules = [];<span class="comment">//每当有script_onload触发时，则shift一个模块，生成Module</span></div><div class="line"></div><div class="line">	<span class="comment">//根据id加载一个模块，数据结构如下</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">loadModule</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> node = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">        node.setAttribute(<span class="string">'data-modid'</span>, id);</div><div class="line">        node.src = baseUrl+id+<span class="string">".js"</span>;</div><div class="line"></div><div class="line">    	node.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">    		<span class="comment">//当前脚本加载的模块名</span></div><div class="line">    		<span class="keyword">var</span> id = e.target.getAttribute(<span class="string">"data-modid"</span>);</div><div class="line">    		completeLoaded(id);</div><div class="line"></div><div class="line">    		<span class="comment">//对所有可以导出export的模块进行导出</span></div><div class="line">    		tryLoading()</div><div class="line">    	&#125;, <span class="literal">false</span>);</div><div class="line"></div><div class="line">    	<span class="built_in">document</span>.head.appendChild(node);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/*   *   *   *   *   *   *   *   *   *   *</span></div><div class="line">	 *  Module用于构建存放于modules中的模块实例    </div><div class="line">	 *   *   *   *   *   *   *   *   *   *   */</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">Module</span>(<span class="params">id,deps,factory</span>)</span>&#123;</div><div class="line">		<span class="keyword">this</span>.id = id;</div><div class="line">		<span class="keyword">this</span>.deps = deps;<span class="comment">//["a","b"]</span></div><div class="line">		<span class="keyword">this</span>.factory = factory;</div><div class="line">		<span class="keyword">this</span>.loaded = <span class="literal">false</span>;</div><div class="line">		<span class="keyword">this</span>.export = <span class="literal">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	Module.prototype = &#123;</div><div class="line">		<span class="attr">getExport</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="comment">//如果export不存在，则构建</span></div><div class="line">			<span class="keyword">if</span> (!<span class="keyword">this</span>.export) &#123;</div><div class="line">				<span class="keyword">var</span> _args = <span class="keyword">this</span>.deps.map(<span class="function"><span class="params">item</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">return</span> modules[item].export;</div><div class="line">				&#125;)</div><div class="line">				<span class="keyword">this</span>.export = <span class="keyword">this</span>.factory.apply(<span class="literal">null</span>,_args);</div><div class="line">				<span class="keyword">this</span>.loaded = <span class="literal">true</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.export;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//当一个远程脚本完成加载时,从unLoadedModules中左移出一个模块.</span></div><div class="line">	<span class="comment">//将此模块格式化成Module对象，存放于modules中</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">completeLoaded</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (unLoadedModules.length) &#123;</div><div class="line">			<span class="keyword">var</span> mod = unLoadedModules.shift();</div><div class="line">			mod[<span class="number">0</span>] = id;</div><div class="line"></div><div class="line">			modules[id] = <span class="keyword">new</span> Module(mod[<span class="number">0</span>],mod[<span class="number">1</span>],mod[<span class="number">2</span>]);</div><div class="line"></div><div class="line">			<span class="comment">//如果是无依赖模块，则立即得到它的export()</span></div><div class="line">			<span class="keyword">if</span> (mod[<span class="number">1</span>].length == <span class="number">0</span>) &#123;</div><div class="line">				modules[id].getExport()</div><div class="line">			&#125;</div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//尝试对modules中依赖加载完成的模块生成export</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">tryLoading</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> _modsname = <span class="built_in">Object</span>.keys(modules);</div><div class="line"></div><div class="line">		_modsname.map(<span class="function"><span class="params">modname</span>=&gt;</span>&#123;</div><div class="line">			<span class="keyword">var</span> __Mod = modules[modname];</div><div class="line"></div><div class="line">			<span class="keyword">var</span> deps = __Mod.deps;</div><div class="line">			<span class="keyword">var</span> canExport = <span class="literal">true</span>;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">				<span class="comment">//检测是否所有依赖都已完成加载</span></div><div class="line">				deps.map(<span class="function"><span class="params">depname</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">if</span> (!modules[depname] || modules[depname].loaded == <span class="literal">false</span>) &#123;</div><div class="line">						canExport = <span class="literal">false</span>;</div><div class="line">					&#125;</div><div class="line">				&#125;)</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (canExport &amp;&amp; __Mod.loaded == <span class="literal">false</span>) &#123;</div><div class="line">				__Mod.getExport()</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//两个参数都是必须的</span></div><div class="line">	define = <span class="function"><span class="keyword">function</span>(<span class="params">deps,factory</span>)</span>&#123;</div><div class="line">		unLoadedModules.push([<span class="literal">null</span>,deps,factory]);</div><div class="line">		<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">			deps.map(<span class="function"><span class="params">_mod</span>=&gt;</span>&#123;</div><div class="line">				loadModule(_mod);</div><div class="line">			&#125;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//从入口启动</span></div><div class="line">	loadModule(entry)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">waitForEntry</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (modules[entry] &amp;&amp; modules[entry].loaded == <span class="literal">false</span>) &#123;</div><div class="line">			tryLoading();</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			setTimeout(waitForEntry,<span class="number">50</span>)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	waitForEntry()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实现requirejs有几个重要的点</p>
+<ul>
+<li>在根据名称加载依赖时，依赖的define未知。即依赖的名称如何与返回的脚本定义绑定。当然可以在定义的时候把id也写上，但是这样就需要跟文件名再来一次绑定，增加了复杂度。上面这个例子中利用插入script标签的顺序，和这些标签的onload事件触发的顺序完成一致这个特性来完成绑定的。<strong>如果当中有标签加载失败，则会导致它们的顺序错乱而对应不上。</strong></li>
+<li>其次只有一个模块的依赖全部加载完，才能执行factory生成export。上面这个简单的例子，是每次有一个模块load完的时候，就检测所有模块是否具有执行factory的条件。这显然不是一个好方法。而且最后的入口模块无法检测（所以我写了个循环，waitForEntry）。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>这个劣质轮子的使用非常简单，我写了个<a href="https://github.com/magmaliang/simple_require" target="_blank" rel="external">demo</a>,一看便知。</p>
+<h3 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h3><p>前端性能优化肯定需要把所有依赖合并成一个文件，然后压缩。。。grunt里面有一个插件 grunt-contrib-requirejs就是干这事的。然后本地使用requirejs调试，根本不需要预编译（合并，压缩）,发布时直接跑下grunt任务（多数是在代码仓库端执行的），不得不说开发与发布都非常方便。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/13/2016-10-13-file-input-ele/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -495,7 +630,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-20-settimeout/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-19-responsive-design/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="magma">
@@ -514,7 +649,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/09/19/2016-09-20-settimeout/" itemprop="url">setTimeout 与 js单线程</a></h1>
+                <a class="post-title-link" href="/2016/09/19/2016-09-19-responsive-design/" itemprop="url">响应式设计</a></h1>
         
 
         <div class="post-meta">
@@ -563,21 +698,28 @@
       
         
           
-            <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>js是单线程的，所有的代码只会在一个线程上运行，串行执行任务。</p>
-<p>setTimeout在window环境下执行，this总是指向window(无论严格模式还是普通模式)。setTimeout会将作为参数传入的代码塞到js执行线程上，预设的时间过后再执行。但是要注意,<strong>并不是在setTimeout预设的时间后，一定轮到其塞入的代码执行:</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
-<p><img src="/image/settimeout.png" alt="" style="width:70%"></p>
-<p>如图，假设fooa执行的时间超过100ms，那么纵使执行流上预定了在200ms之后执行foob也没用，必须等fooa执行完。我们可以检验下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">wait</span>(<span class="params">t</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"start wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">		<span class="keyword">var</span> start = <span class="built_in">Date</span>.now();</div><div class="line"></div><div class="line">		<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">			<span class="keyword">if</span>(<span class="built_in">Date</span>.now() - start &gt; t)&#123;</div><div class="line">				<span class="keyword">break</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"end wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> startT = <span class="built_in">Date</span>.now()</div><div class="line"></div><div class="line">fooa = wait(<span class="number">2000</span>);</div><div class="line">foob = wait(<span class="number">10</span>);</div><div class="line"></div><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
-<p>在我的电脑上执行结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start wait 2000:104</div><div class="line">VM4557:11 end wait 2000:2106</div><div class="line">VM4557:3 start wait 10:2107</div><div class="line">VM4557:11 end wait 10:2118</div></pre></td></tr></table></figure>
-<p>可以看到，foob 并不是 200ms 后执行，它等 fooa 执行完了才执行。因为 fooa 在 js 执行线程上”预约”的时间早于foob;</p>
-<h2 id="实际的例子"><a href="#实际的例子" class="headerlink" title="实际的例子"></a>实际的例子</h2><p>今天稍有时间就查看了项目一直报错的一个bug，因为这个bug不影响使用，所以一直没人管。而我有强迫症，总希望控制台什么异常警告都没有。</p>
-<p>实际的例子较为复杂，这里在不丧失细节的情况做了抽象（原来的是react的项目）:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个组件的定义</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">cmp</span> </span>&#123;</div><div class="line">	<span class="keyword">constructor</span>(props)&#123;</div><div class="line">		<span class="keyword">this</span>.dom = &#123;&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	willReceiveProps(props)&#123;</div><div class="line">		setTimeout((<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">this</span>.dom.a=<span class="number">1</span></div><div class="line">		&#125;).bind(<span class="keyword">this</span>),<span class="number">0</span>)</div><div class="line">	&#125;</div><div class="line">	willUnmount()&#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">	_close()&#123;</div><div class="line">		<span class="keyword">delete</span> <span class="keyword">this</span>.dom;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//一个移除组件的方法，模仿react移除组件</span></div><div class="line"><span class="comment">//在移除组件之前，假设触发了willReceiveProps——</span></div><div class="line"><span class="comment">//实际上在复杂的应用中这是不可避免的，这个方法总是被不断地触发,如果你写了这个方法的话</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeCmp</span>(<span class="params">cmp</span>)</span>&#123;</div><div class="line">	cmp.willRecieveProps();</div><div class="line">	cmp._close();</div><div class="line">&#125;</div><div class="line"></div><div class="line">removeCmp(<span class="keyword">new</span> cmp())</div></pre></td></tr></table></figure>
-<p>这个代码是会报错的，<strong>虽然setTimeout的时间设置为0，但是推到执行流上的函数并没有立即执行，反而先执行了_close</strong>。原因在于（如下图）：</p>
-<p><img src="/image/20160921-01.png" alt="" style="width:70%"></p>
-<p>我们先调用的是removeCmp(上图山楂红部分)，_close是这个函数体的一部分，这玩意没执行完，如何轮到其内部setTimeout推上去的代码？</p>
+            <p><img src="/image/responsive_web_design.png" alt="jif"></p>
+<p>在很长的时间里，我讨厌新名词、术语，因为极大多数是宣传装逼需要 —— 我只想记住小番茄，不想再来一个圣女果，我希望它们就是一回事，这是一种浪费认知精力的无聊行为。然而外行人总是基于表面——例如名字来区分事物和创新，资本需要奴役他们，必然投其所好。</p>
+<p>以上说的都是废话，我现在不这么认为了。在知识系统复杂的过程中，必然会变的越来越专业，植物学发展的初期就是命名，给它们归类给它们起名，细微的差别都通过名字来区别，这是基础。</p>
+<p>比如我听闻 响应式设计，自适应设计 很久了，对它们的认知仅停留在从名字上推论出的结果 —— 很显然更深层次的理解不可能有。然而当我理解了它们确切的含意，我觉得如果移动端的 web 设计需要从零到现在这样是在一天之内提出的，然后让设计人员提出可行的方案——那么十有八九，不同的人提出了不同名称的方案，但是，它们必然是围绕着 “响应式” 和 “自适应” 展开的。</p>
+<p>那么我们是需要知道这些别人提出的名称的确切含意，需要把移动端设计里每种设计的方式提炼到纯粹的纯度来理解 —— 没办法，这是深入理解必然要经历的过程，分而理解再糅合才能运用自如。</p>
+<h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>响应式是设计是用一套伸缩性的设计来适配不同的设备（主要是宽度），经常使用等比缩放的方式来描述元素的大小和位置，它就像狡猾狡猾滴小猫咪，总是给你相对的属性，它千变万化，在每种环境中以独特的面目视人，其实它只有一个本尊。</p>
+<blockquote>
+<p>我更倾向于定义其为一种概念、理念，一种对设计需求的描述，而非一种特定的技术。然后，所以能为此理念添砖加瓦的技艺都可以用上，没有界定。</p>
+</blockquote>
+<h2 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h2><p>前面已经废话过了，主要是为了适应多种设备。目前新开发的网站多数使用响应式设计。</p>
+<h2 id="HOW"><a href="#HOW" class="headerlink" title="HOW"></a>HOW</h2><p>响应式设计实现的技术点主要如下</p>
+<h3 id="布局要求"><a href="#布局要求" class="headerlink" title="布局要求"></a>布局要求</h3><ul>
+<li>减少无用dom层级，减少无用dom层级，减少无用dom层级！</li>
+<li>使用相对数值描述布局容器的大小和位置。</li>
+<li>对于集合、列表这种单一组件重复的复合组件，使用流式设计。</li>
+<li>不使用内联元素，因为它们的高宽都不可控。</li>
+</ul>
+<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>有条件的使用多种尺寸的图片。</p>
+<h3 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h3><p>断点就是设备尺寸的临界值，在临界值分割的区间中应用特定样式 —— 使用媒体查询。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://blog.jobbole.com/30648/" target="_blank" rel="external">http://blog.jobbole.com/30648/</a>,不得不说伯乐在线文章的质量相当高。</li>
+</ul>
 
           
         
@@ -748,7 +890,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-19-responsive-design/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-20-settimeout/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="magma">
@@ -767,7 +909,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/09/19/2016-09-19-responsive-design/" itemprop="url">响应式设计</a></h1>
+                <a class="post-title-link" href="/2016/09/19/2016-09-20-settimeout/" itemprop="url">setTimeout 与 js单线程</a></h1>
         
 
         <div class="post-meta">
@@ -816,28 +958,21 @@
       
         
           
-            <p><img src="/image/responsive_web_design.png" alt="jif"></p>
-<p>在很长的时间里，我讨厌新名词、术语，因为极大多数是宣传装逼需要 —— 我只想记住小番茄，不想再来一个圣女果，我希望它们就是一回事，这是一种浪费认知精力的无聊行为。然而外行人总是基于表面——例如名字来区分事物和创新，资本需要奴役他们，必然投其所好。</p>
-<p>以上说的都是废话，我现在不这么认为了。在知识系统复杂的过程中，必然会变的越来越专业，植物学发展的初期就是命名，给它们归类给它们起名，细微的差别都通过名字来区别，这是基础。</p>
-<p>比如我听闻 响应式设计，自适应设计 很久了，对它们的认知仅停留在从名字上推论出的结果 —— 很显然更深层次的理解不可能有。然而当我理解了它们确切的含意，我觉得如果移动端的 web 设计需要从零到现在这样是在一天之内提出的，然后让设计人员提出可行的方案——那么十有八九，不同的人提出了不同名称的方案，但是，它们必然是围绕着 “响应式” 和 “自适应” 展开的。</p>
-<p>那么我们是需要知道这些别人提出的名称的确切含意，需要把移动端设计里每种设计的方式提炼到纯粹的纯度来理解 —— 没办法，这是深入理解必然要经历的过程，分而理解再糅合才能运用自如。</p>
-<h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>响应式是设计是用一套伸缩性的设计来适配不同的设备（主要是宽度），经常使用等比缩放的方式来描述元素的大小和位置，它就像狡猾狡猾滴小猫咪，总是给你相对的属性，它千变万化，在每种环境中以独特的面目视人，其实它只有一个本尊。</p>
-<blockquote>
-<p>我更倾向于定义其为一种概念、理念，一种对设计需求的描述，而非一种特定的技术。然后，所以能为此理念添砖加瓦的技艺都可以用上，没有界定。</p>
-</blockquote>
-<h2 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h2><p>前面已经废话过了，主要是为了适应多种设备。目前新开发的网站多数使用响应式设计。</p>
-<h2 id="HOW"><a href="#HOW" class="headerlink" title="HOW"></a>HOW</h2><p>响应式设计实现的技术点主要如下</p>
-<h3 id="布局要求"><a href="#布局要求" class="headerlink" title="布局要求"></a>布局要求</h3><ul>
-<li>减少无用dom层级，减少无用dom层级，减少无用dom层级！</li>
-<li>使用相对数值描述布局容器的大小和位置。</li>
-<li>对于集合、列表这种单一组件重复的复合组件，使用流式设计。</li>
-<li>不使用内联元素，因为它们的高宽都不可控。</li>
-</ul>
-<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>有条件的使用多种尺寸的图片。</p>
-<h3 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h3><p>断点就是设备尺寸的临界值，在临界值分割的区间中应用特定样式 —— 使用媒体查询。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://blog.jobbole.com/30648/" target="_blank" rel="external">http://blog.jobbole.com/30648/</a>,不得不说伯乐在线文章的质量相当高。</li>
-</ul>
+            <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>js是单线程的，所有的代码只会在一个线程上运行，串行执行任务。</p>
+<p>setTimeout在window环境下执行，this总是指向window(无论严格模式还是普通模式)。setTimeout会将作为参数传入的代码塞到js执行线程上，预设的时间过后再执行。但是要注意,<strong>并不是在setTimeout预设的时间后，一定轮到其塞入的代码执行:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
+<p><img src="/image/settimeout.png" alt="" style="width:70%"></p>
+<p>如图，假设fooa执行的时间超过100ms，那么纵使执行流上预定了在200ms之后执行foob也没用，必须等fooa执行完。我们可以检验下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">wait</span>(<span class="params">t</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"start wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">		<span class="keyword">var</span> start = <span class="built_in">Date</span>.now();</div><div class="line"></div><div class="line">		<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">			<span class="keyword">if</span>(<span class="built_in">Date</span>.now() - start &gt; t)&#123;</div><div class="line">				<span class="keyword">break</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"end wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> startT = <span class="built_in">Date</span>.now()</div><div class="line"></div><div class="line">fooa = wait(<span class="number">2000</span>);</div><div class="line">foob = wait(<span class="number">10</span>);</div><div class="line"></div><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
+<p>在我的电脑上执行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start wait 2000:104</div><div class="line">VM4557:11 end wait 2000:2106</div><div class="line">VM4557:3 start wait 10:2107</div><div class="line">VM4557:11 end wait 10:2118</div></pre></td></tr></table></figure>
+<p>可以看到，foob 并不是 200ms 后执行，它等 fooa 执行完了才执行。因为 fooa 在 js 执行线程上”预约”的时间早于foob;</p>
+<h2 id="实际的例子"><a href="#实际的例子" class="headerlink" title="实际的例子"></a>实际的例子</h2><p>今天稍有时间就查看了项目一直报错的一个bug，因为这个bug不影响使用，所以一直没人管。而我有强迫症，总希望控制台什么异常警告都没有。</p>
+<p>实际的例子较为复杂，这里在不丧失细节的情况做了抽象（原来的是react的项目）:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个组件的定义</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">cmp</span> </span>&#123;</div><div class="line">	<span class="keyword">constructor</span>(props)&#123;</div><div class="line">		<span class="keyword">this</span>.dom = &#123;&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	willReceiveProps(props)&#123;</div><div class="line">		setTimeout((<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">this</span>.dom.a=<span class="number">1</span></div><div class="line">		&#125;).bind(<span class="keyword">this</span>),<span class="number">0</span>)</div><div class="line">	&#125;</div><div class="line">	willUnmount()&#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">	_close()&#123;</div><div class="line">		<span class="keyword">delete</span> <span class="keyword">this</span>.dom;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//一个移除组件的方法，模仿react移除组件</span></div><div class="line"><span class="comment">//在移除组件之前，假设触发了willReceiveProps——</span></div><div class="line"><span class="comment">//实际上在复杂的应用中这是不可避免的，这个方法总是被不断地触发,如果你写了这个方法的话</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeCmp</span>(<span class="params">cmp</span>)</span>&#123;</div><div class="line">	cmp.willRecieveProps();</div><div class="line">	cmp._close();</div><div class="line">&#125;</div><div class="line"></div><div class="line">removeCmp(<span class="keyword">new</span> cmp())</div></pre></td></tr></table></figure>
+<p>这个代码是会报错的，<strong>虽然setTimeout的时间设置为0，但是推到执行流上的函数并没有立即执行，反而先执行了_close</strong>。原因在于（如下图）：</p>
+<p><img src="/image/20160921-01.png" alt="" style="width:70%"></p>
+<p>我们先调用的是removeCmp(上图山楂红部分)，_close是这个函数体的一部分，这玩意没执行完，如何轮到其内部setTimeout推上去的代码？</p>
 
           
         
@@ -1401,148 +1536,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/27/2016-06-19-base-on-reality/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/05/27/2016-06-19-base-on-reality/" itemprop="url">量力而行</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-27T00:00:00+08:00">
-                2016-05-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="两件难忘的事"><a href="#两件难忘的事" class="headerlink" title="两件难忘的事"></a>两件难忘的事</h2><p>昨天终于下定决定拒绝了一个私活的跟进，老板是个很不错的人。</p>
-<p>这件事像个大石头一样压在我心上将近一个月，造成心里负担的主要原因是自己向来以君子自居，君子守诺。而这个私活前后端互相不熟悉，采用的技术方案也不一样，我做了两版无用功，并且频频拖延。</p>
-<p>这让我想起前年的一件事。</p>
-<p>大姐夫让我帮忙做一个记账的软件，我答应了，后来因为自己不懂帐和需求的不确定性，不了了之。这件事至今让我内心不安，见到大姐夫总是会想起这茬。</p>
-<p>人一辈子总有很多难忘的事，像我这样的人总是盯着远方，所以过去的快乐我不大会记得，但是做错的事却一直会挥之不散——因为它们提醒我的缺陷，而想要去远方，必须尽可能地改正自己。</p>
-<p>这两件事，一开始的时候我都是很有信心做成的，后来渐渐心有余而力不足。我到现在依然相信，如果破釜沉舟拼下去的话，我仍然是可以做成的，所以在于成本。潜意识之中一切不具有创造性活动的工作我都不愿意去做，比如买房子结婚时的各种手续，比如遵守公司繁琐的流程。</p>
-<p>但是无论如何，答应别人的事应当做到，无论它是否有创造性。</p>
-<h2 id="答应自己的事更应该做到"><a href="#答应自己的事更应该做到" class="headerlink" title="答应自己的事更应该做到"></a>答应自己的事更应该做到</h2><p>相比与给别人承诺，我给过自己更多的承诺，而关于守诺也是更加的惨不忍睹。而我总是不断地绘制蓝图，短期的长期的，总是相信自己的规划可以实现。</p>
-<p>在我年少的时候，我喜欢把自己的想法说出来，出于什么目的我难以思考清楚，也许是炫耀。这给我带来了很大的麻烦，因为绝大多数都不了了之了，虽然并没有多少人跟我较真，虽然我有时候安慰自己，“周围人很多也是这样的啊？我有什么好羞愧的？”——可是，我心里明白到底发生了什么，我有意无意地想要改变这种现状。</p>
-<blockquote>
-<p>when a boy stop talking, he is a man.</p>
-</blockquote>
-<p>我选择的是少说话，不再轻率地把自己所思所想说出来。</p>
-<p>它带来的改变相当之大，我变的内敛、克制，我从一个说话不经过头脑的人变成一个话前三思的人，因为说错话而后悔的概率大大降低。可是我常常高估自己的情况并没有改善。</p>
-<p>我是一个理论先行的人，想做一件事喜欢先做大量准备工作；对于不想做的事则索性不做，一点点努力都觉得是浪费。——有这种特性的人，喜欢追求恒久的价值和解决问题的办法，更容易追求“道”而忽略时势、客观因素。这是教育带给我的，我的父母是农民，不能给我多少值得思考的东西，我认真思考的问题多数源自语文和历史课本，它们在我人格形成的过程中几乎是全部精神食粮的来源，是的，我立志做一个君子，这是我一生的梦想。</p>
-<p>这就是我高估自己的原因——求道而轻略了法术器的修行。</p>
-<p>道总是能解决问题的，但是并不能及时地解决问题。多数人解决特定问题使用特定的器具和技巧，无需明白本质，也能以非常快的速度解决问题。而我想要解决更多的问题，追求它们之间的联系，追求万能钥匙和银弹。</p>
-<p>所以我要付出更多的努力，却要以更慢的速度来解决问题，这是我的修行。这是更加耗费时间和精力的修行，没有毅力与恒心，不能大成。正因如此，节奏感非常重要，不能浪费自己的精力。需要有更好的规划和执行力。</p>
-<p>那么答应自己的事情尽量要做到，不能因为精力不济而半途更改策略，退而求其次。</p>
-<h2 id="量力而行"><a href="#量力而行" class="headerlink" title="量力而行"></a>量力而行</h2><p>一个人想要清楚认识自己很难，我们时常伪装自己拥有我们不具有的才能，这让社交很累，但付出的更大的代价是我们心目中的自己并不是真正的自我。</p>
-<p>想要进步，给自己制定计划和守则，然而依据的却是一个对自己错误的认识，这些计划将如何落实？</p>
-<p>所以我要深度地剖析自己，了解自己的优势和短处。</p>
-<p>如前文所说，我习惯追求道——万变不离其宗中的“宗”，我思考的时间更久，在无需深度思考的场景中极容易失去先机，然后在后续的思考中渐渐发力，但是思考的发起者已经不是我，我只是在别人的思维框架下做丰满工作，做得好是别人的，做得不好是自己实现的不好。</p>
-<p>之所以没有足够的时间来沉思，是因为自己揽了太多的事，并非是公司的事，而是自己的计划，多线开工——又学习其他编程语言，又写小说，每天还要反思，对音乐也有想法，还想要写一套博客系统（原因是对所有的博客系统都不满意），践行一些养生，每周至少读一本书，我有老婆有小孩。。。太折腾自己了，我已经严重感觉到精力不足，但是都不想放下。</p>
-<p>因为经过思考，我觉得自己的精力完全能hold住这样的生活，只是自己的效率不够高。</p>
-<p>有段时间尝试过时间管理论，尝试过各种提升效率的方法，效果都不好，因为自我控制力差，因为联想走神的天性，豪情万里、睥睨天下的白日梦情绪经常上涌，走在路上忽然就寒毛林立、昂首挺胸——原因只是车水马龙间，一叶漂零，随风而舞。</p>
-<p>我表面上成熟，其实是个严重中二病患者，读《堂吉柯德》能拍案而起，大呼“大丈夫，当如是哉！” —— 心中有梦想，现实再困顿，也要冲锋！</p>
-<p>理想与浪漫，是前进的动力也是阻力，注定这一类人不能通过严谨的方式取得成功，随心所欲也许更正确，但是不确定性很大。通过严谨的方式行为和付出更好预测，也更好控制，但若不是天性如此，只怕事倍功半。我明显是前一类人，但是历经生活磨砺，我也能在特定的事情上以严谨的方式做事。</p>
-<p>然而我却以为自己在所有事情上都能复制这种严谨，导致更多的计划流产了。</p>
-<p>我要衡量自己的力量，把这种得之不易的严谨用在重要的事情上。</p>
-<p>做事一件一件来，做力所能及之事，把时间和精力运气也要归在能力当中。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1592,7 +1585,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">35</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -263,6 +263,129 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/07/2017-07-07-pt-px-etc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/07/2017-07-07-pt-px-etc/" itemprop="url">web 长度单位</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-07T00:00:00+08:00">
+                2017-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一直被各种图像、排版软件中的长度单位整的糊涂，这里总结下。</p>
+<h2 id="px"><a href="#px" class="headerlink" title="px"></a>px</h2><p>最容易让人混乱的莫过于像素，device pixel, device-independent pixel, css pixel。</p>
+<h3 id="device-pixel-physical-pixel"><a href="#device-pixel-physical-pixel" class="headerlink" title="device pixel (physical pixel)"></a>device pixel (physical pixel)</h3><p>设备像素(物里像素)指设备可以显示的最小单元，对于具体的显示设备，它是个固定值，不能被改变。</p>
+<h3 id="css-pixel-和DIP-device-independent-pixel-意义一样"><a href="#css-pixel-和DIP-device-independent-pixel-意义一样" class="headerlink" title="css pixel (和DIP, device independent pixel 意义一样 )"></a>css pixel (和DIP, device independent pixel 意义一样 )</h3><p>css 像素是个抽象逻辑单位，它就是 device-independent pixel，web渲染时具体映射成多少物理像素是由渲染策略决定的——在retita出现之前，基本都是1：1。</p>
+<p>参考：<a href="https://www.sitepoint.com/css-techniques-for-retina-displays/" target="_blank" rel="external">https://www.sitepoint.com/css-techniques-for-retina-displays/</a></p>
+<h2 id="pt-point"><a href="#pt-point" class="headerlink" title="pt(point)"></a>pt(point)</h2><p>在排版打印的设计中，1pt = 1/72 inch。 这个单位主要为打印设计，像 word 类似的软件出稿打印的目的较多，字体就是使用pt（磅）。</p>
+<h2 id="DPI"><a href="#DPI" class="headerlink" title="DPI"></a>DPI</h2><p>dots per inch，每英寸中点数。注意这个点，在一个设备中它是固定值。因为设置 DPI 为更大的值时，其实放大的是 logical inch. 比如windows的操作系统显示一般都是 96 dpi，在你手动调整为 144 dpi时，dot大小没有变化，但是logical inch 变成了原来的 1/96*144 = 1.5 倍，所以系统显示会变成150%</p>
+<h2 id="PPI"><a href="#PPI" class="headerlink" title="PPI"></a>PPI</h2><p>pixels per inch.</p>
+<p>参考：<a href="https://www.quirksmode.org/blog/archives/2012/06/devicepixelrati.html" target="_blank" rel="external">https://www.quirksmode.org/blog/archives/2012/06/devicepixelrati.html</a></p>
+<h2 id="devicePixelRatio"><a href="#devicePixelRatio" class="headerlink" title="devicePixelRatio"></a>devicePixelRatio</h2><p>devicePixelRatio = physical pixels / dips，需要注意的是这两个单位都是复数——所以它的意思是指在固定物理长度内，物理像素数量与css像素数量之间的比值; chrome 里按 command &amp; + 会放大页面，而physical pixels不可改变，那么就是dip（css pixel）变大了，导致单位内dips变小。</p>
+<p>可以理解为，单位css像素内物理像素质，即物理像素密度。<br><img src="/image/DRP.png" alt="" style="width:70%"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ff684173(v=vs.85" target="_blank" rel="external">https://msdn.microsoft.com/en-us/library/windows/desktop/ff684173(v=vs.85).aspx</a>.aspx)<br><br></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/12/2017-06-12-big-fes-tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -499,6 +622,122 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/2017-06-02-data-bind/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/19/2017-06-02-data-bind/" itemprop="url">Data bind</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-19T00:00:00+08:00">
+                2017-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>MDV 数据驱动视图是现代前端框架基本的设计思想，但是原生javascript对此并没有提供足够的能力。较老的框架（argular,Ember）使用观察者模式：使用内置的方法更新数据，数据更新后调用刷新视图的方法。</p>
+<p>vue 作为新的框架，没有历史包袱，直接使用setter, getter追踪数据的变化。</p>
+<h2 id="Object-observe"><a href="#Object-observe" class="headerlink" title="Object.observe"></a>Object.observe</h2><p>其实曾经有个 Object.observe 的方法，实现了对对象所有行为的追踪，但因为性能问题最后又废弃了。下面这篇文章，描述了详细的历史和原因：</p>
+<p><a href="https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html" target="_blank" rel="external">https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html</a>。</p>
+<p>## </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/2017-05-23-fe-server-side-rendering/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -573,122 +812,6 @@
 <h3 id="B-服务端渲染"><a href="#B-服务端渲染" class="headerlink" title="B. 服务端渲染"></a>B. 服务端渲染</h3><p>服务端渲染完整的页面。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这种优化一般针对功能复杂的首页，入口页，首先让页面渲染出来，达到可交互的状态。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000005641012" target="_blank" rel="external">https://segmentfault.com/a/1190000005641012</a><br><a href="http://web.jobbole.com/86412/" target="_blank" rel="external">http://web.jobbole.com/86412/</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/2017-06-02-data-bind/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/19/2017-06-02-data-bind/" itemprop="url">Data bind</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-19T00:00:00+08:00">
-                2017-05-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>MDV 数据驱动视图是现代前端框架基本的设计思想，但是原生javascript对此并没有提供足够的能力。较老的框架（argular,Ember）使用观察者模式：使用内置的方法更新数据，数据更新后调用刷新视图的方法。</p>
-<p>vue 作为新的框架，没有历史包袱，直接使用setter, getter追踪数据的变化。</p>
-<h2 id="Object-observe"><a href="#Object-observe" class="headerlink" title="Object.observe"></a>Object.observe</h2><p>其实曾经有个 Object.observe 的方法，实现了对对象所有行为的追踪，但因为性能问题最后又废弃了。下面这篇文章，描述了详细的历史和原因：</p>
-<p><a href="https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html" target="_blank" rel="external">https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html</a>。</p>
-<p>## </p>
 
           
         
@@ -1009,6 +1132,153 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/17/2017-01-19-nginx-rewrite/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/01/17/2017-01-19-nginx-rewrite/" itemprop="url">nginx的rewrite</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-17T00:00:00+08:00">
+                2017-01-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>在开发环境，经常使用nginx将首页的静态资料重定向到本地，用的多了，总结下各种重定向的手艺。</p>
+</blockquote>
+<h2 id="location"><a href="#location" class="headerlink" title="location"></a>location</h2><p>location 并不能完成重定向，它只是一个辅助，主要起过滤作用，所以它可以多层嵌套。可以使用正则来匹配url。比较重要的是多规则匹配遵循以下优先级：<br>1.以=号开头的规则，匹配上，中止搜索。<br>2.所有剩下的普通字符串匹配（非正则），匹配越精确的就使用，与规则的顺序无关。如果匹配到以^~开头的规则，中止搜索。<br>3.正则表达式规则，按它们在配置文件中定义的顺序。<br>4.如果第三步有匹配结果，则使用。否则，使用第二步的结果。</p>
+<h2 id="proxy-pass"><a href="#proxy-pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h2><p>proxy_pass 可以重定向域名。例如：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将所有js后缀的请求代理到http://www.proxy.com下</span></div><div class="line">location /*.js &#123;</div><div class="line">	proxy_pass http:<span class="regexp">//www</span>.proxy.com;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>原始url: <a href="http://www.source.com/rs/js/main.js" target="_blank" rel="external">http://www.source.com/rs/js/main.js</a><br>实际访问地址：<a href="http://www.proxy.com/rs/js/main.js" target="_blank" rel="external">http://www.proxy.com/rs/js/main.js</a></p>
+<h2 id="return"><a href="#return" class="headerlink" title="return"></a>return</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Syntax:	return code [text];</div><div class="line">		return code URL;</div><div class="line">		return URL;</div><div class="line">Default:	—</div><div class="line">Context:	server, location, if</div></pre></td></tr></table></figure>
+<p>Context表示当前命令可以使用的环境。return 主要是返回状态码，虽然也可以直接return url，但这不是它的特色。</p>
+<h2 id="rewrite"><a href="#rewrite" class="headerlink" title="rewrite"></a>rewrite</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rewrite regex url [flag]</div></pre></td></tr></table></figure>
+<p>regex匹配上$url时，则执行重写。url中可以使用regex中捕获的子组。</p>
+<h2 id="try-files"><a href="#try-files" class="headerlink" title="try_files"></a>try_files</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">try_files url...url;</div></pre></td></tr></table></figure>
+<p>try_files会从左到右地尝试所有路径，直到它找到一个实际存在的资源，将它返回。这可以方便地设置优先级相关的逻辑。</p>
+<h2 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Syntax:	alias path;</div><div class="line">Default:	—</div><div class="line">Context:	location</div></pre></td></tr></table></figure>
+<p>alias其实是一个replace，它在location命中后，直接返回指定的path资源。</p>
+<h2 id="正则"><a href="#正则" class="headerlink" title="正则"></a>正则</h2><p>nginx编译的时候需要 pcre（Perl Compatible Regular Expressions），这个库由 Philip Hazel开发，它作为非常完善的正则表达式模块被很多其他工具和语言所使用。</p>
+<p>下面这个网站记录了正则的工业标准和各种语言的支持程度。</p>
+<p><a href="http://www.regular-expressions.info/" target="_blank" rel="external">http://www.regular-expressions.info/</a></p>
+<p>pcre的语法与各语言相似，如果你精通其他语言的正则，那么只需要一个小时就能掌握pcre的正则。因为我对javascript的正则较了解，所以只拿这二者作了下比较。</p>
+<p>pcre比js中的正则多出的功能有以下几点：</p>
+<ul>
+<li><p>自定义捕获组名，(?P<name>aaa),如果这个正则捕获成功，那么在下文中可以使用$name进行读取（在perl中你得使用$+{name}，我也不明白为啥nginx中这样可以）。</name></p>
+</li>
+<li><p>Lookbehinds ,/(?&lt;=b)aaa/,匹配baaa中的aaa。javascript中只有向前查找。</p>
+</li>
+<li><p>多出的环境变量，如$`等。</p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.nginx.com/blog/creating-nginx-rewrite-rules/" target="_blank" rel="external">创建nginx重写规则</a></li>
+</ul>
+<p>一篇超级棒的英文，我准备抽时间翻译下。</p>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>这是nginx官方的一个<a href="https://www.nginx.com/resources/wiki/start/topics/examples/fullexample2/" target="_blank" rel="external">config full example</a>。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div></pre></td><td class="code"><pre><div class="line">user  www www;</div><div class="line">worker_processes  <span class="number">2</span>;</div><div class="line">pid /var/run/nginx.pid;</div><div class="line"></div><div class="line"><span class="comment"># [ debug | info | notice | warn | error | crit ]</span></div><div class="line">error_log  /var/<span class="keyword">log</span>/nginx.error_log  info;</div><div class="line"></div><div class="line">events &#123;</div><div class="line">  worker_connections   <span class="number">2000</span>;</div><div class="line">  <span class="comment"># use [ kqueue | rtsig | epoll | /dev/poll | select | poll ] ;</span></div><div class="line">  <span class="keyword">use</span> kqueue;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">  include       conf/mime.types;</div><div class="line">  default_type  application/octet-stream;</div><div class="line"></div><div class="line">  log_format main      <span class="string">'$remote_addr - $remote_user [$time_local]  '</span></div><div class="line">    <span class="string">'"$request" $status $bytes_sent '</span></div><div class="line">    <span class="string">'"$http_referer" "$http_user_agent" '</span></div><div class="line">    <span class="string">'"$gzip_ratio"'</span>;</div><div class="line"></div><div class="line">  log_format download  <span class="string">'$remote_addr - $remote_user [$time_local]  '</span></div><div class="line">    <span class="string">'"$request" $status $bytes_sent '</span></div><div class="line">    <span class="string">'"$http_referer" "$http_user_agent" '</span></div><div class="line">    <span class="string">'"$http_range" "$sent_http_content_range"'</span>;</div><div class="line"></div><div class="line">  client_header_timeout  <span class="number">3</span><span class="keyword">m</span>;</div><div class="line">  client_body_timeout    <span class="number">3</span><span class="keyword">m</span>;</div><div class="line">  send_timeout           <span class="number">3</span><span class="keyword">m</span>;</div><div class="line"></div><div class="line">  client_header_buffer_size    <span class="number">1</span>k;</div><div class="line">  large_client_header_buffers  <span class="number">4</span> <span class="number">4</span>k;</div><div class="line"></div><div class="line">  gzip on;</div><div class="line">  gzip_min_length  <span class="number">1100</span>;</div><div class="line">  gzip_buffers     <span class="number">4</span> <span class="number">8</span>k;</div><div class="line">  gzip_types       text/plain;</div><div class="line"></div><div class="line">  output_buffers   <span class="number">1</span> <span class="number">32</span>k;</div><div class="line">  postpone_output  <span class="number">1460</span>;</div><div class="line"></div><div class="line">  sendfile         on;</div><div class="line">  tcp_nopush       on;</div><div class="line"></div><div class="line">  tcp_nodelay      on;</div><div class="line">  send_lowat       <span class="number">12000</span>;</div><div class="line"></div><div class="line">  keepalive_timeout  <span class="number">75</span> <span class="number">20</span>;</div><div class="line"></div><div class="line">  <span class="comment"># lingering_time     30;</span></div><div class="line">  <span class="comment"># lingering_timeout  10;</span></div><div class="line">  <span class="comment"># reset_timedout_connection  on;</span></div><div class="line"></div><div class="line"></div><div class="line">  server &#123;</div><div class="line">    <span class="keyword">listen</span>        one.example.com;</div><div class="line">    server_name   one.example.com  www.one.example.com;</div><div class="line"></div><div class="line">    access_log   /var/<span class="keyword">log</span>/nginx.access_log  main;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">      proxy_pass         http:<span class="regexp">//</span><span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span>/;</div><div class="line">      proxy_redirect     off;</div><div class="line"></div><div class="line">      proxy_set_header   Host             $host;</div><div class="line">      proxy_set_header   X-Real-IP        $remote_addr;</div><div class="line">      <span class="comment"># proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;</span></div><div class="line"></div><div class="line">      client_max_body_size       <span class="number">10</span><span class="keyword">m</span>;</div><div class="line">      client_body_buffer_size    <span class="number">128</span>k;</div><div class="line"></div><div class="line">      client_body_temp_path      /var/nginx/client_body_temp;</div><div class="line"></div><div class="line">      proxy_connect_timeout      <span class="number">90</span>;</div><div class="line">      proxy_send_timeout         <span class="number">90</span>;</div><div class="line">      proxy_read_timeout         <span class="number">90</span>;</div><div class="line">      proxy_send_lowat           <span class="number">12000</span>;</div><div class="line"></div><div class="line">      proxy_buffer_size          <span class="number">4</span>k;</div><div class="line">      proxy_buffers              <span class="number">4</span> <span class="number">32</span>k;</div><div class="line">      proxy_busy_buffers_size    <span class="number">64</span>k;</div><div class="line">      proxy_temp_file_write_size <span class="number">64</span>k;</div><div class="line"></div><div class="line">      proxy_temp_path            /var/nginx/proxy_temp;</div><div class="line"></div><div class="line">      charset  koi8-r;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    error_page  <span class="number">404</span>  /<span class="number">404</span>.html;</div><div class="line"></div><div class="line">    location /<span class="number">404</span>.html &#123;</div><div class="line">      root  /spool/www;</div><div class="line"></div><div class="line">      charset         on;</div><div class="line">      source_charset  koi8-r;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location /old_stuff/ &#123;</div><div class="line">      rewrite   ^<span class="regexp">/old_stuff/</span>(.*)$  /new_stuff/$1  permanent;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location /download/ &#123;</div><div class="line">      valid_referers  none  blocked  server_names  *.example.com;</div><div class="line"></div><div class="line">      <span class="keyword">if</span> ($invalid_referer) &#123;</div><div class="line">        <span class="comment">#rewrite   ^/   http://www.example.com/;</span></div><div class="line">        <span class="keyword">return</span>   <span class="number">403</span>;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="comment"># rewrite_log  on;</span></div><div class="line">      <span class="comment"># rewrite /download/*/mp3/*.any_ext to /download/*/mp3/*.mp3</span></div><div class="line">      rewrite ^<span class="regexp">/(download/</span>.*)/mp3/(.*)\..*$ /$1/mp3/$2.mp3 <span class="keyword">break</span>;</div><div class="line"></div><div class="line">      root         /spool/www;</div><div class="line">      <span class="comment"># autoindex    on;</span></div><div class="line">      access_log   /var/<span class="keyword">log</span>/nginx-download.access_log  download;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location ~* ^.+\.(jpg|jpeg|gif)$ &#123;</div><div class="line">      root         /spool/www;</div><div class="line">      access_log   off;</div><div class="line">      expires      <span class="number">30</span>d;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="备注-1"><a href="#备注-1" class="headerlink" title="备注"></a>备注</h2><p>今天 2017、07、04 使用nginx解决CORS问题时遇到一个有趣的问题，OPTIONS请求发出去直接403，经过分析应该是服务器对OPTIONS处理有问题所致。开发环境又是无所谓的，前端能解决就解决吧。解决的办法是，直接在 nginx里对OPTIONS返回200，因为CORS的两个请求基本是由浏览器控制的，骗骗浏览器就行了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">location / &#123; </div><div class="line">        proxy_pass http://www.target.com;</div><div class="line">        add_header Access-Control-Allow-Origin http://localhost.target.com:8080 always;</div><div class="line">        add_header Access-Control-Allow-Credentials true;</div><div class="line">        add_header Access-Control-Allow-Headers &apos;Content-Type, Origin, Accept, Cookie&apos;;</div><div class="line"></div><div class="line">        if ($request_method = OPTIONS) &#123;</div><div class="line">            return 200;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>参考：<a href="http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/" target="_blank" rel="external">http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/</a><br><br><br><a href="https://enable-cors.org/server_nginx.html" target="_blank" rel="external">https://enable-cors.org/server_nginx.html</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/17/2017-01-17-visual-achievement/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1115,153 +1385,6 @@
 <p>“七文”及用它的外星人是结果导向性思维，根据结果反推原因。文中举了一个费马光速最短时间原理的例子，外星人与人类语言互通之后第一个交流的就是原理，它们说：“光总是走消耗时间最短的路径”，正是因为这个结果，光根据水的的折射率才造成了光的折射原理——但其实反过来说，光的折射原理造成了光走过的路径，也说的通，并且这就是我们人类最习以为常的思维。</p>
 <p>所以你看，因果倒置其实也能去理解事物。我忽然又想到那个明星州长，他先是定了自己的目标，然后将目标分解倒推，为了完成一个目标，需要实现那些前置目标，最终他按着自己的设计达成了自己一开始设置的目标。</p>
 <p>所以你的目标最重要，在制定目标的时候不用去想如何实现，阻碍有什么。因为通过回溯和分治，很多困难都能战胜。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/17/2017-01-19-nginx-rewrite/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/01/17/2017-01-19-nginx-rewrite/" itemprop="url">nginx的rewrite</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-17T00:00:00+08:00">
-                2017-01-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>在开发环境，经常使用nginx将首页的静态资料重定向到本地，用的多了，总结下各种重定向的手艺。</p>
-</blockquote>
-<h2 id="location"><a href="#location" class="headerlink" title="location"></a>location</h2><p>location 并不能完成重定向，它只是一个辅助，主要起过滤作用，所以它可以多层嵌套。可以使用正则来匹配url。比较重要的是多规则匹配遵循以下优先级：<br>1.以=号开头的规则，匹配上，中止搜索。<br>2.所有剩下的普通字符串匹配（非正则），匹配越精确的就使用，与规则的顺序无关。如果匹配到以^~开头的规则，中止搜索。<br>3.正则表达式规则，按它们在配置文件中定义的顺序。<br>4.如果第三步有匹配结果，则使用。否则，使用第二步的结果。</p>
-<h2 id="proxy-pass"><a href="#proxy-pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h2><p>proxy_pass 可以重定向域名。例如：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将所有js后缀的请求代理到http://www.proxy.com下</span></div><div class="line">location /*.js &#123;</div><div class="line">	proxy_pass http:<span class="regexp">//www</span>.proxy.com;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>原始url: <a href="http://www.source.com/rs/js/main.js" target="_blank" rel="external">http://www.source.com/rs/js/main.js</a><br>实际访问地址：<a href="http://www.proxy.com/rs/js/main.js" target="_blank" rel="external">http://www.proxy.com/rs/js/main.js</a></p>
-<h2 id="return"><a href="#return" class="headerlink" title="return"></a>return</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Syntax:	return code [text];</div><div class="line">		return code URL;</div><div class="line">		return URL;</div><div class="line">Default:	—</div><div class="line">Context:	server, location, if</div></pre></td></tr></table></figure>
-<p>Context表示当前命令可以使用的环境。return 主要是返回状态码，虽然也可以直接return url，但这不是它的特色。</p>
-<h2 id="rewrite"><a href="#rewrite" class="headerlink" title="rewrite"></a>rewrite</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rewrite regex url [flag]</div></pre></td></tr></table></figure>
-<p>regex匹配上$url时，则执行重写。url中可以使用regex中捕获的子组。</p>
-<h2 id="try-files"><a href="#try-files" class="headerlink" title="try_files"></a>try_files</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">try_files url...url;</div></pre></td></tr></table></figure>
-<p>try_files会从左到右地尝试所有路径，直到它找到一个实际存在的资源，将它返回。这可以方便地设置优先级相关的逻辑。</p>
-<h2 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Syntax:	alias path;</div><div class="line">Default:	—</div><div class="line">Context:	location</div></pre></td></tr></table></figure>
-<p>alias其实是一个replace，它在location命中后，直接返回指定的path资源。</p>
-<h2 id="正则"><a href="#正则" class="headerlink" title="正则"></a>正则</h2><p>nginx编译的时候需要 pcre（Perl Compatible Regular Expressions），这个库由 Philip Hazel开发，它作为非常完善的正则表达式模块被很多其他工具和语言所使用。</p>
-<p>下面这个网站记录了正则的工业标准和各种语言的支持程度。</p>
-<p><a href="http://www.regular-expressions.info/" target="_blank" rel="external">http://www.regular-expressions.info/</a></p>
-<p>pcre的语法与各语言相似，如果你精通其他语言的正则，那么只需要一个小时就能掌握pcre的正则。因为我对javascript的正则较了解，所以只拿这二者作了下比较。</p>
-<p>pcre比js中的正则多出的功能有以下几点：</p>
-<ul>
-<li><p>自定义捕获组名，(?P<name>aaa),如果这个正则捕获成功，那么在下文中可以使用$name进行读取（在perl中你得使用$+{name}，我也不明白为啥nginx中这样可以）。</name></p>
-</li>
-<li><p>Lookbehinds ,/(?&lt;=b)aaa/,匹配baaa中的aaa。javascript中只有向前查找。</p>
-</li>
-<li><p>多出的环境变量，如$`等。</p>
-</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.nginx.com/blog/creating-nginx-rewrite-rules/" target="_blank" rel="external">创建nginx重写规则</a></li>
-</ul>
-<p>一篇超级棒的英文，我准备抽时间翻译下。</p>
-<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>这是nginx官方的一个<a href="https://www.nginx.com/resources/wiki/start/topics/examples/fullexample2/" target="_blank" rel="external">config full example</a>。</p>
-<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div></pre></td><td class="code"><pre><div class="line">user  www www;</div><div class="line">worker_processes  <span class="number">2</span>;</div><div class="line">pid /var/run/nginx.pid;</div><div class="line"></div><div class="line"><span class="comment"># [ debug | info | notice | warn | error | crit ]</span></div><div class="line">error_log  /var/<span class="keyword">log</span>/nginx.error_log  info;</div><div class="line"></div><div class="line">events &#123;</div><div class="line">  worker_connections   <span class="number">2000</span>;</div><div class="line">  <span class="comment"># use [ kqueue | rtsig | epoll | /dev/poll | select | poll ] ;</span></div><div class="line">  <span class="keyword">use</span> kqueue;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">  include       conf/mime.types;</div><div class="line">  default_type  application/octet-stream;</div><div class="line"></div><div class="line">  log_format main      <span class="string">'$remote_addr - $remote_user [$time_local]  '</span></div><div class="line">    <span class="string">'"$request" $status $bytes_sent '</span></div><div class="line">    <span class="string">'"$http_referer" "$http_user_agent" '</span></div><div class="line">    <span class="string">'"$gzip_ratio"'</span>;</div><div class="line"></div><div class="line">  log_format download  <span class="string">'$remote_addr - $remote_user [$time_local]  '</span></div><div class="line">    <span class="string">'"$request" $status $bytes_sent '</span></div><div class="line">    <span class="string">'"$http_referer" "$http_user_agent" '</span></div><div class="line">    <span class="string">'"$http_range" "$sent_http_content_range"'</span>;</div><div class="line"></div><div class="line">  client_header_timeout  <span class="number">3</span><span class="keyword">m</span>;</div><div class="line">  client_body_timeout    <span class="number">3</span><span class="keyword">m</span>;</div><div class="line">  send_timeout           <span class="number">3</span><span class="keyword">m</span>;</div><div class="line"></div><div class="line">  client_header_buffer_size    <span class="number">1</span>k;</div><div class="line">  large_client_header_buffers  <span class="number">4</span> <span class="number">4</span>k;</div><div class="line"></div><div class="line">  gzip on;</div><div class="line">  gzip_min_length  <span class="number">1100</span>;</div><div class="line">  gzip_buffers     <span class="number">4</span> <span class="number">8</span>k;</div><div class="line">  gzip_types       text/plain;</div><div class="line"></div><div class="line">  output_buffers   <span class="number">1</span> <span class="number">32</span>k;</div><div class="line">  postpone_output  <span class="number">1460</span>;</div><div class="line"></div><div class="line">  sendfile         on;</div><div class="line">  tcp_nopush       on;</div><div class="line"></div><div class="line">  tcp_nodelay      on;</div><div class="line">  send_lowat       <span class="number">12000</span>;</div><div class="line"></div><div class="line">  keepalive_timeout  <span class="number">75</span> <span class="number">20</span>;</div><div class="line"></div><div class="line">  <span class="comment"># lingering_time     30;</span></div><div class="line">  <span class="comment"># lingering_timeout  10;</span></div><div class="line">  <span class="comment"># reset_timedout_connection  on;</span></div><div class="line"></div><div class="line"></div><div class="line">  server &#123;</div><div class="line">    <span class="keyword">listen</span>        one.example.com;</div><div class="line">    server_name   one.example.com  www.one.example.com;</div><div class="line"></div><div class="line">    access_log   /var/<span class="keyword">log</span>/nginx.access_log  main;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">      proxy_pass         http:<span class="regexp">//</span><span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span>/;</div><div class="line">      proxy_redirect     off;</div><div class="line"></div><div class="line">      proxy_set_header   Host             $host;</div><div class="line">      proxy_set_header   X-Real-IP        $remote_addr;</div><div class="line">      <span class="comment"># proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;</span></div><div class="line"></div><div class="line">      client_max_body_size       <span class="number">10</span><span class="keyword">m</span>;</div><div class="line">      client_body_buffer_size    <span class="number">128</span>k;</div><div class="line"></div><div class="line">      client_body_temp_path      /var/nginx/client_body_temp;</div><div class="line"></div><div class="line">      proxy_connect_timeout      <span class="number">90</span>;</div><div class="line">      proxy_send_timeout         <span class="number">90</span>;</div><div class="line">      proxy_read_timeout         <span class="number">90</span>;</div><div class="line">      proxy_send_lowat           <span class="number">12000</span>;</div><div class="line"></div><div class="line">      proxy_buffer_size          <span class="number">4</span>k;</div><div class="line">      proxy_buffers              <span class="number">4</span> <span class="number">32</span>k;</div><div class="line">      proxy_busy_buffers_size    <span class="number">64</span>k;</div><div class="line">      proxy_temp_file_write_size <span class="number">64</span>k;</div><div class="line"></div><div class="line">      proxy_temp_path            /var/nginx/proxy_temp;</div><div class="line"></div><div class="line">      charset  koi8-r;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    error_page  <span class="number">404</span>  /<span class="number">404</span>.html;</div><div class="line"></div><div class="line">    location /<span class="number">404</span>.html &#123;</div><div class="line">      root  /spool/www;</div><div class="line"></div><div class="line">      charset         on;</div><div class="line">      source_charset  koi8-r;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location /old_stuff/ &#123;</div><div class="line">      rewrite   ^<span class="regexp">/old_stuff/</span>(.*)$  /new_stuff/$1  permanent;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location /download/ &#123;</div><div class="line">      valid_referers  none  blocked  server_names  *.example.com;</div><div class="line"></div><div class="line">      <span class="keyword">if</span> ($invalid_referer) &#123;</div><div class="line">        <span class="comment">#rewrite   ^/   http://www.example.com/;</span></div><div class="line">        <span class="keyword">return</span>   <span class="number">403</span>;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="comment"># rewrite_log  on;</span></div><div class="line">      <span class="comment"># rewrite /download/*/mp3/*.any_ext to /download/*/mp3/*.mp3</span></div><div class="line">      rewrite ^<span class="regexp">/(download/</span>.*)/mp3/(.*)\..*$ /$1/mp3/$2.mp3 <span class="keyword">break</span>;</div><div class="line"></div><div class="line">      root         /spool/www;</div><div class="line">      <span class="comment"># autoindex    on;</span></div><div class="line">      access_log   /var/<span class="keyword">log</span>/nginx-download.access_log  download;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location ~* ^.+\.(jpg|jpeg|gif)$ &#123;</div><div class="line">      root         /spool/www;</div><div class="line">      access_log   off;</div><div class="line">      expires      <span class="number">30</span>d;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="备注-1"><a href="#备注-1" class="headerlink" title="备注"></a>备注</h2><p>今天 2017、07、04 使用nginx解决CORS问题时遇到一个有趣的问题，OPTIONS请求发出去直接403，经过分析应该是服务器对OPTIONS处理有问题所致。开发环境又是无所谓的，前端能解决就解决吧。解决的办法是，直接在 nginx里对OPTIONS返回200，因为CORS的两个请求基本是由浏览器控制的，骗骗浏览器就行了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">location / &#123; </div><div class="line">        proxy_pass http://www.target.com;</div><div class="line">        add_header Access-Control-Allow-Origin http://localhost.target.com:8080 always;</div><div class="line">        add_header Access-Control-Allow-Credentials true;</div><div class="line">        add_header Access-Control-Allow-Headers &apos;Content-Type, Origin, Accept, Cookie&apos;;</div><div class="line"></div><div class="line">        if ($request_method = OPTIONS) &#123;</div><div class="line">            return 200;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>参考：<a href="http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/" target="_blank" rel="external">http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/</a><br><br><br><a href="https://enable-cors.org/server_nginx.html" target="_blank" rel="external">https://enable-cors.org/server_nginx.html</a></p>
 
           
         
@@ -1429,131 +1552,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/02/2017-01-20-why-we-always-talkabout-history/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/01/02/2017-01-20-why-we-always-talkabout-history/" itemprop="url">为什么我们总是说历史</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-02T00:00:00+08:00">
-                2017-01-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>今天我在写nginx的配置的时候遇到一个在javascript中没有见过的语法，查了很久没有查到结论。在问了一些人之后，最后查到了一个网站，包含正则的标准和各语言的实现情况，最后竟然一直查到了正则的历史（正则的历史是怎样的，我回头再写文章）。</p>
-<p>在读完它的历史后，我对正则的理解更深入了一步。然后我又想起了一个问题，“为什么每一本书前面说的都是历史？”你会发现真的没有一本技术书籍一上来直接上干货的。</p>
-<p>这么多年虽然读各个书本前面的历史读得津津有味，但是我一直希望书本一上来就读最重要的东西——因为我总是会反复地读书的前几页。</p>
-<blockquote>
-<p>历史是最好的场景</p>
-</blockquote>
-<p>如果连学的东西是用来干什么的，解决什么问题的都不知道，我相信绝大多数人都学不下去。而相对复杂的知识，比如正则表达式，它的场景很难描述清楚。而历史能说明很多问题。它是在什么情况下产生的，它为了解决什么问题，它因为什么原因经历了多少变化，现在为什么会这样？</p>
-<p>这些问题搞清楚了，对以后学习中遇到的问题很有帮助。从我自己来说，我经常吐槽某些技术的缺点、不方便之处，但是最后我总是能从历史中找到答案——当时的设计是为了解决什么问题。虽然很多不能解决问题，但能让我释然，让我明白这是取舍的产物，而在你分析这取舍之间，你的理解便会更加深入。</p>
-<p>问题总是先出现，然后才会出现解决方案。</p>
-<blockquote>
-<p>没有完美全能的方法技艺</p>
-</blockquote>
-<p>很长一段时间我都是在追求一劳永逸，然后随着年岁增长，原来唯一不变的是变化。从来就没有银弹，有的只是在各种场景下的调整变化适配。</p>
-<p>处理的事情越具有不确定性，工作的价值就越大，而于大多数人都不喜欢这样的工作，因为人们希望自己的经验能最大化的应用——这样才会在经验增长时，有实力提升的感觉，实际上就是需要一个衡量。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1603,7 +1601,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">35</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
