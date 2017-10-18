@@ -96,13 +96,13 @@
 <meta name="description" content="MDV 数据驱动视图是现代前端框架基本的设计思想，但是原生javascript对此并没有提供足够的能力。较老的框架（argular,Ember）使用观察者模式：使用内置的方法更新数据，数据更新后调用刷新视图的方法。 vue 作为新的框架，没有历史包袱，直接使用setter, getter追踪数据的变化。 Object.observe其实曾经有个 Object.observe 的方法，实现了对对象所">
 <meta name="keywords" content="编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Data bind">
+<meta property="og:title" content="Vue Data bind">
 <meta property="og:url" content="http://yoursite.com/2017/05/19/2017-06-02-data-bind/index.html">
 <meta property="og:site_name" content="magma&#39;s fe blog">
 <meta property="og:description" content="MDV 数据驱动视图是现代前端框架基本的设计思想，但是原生javascript对此并没有提供足够的能力。较老的框架（argular,Ember）使用观察者模式：使用内置的方法更新数据，数据更新后调用刷新视图的方法。 vue 作为新的框架，没有历史包袱，直接使用setter, getter追踪数据的变化。 Object.observe其实曾经有个 Object.observe 的方法，实现了对对象所">
-<meta property="og:updated_time" content="2017-06-23T09:05:24.000Z">
+<meta property="og:updated_time" content="2017-08-29T10:49:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Data bind">
+<meta name="twitter:title" content="Vue Data bind">
 <meta name="twitter:description" content="MDV 数据驱动视图是现代前端框架基本的设计思想，但是原生javascript对此并没有提供足够的能力。较老的框架（argular,Ember）使用观察者模式：使用内置的方法更新数据，数据更新后调用刷新视图的方法。 vue 作为新的框架，没有历史包袱，直接使用setter, getter追踪数据的变化。 Object.observe其实曾经有个 Object.observe 的方法，实现了对对象所">
 
 
@@ -137,7 +137,7 @@
 
 
 
-  <title>Data bind | magma's fe blog</title>
+  <title>Vue Data bind | magma's fe blog</title>
   
 
 
@@ -283,7 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Data bind</h1>
+          <h1 class="post-title" itemprop="name headline">Vue Data bind</h1>
         
 
         <div class="post-meta">
@@ -334,8 +334,7 @@
 <p>vue 作为新的框架，没有历史包袱，直接使用setter, getter追踪数据的变化。</p>
 <h2 id="Object-observe"><a href="#Object-observe" class="headerlink" title="Object.observe"></a>Object.observe</h2><p>其实曾经有个 Object.observe 的方法，实现了对对象所有行为的追踪，但因为性能问题最后又废弃了。下面这篇文章，描述了详细的历史和原因：</p>
 <p><a href="https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html" target="_blank" rel="external">https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html</a>。</p>
-<p>## </p>
-
+<h2 id="Object-defineProperty"><a href="#Object-defineProperty" class="headerlink" title="Object.defineProperty"></a>Object.defineProperty</h2>
       
     </div>
 
@@ -377,8 +376,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/19/2017-05-23-fe-server-side-rendering/" rel="next" title="直出">
-                <i class="fa fa-chevron-left"></i> 直出
+              <a href="/2017/05/09/2017-05-09-webpack-optimizing/" rel="next" title="webpack打包优化">
+                <i class="fa fa-chevron-left"></i> webpack打包优化
               </a>
             
           </div>
@@ -387,8 +386,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/06/09/2017-06-09-viewport/" rel="prev" title="viewport">
-                viewport <i class="fa fa-chevron-right"></i>
+              <a href="/2017/05/19/2017-05-23-fe-server-side-rendering/" rel="prev" title="直出">
+                直出 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -461,7 +460,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -509,7 +508,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-observe"><span class="nav-number">1.</span> <span class="nav-text">Object.observe</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-observe"><span class="nav-number">1.</span> <span class="nav-text">Object.observe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-defineProperty"><span class="nav-number">2.</span> <span class="nav-text">Object.defineProperty</span></a></li></ol></div>
             
 
           </div>
