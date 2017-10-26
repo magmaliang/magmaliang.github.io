@@ -12,7 +12,7 @@ tags: 编程
 
 file type 的input元素与其他类型不一样：它的value值通过js只能设置为空string。
 
-在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+,chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值为""(空字符串)，区别是IE会触发change事件，其它浏览器不会。可以看出IE的设计非常讲究逻辑，而不是易用和习惯——这在很多IE诟病的地方都得到体现。
+在ie8-ie10中，input(type=file)一直将value值设计为readonly，就是不能改，用户上传了一个文件，取消都不行——只能通过form的reset。IE 11+, chrome和firefox 允许通过脚本的方式改变 file_input 的 value 值为""(空字符串)，区别是IE会触发change事件，其它浏览器不会。可以看出IE的设计非常讲究逻辑，而不是易用和习惯——这在很多IE诟病的地方都得到体现。
 
 ## 为何不能通过脚本改上传元素的value值？
 
@@ -22,7 +22,7 @@ file type 的input元素与其他类型不一样：它的value值通过js只能�
 
 ## 为什么可以被设置为空值？
 
-
+设置为空值主要是为了重置，清空已选文件。
 
 
 

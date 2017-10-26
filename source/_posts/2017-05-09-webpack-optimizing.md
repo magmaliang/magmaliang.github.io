@@ -6,202 +6,52 @@ author: 梁龙飞
 tags: 编程
 ---
 
-> 这里先介绍 code splitting，先说一些关键函数，再串原理。未完待续。。。
+## 概述
 
-## code splitting 
+程序的编译基本都是**链接转化合并压缩**，有这过程中有很多可以优化的地方。js虽然是轻量的脚本语言，但近几年的发展让它已经有了开发大型程序的能力，webpack 引入了后端高级语言的编译打包功能，其构建流程已经成为了前端的标准。对于后端同学，这没有什么神奇的地方，但对于前端，打包的逻辑还是挺新鲜的。本文总结webpack打包时一些的一些优化配置。
 
-### 打包完关键代码
+写了个demo说明以下所有的优化： [https://github.com/magmaliang/webpack-package-optimize](https://github.com/magmaliang/webpack-package-optimize)
 
-使用 require.ensure 或者 import().then的代码，经过 webpack 打包，会生成以下结构的代码。其实如果读过requirejs的源码，会发现它们的逻辑基本是一样的。但webpack实现起来简单点，因为在编译的时候已经为异步的模块占位了chunkId。
+## code splitting
 
-主包中定义了 webpackJsonP，用以装载子包到全局包数组中去。源码的注释写的比较好。
+代码切割分包，主要是为提取公共代码，优化加载。其主要分为 code-spilitting-cs 和 code-splitiing-js。
+
+### css
+
+如果将css和js包混在一起打成一个大包，则需要等待主包加载完才会插入js。这样主要有两个弊端：
+
+1. 在css的模块加载完之前，界面上无法应用样式。
+2. 没有利用浏览器并发加载资源的特性。css这种和js无关的资源其实分开加载较好，它并没有什么依赖。
+
+extract-text-webpack-plugin 可以将所有css单独抽离打成一个包，配置如下：
+
 ```javascript
-// 主包的代码结构
-(function webpackUniversalModuleDefinition(root, factory) {
-    if (typeof exports === 'object' && typeof module === 'object')
-        module.exports = factory();
-    else if (typeof define === 'function' && define.amd)
-        define([], factory);
-    else {
-        var a = factory();
-        for (var i in a)(typeof exports === 'object' ? exports : root)[i] = a[i];
-    }
-})(this, function() {
-    return (function(modules) {
-    		// install a JSONP callback for chunk loading
-            var parentJsonpFunction = window["webpackJsonp"];
-            window["webpackJsonp"] = function webpackJsonpCallback(chunkIds, moreModules, executeModules) {
-                // add "moreModules" to the modules object,
-                // then flag all "chunkIds" as loaded and fire callback
-                var moduleId, chunkId, i = 0,
-                    resolves = [],
-                    result;
-                for (; i < chunkIds.length; i++) {
-                    chunkId = chunkIds[i];
-                    if (installedChunks[chunkId]) {
-                        resolves.push(installedChunks[chunkId][0]);
-                    }
-                    installedChunks[chunkId] = 0;
-                }
-                for (moduleId in moreModules) {
-                    if (Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-                        modules[moduleId] = moreModules[moduleId];
-                    }
-                }
-                if (parentJsonpFunction) parentJsonpFunction(chunkIds, moreModules, executeModules);
-                while (resolves.length) {
-                    resolves.shift()();
-                }
-            };
-            // The module cache
-            var installedModules = {};
-            // objects to store loaded and loading chunks
-            var installedChunks = {
-                2: 0
-            };
-            // The require function
-            function __webpack_require__(moduleId) {
-                // Check if module is in cache
-                if (installedModules[moduleId]) {
-                    return installedModules[moduleId].exports;
-                }
-                // Create a new module (and put it into the cache)
-                var module = installedModules[moduleId] = {
-                    i: moduleId,
-                    l: false,
-                    exports: {}
-                };
-                // Execute the module function
-                modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-                // Flag the module as loaded
-                module.l = true;
-                // Return the exports of the module
-                return module.exports;
-            }
-            // This file contains only the entry chunk.
-            // The chunk loading function for additional chunks
-            __webpack_require__.e = function requireEnsure(chunkId) {
-                if (installedChunks[chunkId] === 0) {
-                    return Promise.resolve();
-                }
-                // a Promise means "currently loading".
-                if (installedChunks[chunkId]) {
-                    return installedChunks[chunkId][2];
-                }
-                // setup Promise in chunk cache
-                var promise = new Promise(function(resolve, reject) {
-                    installedChunks[chunkId] = [resolve, reject];
-                });
-                installedChunks[chunkId][2] = promise;
-                // start chunk loading
-                var head = document.getElementsByTagName('head')[0];
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.charset = 'utf-8';
-                script.async = true;
-                script.timeout = 120000;
-                if (__webpack_require__.nc) {
-                    script.setAttribute("nonce", __webpack_require__.nc);
-                }
-                script.src = __webpack_require__.p + "" + chunkId + ".bundle.js";
-                var timeout = setTimeout(onScriptComplete, 120000);
-                script.onerror = script.onload = onScriptComplete;
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-                function onScriptComplete() {
-                    // avoid mem leaks in IE.
-                    script.onerror = script.onload = null;
-                    clearTimeout(timeout);
-                    var chunk = installedChunks[chunkId];
-                    if (chunk !== 0) {
-                        if (chunk) {
-                            chunk[1](new Error('Loading chunk ' + chunkId + ' failed.'));
-                        }
-                        installedChunks[chunkId] = undefined;
-                    }
-                };
-                head.appendChild(script);
-                return promise;
-            };
-            // expose the modules object (__webpack_modules__)
-            __webpack_require__.m = modules;
-            // expose the module cache
-            __webpack_require__.c = installedModules;
-            // identity function for calling harmony imports with the correct context
-            __webpack_require__.i = function(value) {
-                return value;
-            };
-            // define getter function for harmony exports
-            __webpack_require__.d = function(exports, name, getter) {
-                if (!__webpack_require__.o(exports, name)) {
-                    Object.defineProperty(exports, name, {
-                        configurable: false,
-                        enumerable: true,
-                        get: getter
-                    });
-                }
-            };
-            // getDefaultExport function for compatibility with non-harmony modules
-            __webpack_require__.n = function(module) {
-                var getter = module && module.__esModule ?
-                    function getDefault() {
-                        return module['default'];
-                    } :
-                    function getModuleExports() {
-                        return module;
-                    };
-                __webpack_require__.d(getter, 'a', getter);
-                return getter;
-            };
-            // Object.prototype.hasOwnProperty.call
-            __webpack_require__.o = function(object, property) {
-                return Object.prototype.hasOwnProperty.call(object, property);
-            };
-            // __webpack_public_path__
-            __webpack_require__.p = "./release/";
-            // on error function for async loading
-            __webpack_require__.oe = function(err) {
-                console.error(err);
-                throw err;
-            };
-            // Load entry module and return exports
-            return __webpack_require__(__webpack_require__.s = 85);
+// module 的rules结点
+rules: [
+    {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+            use: 'css-loader'
         })
-        (
-        	// 所有chunk，传入形参 modules 中
-        	[
-	            /* 0 */
-	            /***/
-	            (function(module, exports) {
-	            }),
-	            /* 1 */
-	            /***/
-	            (function(module, exports, __webpack_require__) {
-	            }),
-	            /* 2 */
-	            /***/
-	            (function(module, exports, __webpack_require__) {
-	            }),
-	            ...
-        	]
-        );
-});
+    }
+    , {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+            fallbackLoader: "style-loader",
+            loader: "css-loader!sass-loader",
+        })
+    }
+]
+
+// plugins 结点 
+plugins: [new ExtractTextPlugin('styles.css')]
 ```
 
-单独打包的子包结构
-```
-webpackJsonp([0], {
-	84:
-		(function(module, exports, __webpack_require__) {
-			module.exports = CmpB;
-		})
-});
-```
+### js
 
-## 原理
-
-所有以 import('module_name').then 或者 require.ensure 引入的模块，webpack 在打包时会将其打成额外的 bundle。
-
-主包中会定义 webpackJsonP 函数，子包以 webpackJsonP 包裹。
+所有以 import('module_name').then 或者 require.ensure 引入的模块，webpack 在打包时会将其打成额外的 bundle。主包中会定义 webpackJsonP 函数，子包以 webpackJsonP 包裹。在代码运行的时候异步加载。
 
 编译前后的异步引入 module 的代码如下：
 
@@ -231,7 +81,75 @@ __webpack_require__.e /* require.ensure */ (0).then((function() {
 }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 ```
 
-观察以上代码会发现，编译后的引入已经明确了 moduleId，说明 CmpA 和 App 在主 bundle 的编译里已经占坑。以 webpackJsonP 包裹的子包中有类似 {51: CmpA, 52: App} 这样的 Map，webpackJsonP 就是按照这个 Map 把相应 module 复制进 webpack 的 **modules** 数组中相应位置 —— **modules** 包含所有包，__webpack_require__ 函数即从此 数组中读取 module 的内容。在复制的同时，执行对应 installedChunks 的 resolve, installedChunks 返回的都是 **Promise**。这样 __webpack_require__.e(xxx).then 就会执行。
+单独打包的子包结构
+
+```javascript
+webpackJsonp([0], {
+    84:
+        (function(module, exports, __webpack_require__) {
+            module.exports = CmpB;
+        })
+});
+```
+主要的逻辑在 webpackJsonP 和 __webpack_require__.e 定义。
+
+## externals
+
+externals 可以让引用的模块不被打包，主要适用于这样的场景：多个bundle依赖于同一个common库，这些bundle在打包的时候并不能都将common打进去 —— 因为每个项目可能引入多个bundle，而这些bundle又是单独维护的。
+
+externals 按如下的方式配置：
+```javascript
+// webpack.config.json
+externals:{
+    "jquery": "jQuery"
+}
+```
+
+## CommonsChunkPlugin
+
+externals 解决的问题和externals一样，如果不嫌麻烦，用 externals 也能解决 commonsChunkPlugin 能解决的问题。假设有这样的场景，非单页面的应用中，多个entry中有相当一些公用的代码，这些代码即非jQuery、React这类第三方常用的库，也非稳定的约定范围的代码。但是我们又希望把这部分代码独立出来，以便利用浏览器的缓存。
+
+这就是commonsChunkPlugin 解决的问题。
+
+```javascript
+// 在webpack的配置中plugins数组中添加以下代码即可
+new webpack.optimize.CommonsChunkPlugin(options)
+
+// options有以下参数
+{
+    name: // 导出的bundle名，string or string[]
+    ,filename: // 和output的filename命名规则一样
+    ,minChunks: // 定义多少个entry共用才被定义为 commonsChunk，数质在[2,x]，x为entry的数量
+}
+
+```
+
+## tree-shaking
+
+这尼玛的不好翻译，就叫树筛选吧。webpack2 在打包时会给没有用的模块内部对象打上标记，然后在执行webpack命令的时候使用 --optimize-minimize 这个选项，压缩之后的代码便没有多余的模块。
+
+在本项目中，入口文件 src/main.js 中只引用了 src/common/utils 的部分对象，执行 npm start 后观察 release下的main.js可以发现，只打包了utils中的部分代码。
+
+ps: 和babel结合使用的时候比较恶心，请看这篇文章 [http://2ality.com/2015/12/webpack-tree-shaking.html](http://2ality.com/2015/12/webpack-tree-shaking.html)
+
+
+## Scope Hoisting
+
+Scope Hoisting 是 webpack3 的主要功能。他的思想是可以合并的module在打包时尽量合并，假设有以下代码：
+
+>a 模块在 enrty 文件中只引用了一次，那么使用 Scope Hoisting 之后，a模块的代码会直接放在 entry 的 module中
+
+它的使用很简单，只需在plugins结点中添加如下代码：
+
+```javascript
+new webpack.optimize.ModuleConcatenationPlugin()
+```
+PS: 请注意这是webpack3才有的功能
+
+
+
+## 参考 
+- [https://webpack.js.org/guides/code-splitting-css/#components/sidebar/sidebar.jsx](https://webpack.js.org/guides/code-splitting-css/#components/sidebar/sidebar.jsx)
 
 
 

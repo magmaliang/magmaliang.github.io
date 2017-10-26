@@ -24,6 +24,10 @@ npm install babel-preset-react --save-dev
 // webpack
 npm install webpack --save-dev
 npm install webpack-dev-server --save-dev
+
+// sass
+npm install node-sass --save-dev
+npm install sass-loader --save-dev
 ```
 
 ## 配置
@@ -101,6 +105,21 @@ loaders: [
 
 ```
 
+**babel-preset-env** 插件， 转化出支持特定环境的代码。
+
+例如：打包出的代码仅支持chrome52
+```javascript
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 52
+      }
+    }]
+  ]
+}
+```
+
 ## 项目
 
 配置完了，把文件路径什么的在webpack中同步好，直接执行 webpack 命令就ok了。 对于react 说个题外话。
@@ -147,6 +166,47 @@ render((
 ```
 
 react在某个版本自己分离成了react + react-dom，我之前一直在关注react，中间突然分开着实坑了我一把 —— 这也让我设计规划的时候更加大胆，更改api和模块结构也在所不惜，因为我发现很多开源库都这样 —— 为了更好，再所不惜。
+
+## redux 与高阶组件
+
+
+## 备注（以下为碎片，尚未总结）
+
+### dom 操作
+所有的**MVx**前端框架都不提倡dom操作，但是有些时候避免不了，比如手动触发某些元素的原生事件。这个时候就需要对原生dom使用ref引用到React环境,看官方的例子：
+
+```javascript
+class CustomTextInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.focus = this.focus.bind(this);
+  }
+
+  focus() {
+    // Explicitly focus the text input using the raw DOM API
+    this.textInput.focus();
+  }
+
+  render() {
+    // Use the `ref` callback to store a reference to the text input DOM
+    // element in an instance field (for example, this.textInput).
+    return (
+      <div>
+        <input
+          type="text"
+          ref={(input) => { this.textInput = input; }} />
+        <input
+          type="button"
+          value="Focus the text input"
+          onClick={this.focus}
+        />
+      </div>
+    );
+  }
+}
+```
+
+### 频繁使用setState
 
 ## 参考
 

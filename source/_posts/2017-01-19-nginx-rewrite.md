@@ -214,3 +214,24 @@ http {
   }
 }
 ```
+
+## 备注
+
+今天 2017、07、04 使用nginx解决CORS问题时遇到一个有趣的问题，OPTIONS请求发出去直接403，经过分析应该是服务器对OPTIONS处理有问题所致。开发环境又是无所谓的，前端能解决就解决吧。解决的办法是，直接在 nginx里对OPTIONS返回200，因为CORS的两个请求基本是由浏览器控制的，骗骗浏览器就行了。
+
+```
+location / { 
+        proxy_pass http://www.target.com;
+        add_header Access-Control-Allow-Origin http://localhost.target.com:8080 always;
+        add_header Access-Control-Allow-Credentials true;
+        add_header Access-Control-Allow-Headers 'Content-Type, Origin, Accept, Cookie';
+
+        if ($request_method = OPTIONS) {
+            return 200;
+        }
+    }
+```
+
+参考：[http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/](http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/)
+<br/>
+[https://enable-cors.org/server_nginx.html](https://enable-cors.org/server_nginx.html)
