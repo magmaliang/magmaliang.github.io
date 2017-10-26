@@ -1,0 +1,735 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="本文的结论在很久前就注意过，并且了解到浏览器的缓存压缩，但是没有记录、没有深入调研，不够了解自然不能运用自如。  问题这个问题很早就出现，因为其他更紧急的事，没有分析。情况是这样的，我们有几个比较大的js脚本，平均在1MB~2MB之间（压缩前），在chrome下304的情况下加载都需要平均600毫秒的时间。 问题分析经过 以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。">
+<meta name="keywords" content="编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chrome 缓存压缩--记一次脚本加载时间过长的分析">
+<meta property="og:url" content="http://yoursite.com/2016/10/31/2016-11-01-introduction-to-chrome-cache-compress/index.html">
+<meta property="og:site_name" content="magma&#39;s fe blog">
+<meta property="og:description" content="本文的结论在很久前就注意过，并且了解到浏览器的缓存压缩，但是没有记录、没有深入调研，不够了解自然不能运用自如。  问题这个问题很早就出现，因为其他更紧急的事，没有分析。情况是这样的，我们有几个比较大的js脚本，平均在1MB~2MB之间（压缩前），在chrome下304的情况下加载都需要平均600毫秒的时间。 问题分析经过 以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。">
+<meta property="og:image" content="http://yoursite.com/image/chrome-200.png">
+<meta property="og:image" content="http://yoursite.com/image/pinglocal.png">
+<meta property="og:image" content="http://yoursite.com/image/chrome-200cache.png">
+<meta property="og:image" content="http://yoursite.com/image/safari-200cache.png">
+<meta property="og:image" content="http://yoursite.com/image/ping.jpg">
+<meta property="og:image" content="http://yoursite.com/image/firefox_304.png">
+<meta property="og:updated_time" content="2017-06-17T15:00:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="chrome 缓存压缩--记一次脚本加载时间过长的分析">
+<meta name="twitter:description" content="本文的结论在很久前就注意过，并且了解到浏览器的缓存压缩，但是没有记录、没有深入调研，不够了解自然不能运用自如。  问题这个问题很早就出现，因为其他更紧急的事，没有分析。情况是这样的，我们有几个比较大的js脚本，平均在1MB~2MB之间（压缩前），在chrome下304的情况下加载都需要平均600毫秒的时间。 问题分析经过 以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。">
+<meta name="twitter:image" content="http://yoursite.com/image/chrome-200.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/31/2016-11-01-introduction-to-chrome-cache-compress/"/>
+
+
+
+
+
+  <title>chrome 缓存压缩--记一次脚本加载时间过长的分析 | magma's fe blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">magma's fe blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/31/2016-11-01-introduction-to-chrome-cache-compress/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">chrome 缓存压缩--记一次脚本加载时间过长的分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-31T00:00:00+08:00">
+                2016-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文的结论在很久前就注意过，并且了解到浏览器的缓存压缩，但是没有记录、没有深入调研，不够了解自然不能运用自如。</p>
+</blockquote>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>这个问题很早就出现，因为其他更紧急的事，没有分析。情况是这样的，我们有几个比较大的js脚本，平均在1MB~2MB之间（压缩前），在chrome下304的情况下加载都需要平均600毫秒的时间。</p>
+<h2 id="问题分析经过"><a href="#问题分析经过" class="headerlink" title="问题分析经过"></a>问题分析经过</h2><blockquote>
+<p>以下测试数据皆在我自己的mac上进行，在其他机器上数据偏差量可能非常大。</p>
+</blockquote>
+<h3 id="一-是否是服务器原因"><a href="#一-是否是服务器原因" class="headerlink" title="一.是否是服务器原因"></a>一.是否是服务器原因</h3><p>之所以会考虑这个原因，是因为我们使用了nginx rewrite模块，这还不算完，rewrite之后还要使用proxy_pass代理到node启的端口上，我害怕这条路太过曲折。所以我把一个大文件直接在nginx里location出去。</p>
+<p>然后……chrome下<br><br><br><img src="/image/chrome-200.png" alt="/image/chrome-200.png"></p>
+<h3 id="二-是否是网络原因"><a href="#二-是否是网络原因" class="headerlink" title="二.是否是网络原因"></a>二.是否是网络原因</h3><p>因为使用的是本地的静态资源服务器(127.0.0.1)，网络出现原因只能是到本地服务器的建连时间。但是我还是手贱地ping了下</p>
+<p><img src="/image/pinglocal.png" style="width:70%;"></p>
+<p>这个时间，业界良心，没得说了。</p>
+<p>如何彻底绝了这念想，我只好触发200 from cache了。</p>
+<p>chrome下的结果：</p>
+<p><img src="/image/chrome-200cache.png" alt="/image/chrome-200.png"></p>
+<p>完全跟网络无关的加载都如此耗时，这….绝逼是浏览器的原因了，为了证实此问题。</p>
+<h3 id="三-证明是chrome的原因"><a href="#三-证明是chrome的原因" class="headerlink" title="三.证明是chrome的原因"></a>三.证明是chrome的原因</h3><p>这时候我打开了尘封已久的safari,看了下资源304时的timeline.</p>
+<p><img src="/image/safari-200cache.png" alt="/image/chrome-200.png"></p>
+<p>尼玛，这数据似曾相识？<br><br><br><img src="/image/ping.jpg" width="30%"></p>
+<p>我又浪费公司带宽去下载了一个80MB的firefox,304缓存时间如下：<br><br><br><img src="/image/firefox_304.png"></p>
+<h3 id="四-理论依据"><a href="#四-理论依据" class="headerlink" title="四.理论依据"></a>四.理论依据</h3><p>作为一个程序员，仅仅用事实说话是不行的……还得用代码说话。。。只可惜。。<br>我看不懂chrome的代码，那时候整天哔哔哔微软不开源，现在开源的也看不懂，尴尬。所以又去读了几遍chrome timing相关的<a href="https://developers.google.com/web/tools/chrome-devtools/network-performance/resource-loading#view-network-timing-details-for-a-specific-resource" target="_blank" rel="external">文档</a>，还是没搞明白。</p>
+<p>只好low爆地去搜，“Chrome spend too much time downloading resourece from cache”，结果只找到了这一篇<a href="http://stackoverflow.com/questions/33250802/why-does-chrome-spend-time-downloading-content-from-cache" target="_blank" rel="external">Why does Chrome spend time “downloading” content from cache?</a>,这个回答指引我找到了最终的答案，但只有可怜的3个赞，我顺手一点，结果说我声望不够，不准我点赞，于是我又google如何获取声望~~~。</p>
+<p>这位兄台说到：</p>
+<blockquote>
+<p>You’ll also notice that Chrome is spending time “downloading” every file. Why is this? Well, Chrome’s cache is a database, and that database is also compressed to save space. When you retrieve a document from cache, the price of that retrieval is not zero. Chrome has to look up the item in the cache database, and then inflate that entry into memory so Chrome can work with it. I don’t know the exact details concerning how the Network chrome-dev-tools panel shows the times, but I would guess that getting that file from disk, uncompressing it, and then parsing and working with the result is what you’re seeing reflected in “Time downloaded.”</p>
+</blockquote>
+<p>进一步搜索找到这篇<a href="https://www.stevesouders.com/blog/2012/03/27/cache-compressed-or-uncompressed/" target="_blank" rel="external">文章</a>。可以看到chrome,firefox和Opera进行了压缩，IE和Safari没有。这说明了我上面测试的结果，从safari加载304缓存的速度几乎和ping的速度一样。chrome相比于firefox，解压加载的速度几乎慢了两个数量级，这应该是chrome的压缩率更高，所以解压速度更长。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><blockquote>
+<p>Chrome压缩了缓存，从缓存中加载需要解压 —— No free lunch.</p>
+</blockquote>
+<script>
+    var imgs = document.images;
+    for(var i =0;i<imgs.length;i++){
+        imgs[i].addEventListener("mousedown",function(e){
+            var str = e.target.getAttribute("src");
+            window.open(str,"_blank")
+        })
+    }
+</script>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/13/2016-10-13-file-input-ele/" rel="next" title="file input 元素">
+                <i class="fa fa-chevron-left"></i> file input 元素
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/31/2016-10-31-simple-require-js/" rel="prev" title="简述AMD的实现库: requirejs">
+                简述AMD的实现库: requirejs <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="magma" />
+          <p class="site-author-name" itemprop="name">magma</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题分析经过"><span class="nav-number">2.</span> <span class="nav-text">问题分析经过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一-是否是服务器原因"><span class="nav-number">2.1.</span> <span class="nav-text">一.是否是服务器原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二-是否是网络原因"><span class="nav-number">2.2.</span> <span class="nav-text">二.是否是网络原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三-证明是chrome的原因"><span class="nav-number">2.3.</span> <span class="nav-text">三.证明是chrome的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四-理论依据"><span class="nav-number">2.4.</span> <span class="nav-text">四.理论依据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magma</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

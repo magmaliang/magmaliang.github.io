@@ -1,0 +1,733 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。  环境、前提 以下测试阐述用例使用的是nginx 1.8.1。  Expires资源的过期时间，">
+<meta name="keywords" content="编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务器配置静态资源的缓存策略">
+<meta property="og:url" content="http://yoursite.com/2016/11/04/2016-11-04-cache-control/index.html">
+<meta property="og:site_name" content="magma&#39;s fe blog">
+<meta property="og:description" content="这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。  环境、前提 以下测试阐述用例使用的是nginx 1.8.1。  Expires资源的过期时间，">
+<meta property="og:image" content="http://yoursite.com/image/first_request.png">
+<meta property="og:image" content="http://yoursite.com/image/second_request.png">
+<meta property="og:updated_time" content="2017-06-17T15:00:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="服务器配置静态资源的缓存策略">
+<meta name="twitter:description" content="这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。  环境、前提 以下测试阐述用例使用的是nginx 1.8.1。  Expires资源的过期时间，">
+<meta name="twitter:image" content="http://yoursite.com/image/first_request.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/04/2016-11-04-cache-control/"/>
+
+
+
+
+
+  <title>服务器配置静态资源的缓存策略 | magma's fe blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">magma's fe blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/04/2016-11-04-cache-control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">服务器配置静态资源的缓存策略</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-04T00:00:00+08:00">
+                2016-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。</p>
+</blockquote>
+<h2 id="环境、前提"><a href="#环境、前提" class="headerlink" title="环境、前提"></a>环境、前提</h2><blockquote>
+<p>以下测试阐述用例使用的是nginx 1.8.1。</p>
+</blockquote>
+<h2 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h2><p>资源的过期时间，这是个时间点。它的运行机制如下：</p>
+<ol>
+<li>服务器设置资源A的过期时间为 <strong>Mon, 07 Nov 2016 09:45:28 GMT</strong></li>
+<li>客户端第一次访问A时，下载资源200。再次访问资源A时，如果客户端时间在Expires之前，则直接从缓存中读取A，状态为 200 from cache.否则再次请求服务器。</li>
+</ol>
+<p>Expires定义于http1.0，虽然浏览器依然处理此策略，但是http1.1定义的cache-control更犀利、全面。需要注意的是如果使用nginx测试，其中expires字段并不是Expires，见关联知识第二点。</p>
+<h2 id="Cache-Control相关"><a href="#Cache-Control相关" class="headerlink" title="Cache-Control相关"></a>Cache-Control相关</h2><p>Cache-Control的常用取值（其实是我理解的，其他的不理解不敢瞎写）：</p>
+<ol>
+<li>max-age=t,在t秒内不会再次请求此资源，当此项与Expires同时存在时，此项优先级高于Exprires。</li>
+<li>no-cache,不直接使用本地缓存，每次会去服务器验证有效性，所以可能会触发304 cache.</li>
+<li>no-store,完全不使用缓存。</li>
+<li>public,缓存所有资源。</li>
+</ol>
+<p><strong>Cache-Control与Expires同时设置时，Cache-Control的优先级高于Expires。</strong></p>
+<h3 id="Last-Modified-If-Modified-Since"><a href="#Last-Modified-If-Modified-Since" class="headerlink" title="Last-Modified/If-Modified-Since"></a>Last-Modified/If-Modified-Since</h3><p>如果服务器开启此功能，其运行机制如下：</p>
+<ol>
+<li>客户端第一次请求资源A时，返回资源A的 response-header 中有 Last-Modified字段</li>
+<li>第二次请求A资源，并且此资源过期（Expires的设置，或者Cache-Control设置），客户端发送一个带有If-Modified-Since字段的请求去服务器，服务器对比A资源的最后修改时间T与客户端发送过来的If-Modified-Since。如果T&gt;If-Modified-Since,返回状态码200，并完全返回资源A的数据。如果 T = If-Modified-Since，返回304，客户端从缓存中读取A的数据。如果T &lt; If-Modified-Since,那么这是个非法请求。</li>
+</ol>
+<h3 id="Etag-If-None-Match"><a href="#Etag-If-None-Match" class="headerlink" title="Etag/If-None-Match"></a>Etag/If-None-Match</h3><p>Etag与Last-Modified的机制一样，不同的是Etag有生成规则，用以区分同一文件在时间维度上的不同。Etag提出主要是解决以下Last-Modified不能解决的问题：</p>
+<ol>
+<li>Last-Modified只能精确到秒级，如果1秒内多次修改，可能造成缓存到客户端的不是最新的资源。</li>
+<li>某些文件定时更新，客户端关心的资源并没有变化，但Last-Modified改变了，将无法使用缓存。</li>
+<li>有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形。</li>
+</ol>
+<p>注意，当Etag和Last-Modified一起设置时，Etag的优先级高于Last-Modified，但并不是覆盖。</p>
+<h2 id="缓存应用流程图"><a href="#缓存应用流程图" class="headerlink" title="缓存应用流程图"></a>缓存应用流程图</h2><h3 id="客户端第一次请求资源"><a href="#客户端第一次请求资源" class="headerlink" title="客户端第一次请求资源"></a>客户端第一次请求资源</h3><p><img src="/image/first_request.png"></p>
+<h3 id="客户端第二次请求资源"><a href="#客户端第二次请求资源" class="headerlink" title="客户端第二次请求资源"></a>客户端第二次请求资源</h3><p><img src="/image/second_request.png"></p>
+<p>哈哈~，这两张图是盗的，来自于参考项的文章中。</p>
+<h2 id="关联知识"><a href="#关联知识" class="headerlink" title="关联知识"></a>关联知识</h2><ul>
+<li>GMT时间，格林尼治时间，北京时间是东八区，这个八就是相对格林尼治，所以北京时间减8个小时就是GMT。</li>
+<li>ngx_http_headers_module，此模块总是在response header上追加 Expires 和 Cache-Control字段，同时expires不设置为 off时，Expires和Cache-Control会因为expires的设置而被修改。参考:<a href="http://nginx.org/en/docs/http/ngx_http_headers_module.html#expires" target="_blank" rel="external">Module ngx_http_headers_module</a></li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html" target="_blank" rel="external">http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html</a><br><a href="https://www.mnot.net/cache_docs/" target="_blank" rel="external">https://www.mnot.net/cache_docs/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/31/2016-10-31-simple-require-js/" rel="next" title="简述AMD的实现库: requirejs">
+                <i class="fa fa-chevron-left"></i> 简述AMD的实现库: requirejs
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/05/2016-11-05-amd-commonjs-umd/" rel="prev" title="js模块化规范——AMD,CommonJS,UMD">
+                js模块化规范——AMD,CommonJS,UMD <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="magma" />
+          <p class="site-author-name" itemprop="name">magma</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境、前提"><span class="nav-number">1.</span> <span class="nav-text">环境、前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Expires"><span class="nav-number">2.</span> <span class="nav-text">Expires</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cache-Control相关"><span class="nav-number">3.</span> <span class="nav-text">Cache-Control相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Last-Modified-If-Modified-Since"><span class="nav-number">3.1.</span> <span class="nav-text">Last-Modified/If-Modified-Since</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Etag-If-None-Match"><span class="nav-number">3.2.</span> <span class="nav-text">Etag/If-None-Match</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存应用流程图"><span class="nav-number">4.</span> <span class="nav-text">缓存应用流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端第一次请求资源"><span class="nav-number">4.1.</span> <span class="nav-text">客户端第一次请求资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端第二次请求资源"><span class="nav-number">4.2.</span> <span class="nav-text">客户端第二次请求资源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联知识"><span class="nav-number">5.</span> <span class="nav-text">关联知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magma</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

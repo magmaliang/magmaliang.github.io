@@ -1,0 +1,714 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js,浏览器内核" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概念程序语言的UI模块向来比较复杂，且因为依赖操作系统的具体呈现，在跨平台下更为难搞。C 语言就是因为如此一直没有UI模块。处理数据的模块可以抽象，可以运用各种高阶技艺，但是呈现出的UI相对来说比较具体，如何设计的优雅简单，我个人觉得需要的智慧不亚于操作系统（KDE的代码量已经达到400万行，linux内核有370万行）。 和其他规模大到一定程度需要标准和流程一样，UI也是如此。无论是 cs 还是">
+<meta name="keywords" content="js,浏览器内核">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器内核">
+<meta property="og:url" content="http://yoursite.com/2016/09/14/2016-09-14-browser-kernel/index.html">
+<meta property="og:site_name" content="magma&#39;s fe blog">
+<meta property="og:description" content="概念程序语言的UI模块向来比较复杂，且因为依赖操作系统的具体呈现，在跨平台下更为难搞。C 语言就是因为如此一直没有UI模块。处理数据的模块可以抽象，可以运用各种高阶技艺，但是呈现出的UI相对来说比较具体，如何设计的优雅简单，我个人觉得需要的智慧不亚于操作系统（KDE的代码量已经达到400万行，linux内核有370万行）。 和其他规模大到一定程度需要标准和流程一样，UI也是如此。无论是 cs 还是">
+<meta property="og:updated_time" content="2017-06-17T14:48:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浏览器内核">
+<meta name="twitter:description" content="概念程序语言的UI模块向来比较复杂，且因为依赖操作系统的具体呈现，在跨平台下更为难搞。C 语言就是因为如此一直没有UI模块。处理数据的模块可以抽象，可以运用各种高阶技艺，但是呈现出的UI相对来说比较具体，如何设计的优雅简单，我个人觉得需要的智慧不亚于操作系统（KDE的代码量已经达到400万行，linux内核有370万行）。 和其他规模大到一定程度需要标准和流程一样，UI也是如此。无论是 cs 还是">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/14/2016-09-14-browser-kernel/"/>
+
+
+
+
+
+  <title>浏览器内核 | magma's fe blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">magma's fe blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/14/2016-09-14-browser-kernel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浏览器内核</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-14T00:00:00+08:00">
+                2016-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>程序语言的UI模块向来比较复杂，且因为依赖操作系统的具体呈现，在跨平台下更为难搞。C 语言就是因为如此一直没有UI模块。处理数据的模块可以抽象，可以运用各种高阶技艺，但是呈现出的UI相对来说比较具体，如何设计的优雅简单，我个人觉得需要的智慧不亚于操作系统（KDE的代码量已经达到400万行，linux内核有370万行）。</p>
+<p>和其他规模大到一定程度需要标准和流程一样，UI也是如此。无论是 cs 还是 bs，在 UI 的呈现上其实有很多共通之处，就像各种程序语言之间的关系一样。桌面 UI 与浏览器的 UI(html css) 之间有着基本一致的设计。例如基于 KDE 的 webcore(webkit中的排版模块) 被选为 chrome 和 safari 的排版引擎，但是它最初是为了 *inux 的桌面系统而设计的。</p>
+<p>java 在操作系统之上铺一层 jvm 实现跨平台，对于 web 程序来讲，浏览器就是它们的虚拟机。<strong>而浏览器内核就是呈现网页应用的核心模块，它一般包括两部分 —— 渲染排版模块和 js 解析模块，即渲染引擎和 js 引擎</strong>。</p>
+<h2 id="内核和引擎的区别"><a href="#内核和引擎的区别" class="headerlink" title="内核和引擎的区别"></a>内核和引擎的区别</h2><p><em>我在 google 里搜索 brower kernel 并没有结果。</em></p>
+<p>中文社区经常会说到浏览器内核，然而内核与渲染引擎经常混用，我一直傻傻分不清，极度混淆，于是在今天使劲撸了一把，得出结论：</p>
+<blockquote>
+<p><strong>由于web出现的早期是没有js的，内核的功能仅仅是排版渲染，所以渲染引擎的模块一开始与内核是等价的，后来再加入的js模块多数有自己的模块名。—— 所以渲染引擎的名称几乎与内核一样，但是内核包含一些有自己名称的 js 引擎</strong></p>
+</blockquote>
+<h2 id="渲染引擎分类-rendering-engine-or-layout-engine"><a href="#渲染引擎分类-rendering-engine-or-layout-engine" class="headerlink" title="渲染引擎分类(rendering engine or layout engine)"></a>渲染引擎分类(rendering engine or layout engine)</h2><blockquote>
+<p>读取标记语言(HTML,XML)和一些格式信息排版渲染成UI界面的程序， 我们平时所说的浏览器引擎一般指渲染引擎。</p>
+</blockquote>
+<table><br>    <thead><br>        <tr><th style="width:100px">名称</th><th>简介</th></tr><br>    </thead><br>    <tbody><br>        <tr><td>Trident</td><td>IE 开发使用的内核。360 早期仅使用 Trident，后来又引入 chromium 成为双内核浏览器。</td></tr><br>        <tr><td>Webkit</td><td>起源于 KDE。webkit 是目前最屌的内核，chrome 和 safari 以及几乎所有的移动端浏览器都是在 webkit 的的基础上衍生的。chrome 28+之后，使用基于webkit开发的 <a href="https://en.wikipedia.org/wiki/Blink_(web_engine)" target="_blank" rel="external">Blink</a></td></tr><br>        <tr><td>Gecko</td><td>由 Netscape 开发。继承衣钵的 FirFox 自然采用了此内核。</td></tr><br>        <tr><td>Presto</td><td>Opera 浏览器采用的渲染引擎，不过 opera software 在2013年已经放弃它了，决定使用webkit + v8。</td></tr><br>    </tbody><br></table>
+
+<h2 id="js-引擎分类"><a href="#js-引擎分类" class="headerlink" title="js 引擎分类"></a>js 引擎分类</h2><blockquote>
+<p>读取执行 JavaScript 代码的程序。</p>
+</blockquote>
+<table><br>    <thead><br>        <tr><th style="width:200px">名称</th><th>采用程序</th><th>备注</th></tr><br>    </thead><br>    <tbody><br>        <tr><td>V8</td><td>Google Chrome，Node.js,V8.NET</td><td></td>chrome使用的渲染引擎是webkit</tr><br>        <tr><td>Chakra(JScript engine)</td><td>IE9~IE11</td><td>MIT 开源</td></tr><br>        <tr><td>Chakra(JavaScript engine)</td><td>Microsoft Edge</td><td>对你没有看错，微软就是样子多,这是JScript engine的一个fork，MIT开源</td></tr><br>        <tr><td>Carakan</td><td>Opera</td><td>2013年 Opera15 正式采用 V8,放弃Carakan</td></tr><br>        <tr><td>SpiderMonkey</td><td>FireFox</td><td></td></tr><br>        <tr><td>JavaScriptCore</td><td>大名鼎鼎的webkit内核使用的js引擎</td><td></td></tr><br>        <tr><td>Tamarin</td><td>Adobe Flash</td><td></td></tr><br>        <tr><td>Nashore</td><td>JDK 8+</td><td></td></tr><br>    </tbody><br></table>
+
+
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><ul>
+<li><a href="https://en.wikipedia.org/wiki/Comparison_of_layout_engines_(HTML" target="_blank" rel="external">https://en.wikipedia.org/wiki/Comparison_of_layout<em>engines</em>(HTML)</a>)</li>
+<li><a href="https://en.wikipedia.org/wiki/Web_browser_engine" target="_blank" rel="external">https://en.wikipedia.org/wiki/Web_browser_engine</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_ECMAScript_engines" target="_blank" rel="external">https://en.wikipedia.org/wiki/List_of_ECMAScript_engines</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/02/2016-08-02-value-assign/" rel="next" title="js 引用类型的赋值">
+                <i class="fa fa-chevron-left"></i> js 引用类型的赋值
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/18/2016-09-18-adaptive-vs-responsive/" rel="prev" title="自适应设计 vs 响应式设计">
+                自适应设计 vs 响应式设计 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="magma" />
+          <p class="site-author-name" itemprop="name">magma</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核和引擎的区别"><span class="nav-number">2.</span> <span class="nav-text">内核和引擎的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染引擎分类-rendering-engine-or-layout-engine"><span class="nav-number">3.</span> <span class="nav-text">渲染引擎分类(rendering engine or layout engine)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#js-引擎分类"><span class="nav-number">4.</span> <span class="nav-text">js 引擎分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考资料"><span class="nav-number">4.0.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magma</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
