@@ -263,7 +263,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/31/2016-10-31-simple-require-js/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/05/2016-11-05-amd-commonjs-umd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="magma">
@@ -282,7 +282,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/10/31/2016-10-31-simple-require-js/" itemprop="url">简述AMD的实现库: requirejs</a></h1>
+                <a class="post-title-link" href="/2016/11/05/2016-11-05-amd-commonjs-umd/" itemprop="url">js模块化规范——AMD,CommonJS,UMD</a></h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-31T00:00:00+08:00">
-                2016-10-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-05T00:00:00+08:00">
+                2016-11-05
               </time>
             
 
@@ -331,30 +331,180 @@
       
         
           
-            <p>requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖…直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">define(id?,deps?,factory)</div></pre></td></tr></table></figure>
-<h3 id="requirejs的内部变量"><a href="#requirejs的内部变量" class="headerlink" title="requirejs的内部变量"></a>requirejs的内部变量</h3><p>id 和 deps都不是必选的，factory才是模块的内容。那么define到底做了什么事呢？这得说到requirejs内部的一些对象，下面的代码是requirejs一开始定义的变量，它秉承了先声明后使用的原则把内部所用的变量一股脑声明在了函数内部的最前面：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> req, s, head, baseElement, dataMain, src,</div><div class="line">interactiveScript, currentlyAddingScript, mainScript, subPath,</div><div class="line">version = <span class="string">'2.3.2'</span>,</div><div class="line">commentRegExp = <span class="regexp">/\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/mg</span>,</div><div class="line">cjsRequireRegExp = <span class="regexp">/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g</span>,</div><div class="line">jsSuffixRegExp = <span class="regexp">/\.js$/</span>,</div><div class="line">currDirRegExp = <span class="regexp">/^\.\//</span>,</div><div class="line">op = <span class="built_in">Object</span>.prototype,</div><div class="line">ostring = op.toString,</div><div class="line">hasOwn = op.hasOwnProperty,</div><div class="line">isBrowser = !!(<span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> &amp;&amp; <span class="keyword">typeof</span> navigator !== <span class="string">'undefined'</span> &amp;&amp; <span class="built_in">window</span>.document),</div><div class="line">isWebWorker = !isBrowser &amp;&amp; <span class="keyword">typeof</span> importScripts !== <span class="string">'undefined'</span>,</div><div class="line"><span class="comment">//PS3 indicates loaded and complete, but need to wait for complete</span></div><div class="line"><span class="comment">//specifically. Sequence is 'loading', 'loaded', execution,</span></div><div class="line"><span class="comment">// then 'complete'. The UA check is unfortunate, but not sure how</span></div><div class="line"><span class="comment">//to feature test w/o causing perf issues.</span></div><div class="line">readyRegExp = isBrowser &amp;&amp; navigator.platform === <span class="string">'PLAYSTATION 3'</span> ?</div><div class="line">              <span class="regexp">/^complete$/</span> : <span class="regexp">/^(complete|loaded)$/</span>,</div><div class="line">defContextName = <span class="string">'_'</span>,</div><div class="line"><span class="comment">//Oh the tragedy, detecting opera. See the usage of isOpera for reason.</span></div><div class="line">isOpera = <span class="keyword">typeof</span> opera !== <span class="string">'undefined'</span> &amp;&amp; opera.toString() === <span class="string">'[object Opera]'</span>,</div><div class="line">contexts = &#123;&#125;,</div><div class="line">cfg = &#123;&#125;,</div><div class="line">globalDefQueue = [],</div><div class="line">useInteractive = <span class="literal">false</span>;</div></pre></td></tr></table></figure>
-<p>除了contexts之外，其他的类似于程序设计中的静态单例，或是辅助空间，所有的逻辑还是隐藏在了contexts中。在这个2.3.2的版本中，用来生成contexts实例的newContext函数从200行开始，直到1798行结束。。。所以没办法，我们打开newContext函数，把它的变量也扒出来。</p>
-<h3 id="newContext"><a href="#newContext" class="headerlink" title="newContext"></a>newContext</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> inCheckLoaded, Module, context, handlers,</div><div class="line">checkLoadedTimeoutId,</div><div class="line">config = &#123;</div><div class="line">    <span class="comment">//Defaults. Do not set a default for map</span></div><div class="line">    <span class="comment">//config to speed up normalize(), which</span></div><div class="line">    <span class="comment">//will run faster if there is no default.</span></div><div class="line">    waitSeconds: <span class="number">7</span>,</div><div class="line">    <span class="attr">baseUrl</span>: <span class="string">'./'</span>,</div><div class="line">    <span class="attr">paths</span>: &#123;&#125;,</div><div class="line">    <span class="attr">bundles</span>: &#123;&#125;,</div><div class="line">    <span class="attr">pkgs</span>: &#123;&#125;,</div><div class="line">    <span class="attr">shim</span>: &#123;&#125;,</div><div class="line">    <span class="attr">config</span>: &#123;&#125;</div><div class="line">&#125;,</div><div class="line">registry = &#123;&#125;,</div><div class="line"><span class="comment">//registry of just enabled modules, to speed</span></div><div class="line"><span class="comment">//cycle breaking code when lots of modules</span></div><div class="line"><span class="comment">//are registered, but not activated.</span></div><div class="line">enabledRegistry = &#123;&#125;,</div><div class="line">undefEvents = &#123;&#125;,</div><div class="line">defQueue = [],</div><div class="line">defined = &#123;&#125;,</div><div class="line">urlFetched = &#123;&#125;,</div><div class="line">bundlesMap = &#123;&#125;,</div><div class="line">requireCounter = <span class="number">1</span>,</div><div class="line">unnormalizedCounter = <span class="number">1</span>;</div></pre></td></tr></table></figure>
-<p>通过官方文档我们知道入口文件用 requirejs.config 来启动的，这个函数执行时即开始加载依赖，我们把这个入口文件叫做依赖树的根——尽管存在一个文件可能被好几个上级资源依赖的情况，这里为叙述方便仍称其为树。除了根之外节点都会被构建为Module（newContext内部定义的模块对象）对象，临时存放于<strong>enabledRegistry</strong>这个变量中。需要注意的是，只是刚刚激活的模块才会在这个变量中短暂停留，随后就会被清除，它的作用像是一个buffer。</p>
-<h3 id="define函数的作用"><a href="#define函数的作用" class="headerlink" title="define函数的作用"></a>define函数的作用</h3><p>我们回到前面的问题，define到底做了什么？</p>
-<p>define将模块格式化为一个数组：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[id,deps,factory]</div></pre></td></tr></table></figure>
-<p>并将其 push 进全局变量 globalDefQueue 中 —— 上面说过，这是个缓冲池。然后contexts会从其中拿数据并构建为Module对象存放于自己内部变量中,Module对象主要模式如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">exports</span>:define中factory执行返回的对象，如果factory不是可执行函数则直接返回factory</div><div class="line">    ,<span class="attr">factory</span>:即define中的factory</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当此Module被上层函数依赖时，则返回其exports到上层函数的arguments中，执行这个操作的关键函数为：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">/**</span></div><div class="line"> * Executes a module callback function. Broken out as a separate function</div><div class="line"> * solely to allow the build system to sequence the files in the built</div><div class="line"> * layer in the right sequence.</div><div class="line"> *</div><div class="line"> * @private</div><div class="line"> */</div><div class="line">execCb: <span class="function"><span class="keyword">function</span> (<span class="params">name, callback, args, exports</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> callback.apply(exports, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="简单的requirejs实现"><a href="#简单的requirejs实现" class="headerlink" title="简单的requirejs实现"></a>简单的requirejs实现</h2><p>好了，专业库因为要考虑很多方面，不容易直接洞察其主要逻辑。其实我些年的经验时，需求是最好的文档，当你了解需求，直接读源码就行了——甚至直接去造轮子了。下面我们就造个劣质小轮子 —— 这是了解一个库最好的方式了。</p>
-<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> define,<span class="built_in">require</span>;</div><div class="line"><span class="built_in">require</span> = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>)</span>&#123;</div><div class="line">	<span class="keyword">let</span> &#123;entry,baseUrl&#125; = options;</div><div class="line">	<span class="comment">//存放所有生成的模块</span></div><div class="line">	<span class="keyword">var</span> modules  = &#123;&#125;,</div><div class="line">		unLoadedModules = [];<span class="comment">//每当有script_onload触发时，则shift一个模块，生成Module</span></div><div class="line"></div><div class="line">	<span class="comment">//根据id加载一个模块，数据结构如下</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">loadModule</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> node = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">        node.setAttribute(<span class="string">'data-modid'</span>, id);</div><div class="line">        node.src = baseUrl+id+<span class="string">".js"</span>;</div><div class="line"></div><div class="line">    	node.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">    		<span class="comment">//当前脚本加载的模块名</span></div><div class="line">    		<span class="keyword">var</span> id = e.target.getAttribute(<span class="string">"data-modid"</span>);</div><div class="line">    		completeLoaded(id);</div><div class="line"></div><div class="line">    		<span class="comment">//对所有可以导出export的模块进行导出</span></div><div class="line">    		tryLoading()</div><div class="line">    	&#125;, <span class="literal">false</span>);</div><div class="line"></div><div class="line">    	<span class="built_in">document</span>.head.appendChild(node);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/*   *   *   *   *   *   *   *   *   *   *</span></div><div class="line">	 *  Module用于构建存放于modules中的模块实例    </div><div class="line">	 *   *   *   *   *   *   *   *   *   *   */</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">Module</span>(<span class="params">id,deps,factory</span>)</span>&#123;</div><div class="line">		<span class="keyword">this</span>.id = id;</div><div class="line">		<span class="keyword">this</span>.deps = deps;<span class="comment">//["a","b"]</span></div><div class="line">		<span class="keyword">this</span>.factory = factory;</div><div class="line">		<span class="keyword">this</span>.loaded = <span class="literal">false</span>;</div><div class="line">		<span class="keyword">this</span>.export = <span class="literal">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	Module.prototype = &#123;</div><div class="line">		<span class="attr">getExport</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="comment">//如果export不存在，则构建</span></div><div class="line">			<span class="keyword">if</span> (!<span class="keyword">this</span>.export) &#123;</div><div class="line">				<span class="keyword">var</span> _args = <span class="keyword">this</span>.deps.map(<span class="function"><span class="params">item</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">return</span> modules[item].export;</div><div class="line">				&#125;)</div><div class="line">				<span class="keyword">this</span>.export = <span class="keyword">this</span>.factory.apply(<span class="literal">null</span>,_args);</div><div class="line">				<span class="keyword">this</span>.loaded = <span class="literal">true</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.export;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//当一个远程脚本完成加载时,从unLoadedModules中左移出一个模块.</span></div><div class="line">	<span class="comment">//将此模块格式化成Module对象，存放于modules中</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">completeLoaded</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (unLoadedModules.length) &#123;</div><div class="line">			<span class="keyword">var</span> mod = unLoadedModules.shift();</div><div class="line">			mod[<span class="number">0</span>] = id;</div><div class="line"></div><div class="line">			modules[id] = <span class="keyword">new</span> Module(mod[<span class="number">0</span>],mod[<span class="number">1</span>],mod[<span class="number">2</span>]);</div><div class="line"></div><div class="line">			<span class="comment">//如果是无依赖模块，则立即得到它的export()</span></div><div class="line">			<span class="keyword">if</span> (mod[<span class="number">1</span>].length == <span class="number">0</span>) &#123;</div><div class="line">				modules[id].getExport()</div><div class="line">			&#125;</div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//尝试对modules中依赖加载完成的模块生成export</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">tryLoading</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> _modsname = <span class="built_in">Object</span>.keys(modules);</div><div class="line"></div><div class="line">		_modsname.map(<span class="function"><span class="params">modname</span>=&gt;</span>&#123;</div><div class="line">			<span class="keyword">var</span> __Mod = modules[modname];</div><div class="line"></div><div class="line">			<span class="keyword">var</span> deps = __Mod.deps;</div><div class="line">			<span class="keyword">var</span> canExport = <span class="literal">true</span>;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">				<span class="comment">//检测是否所有依赖都已完成加载</span></div><div class="line">				deps.map(<span class="function"><span class="params">depname</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">if</span> (!modules[depname] || modules[depname].loaded == <span class="literal">false</span>) &#123;</div><div class="line">						canExport = <span class="literal">false</span>;</div><div class="line">					&#125;</div><div class="line">				&#125;)</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (canExport &amp;&amp; __Mod.loaded == <span class="literal">false</span>) &#123;</div><div class="line">				__Mod.getExport()</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//两个参数都是必须的</span></div><div class="line">	define = <span class="function"><span class="keyword">function</span>(<span class="params">deps,factory</span>)</span>&#123;</div><div class="line">		unLoadedModules.push([<span class="literal">null</span>,deps,factory]);</div><div class="line">		<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">			deps.map(<span class="function"><span class="params">_mod</span>=&gt;</span>&#123;</div><div class="line">				loadModule(_mod);</div><div class="line">			&#125;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//从入口启动</span></div><div class="line">	loadModule(entry)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">waitForEntry</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (modules[entry] &amp;&amp; modules[entry].loaded == <span class="literal">false</span>) &#123;</div><div class="line">			tryLoading();</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			setTimeout(waitForEntry,<span class="number">50</span>)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	waitForEntry()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>实现requirejs有几个重要的点</p>
-<ul>
-<li>在根据名称加载依赖时，依赖的define未知。即依赖的名称如何与返回的脚本定义绑定。当然可以在定义的时候把id也写上，但是这样就需要跟文件名再来一次绑定，增加了复杂度。上面这个例子中利用插入script标签的顺序，和这些标签的onload事件触发的顺序完成一致这个特性来完成绑定的。<strong>如果当中有标签加载失败，则会导致它们的顺序错乱而对应不上。</strong></li>
-<li>其次只有一个模块的依赖全部加载完，才能执行factory生成export。上面这个简单的例子，是每次有一个模块load完的时候，就检测所有模块是否具有执行factory的条件。这显然不是一个好方法。而且最后的入口模块无法检测（所以我写了个循环，waitForEntry）。</li>
+            <blockquote>
+<p>我在搜索js模块化关键词时，搜索到一篇非常通俗易懂的文章，<a href="http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/" target="_blank" rel="external">http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/</a>，我写不出更好的，所以写了个读博的笔记。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>AMD是等依赖全部加载好了，才构建输出模块，模块的定义中不包含依赖的加载逻辑。CMD的依赖加载写在模块定义中。UMD是兼容AMD和CMD的模块定义方式。</p>
+<h2 id="AMD"><a href="#AMD" class="headerlink" title="AMD"></a>AMD</h2><p>AMD的语法如下：</p>
+<blockquote>
+<p>define(id?,deps?,factory)</p>
+</blockquote>
+<p>deps中的依赖会索引到依赖模块的实体作为参数数组传入模块的定义factory中，factory要等依赖全部加载完才会执行。我读完requirejs的源码，写了一个简易的实现：(simple_requirejs)[/2016/10/31/simple-require-js.html]。</p>
+<p>下面定义了一个foo模块，依赖于jquery:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// filename: foo.js</span></div><div class="line">define([<span class="string">'jquery'</span>], <span class="function"><span class="keyword">function</span> (<span class="params">$</span>) </span>&#123;</div><div class="line">    <span class="comment">//methods</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">myFunc</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line">    <span class="comment">//exposed public methods</span></div><div class="line">    <span class="keyword">return</span> myFunc;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>以上的factory执行的时候首先要获得jquery模块的输出，并作为$传入到factory中作为参数。</p>
+<h2 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h2><p>定义语法如下：</p>
+<blockquote>
+<p>define(factory(){<br>    var dep1 = require(“dep1”);<br>    var dep2 = require(“dep2”);<br>})</p>
+</blockquote>
+<p>CommonJS号称 as lazy as possible。</p>
+<p>下面同样定义一个foo模块，依赖于jquery:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//filename: foo.js</span></div><div class="line"></div><div class="line"><span class="comment">//dependencies</span></div><div class="line"><span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">'jquery'</span>);</div><div class="line"></div><div class="line"><span class="comment">//methods</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunc</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line"></div><div class="line"><span class="comment">//exposed public method (single)</span></div><div class="line"><span class="built_in">module</span>.exports = myFunc;</div></pre></td></tr></table></figure>
+<h2 id="UMD"><a href="#UMD" class="headerlink" title="UMD"></a>UMD</h2><p>AMD与CMD差不多一样流行，于是UMD这种能被这两种模块定义加载的定义出现了。</p>
+<p>语法如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">root, factory</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">'function'</span> &amp;&amp; define.amd) &#123;</div><div class="line">        <span class="comment">// AMD</span></div><div class="line">        define([<span class="string">'jquery'</span>], factory);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">'object'</span>) &#123;</div><div class="line">        <span class="comment">// Node, CommonJS-like</span></div><div class="line">        <span class="built_in">module</span>.exports = factory(<span class="built_in">require</span>(<span class="string">'jquery'</span>));</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// Browser globals (root is window)</span></div><div class="line">        root.returnExports = factory(root.jQuery);</div><div class="line">    &#125;</div><div class="line">&#125;(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$</span>) </span>&#123;</div><div class="line">    <span class="comment">//    methods</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">myFunc</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line"></div><div class="line">    <span class="comment">//    exposed public method</span></div><div class="line">    <span class="keyword">return</span> myFunc;</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
+<p>其实就是判断环境是什么，然后输出对应的模块定义。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/04/2016-11-04-cache-control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/11/04/2016-11-04-cache-control/" itemprop="url">服务器配置静态资源的缓存策略</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-04T00:00:00+08:00">
+                2016-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。</p>
+</blockquote>
+<h2 id="环境、前提"><a href="#环境、前提" class="headerlink" title="环境、前提"></a>环境、前提</h2><blockquote>
+<p>以下测试阐述用例使用的是nginx 1.8.1。</p>
+</blockquote>
+<h2 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h2><p>资源的过期时间，这是个时间点。它的运行机制如下：</p>
+<ol>
+<li>服务器设置资源A的过期时间为 <strong>Mon, 07 Nov 2016 09:45:28 GMT</strong></li>
+<li>客户端第一次访问A时，下载资源200。再次访问资源A时，如果客户端时间在Expires之前，则直接从缓存中读取A，状态为 200 from cache.否则再次请求服务器。</li>
+</ol>
+<p>Expires定义于http1.0，虽然浏览器依然处理此策略，但是http1.1定义的cache-control更犀利、全面。需要注意的是如果使用nginx测试，其中expires字段并不是Expires，见关联知识第二点。</p>
+<h2 id="Cache-Control相关"><a href="#Cache-Control相关" class="headerlink" title="Cache-Control相关"></a>Cache-Control相关</h2><p>Cache-Control的常用取值（其实是我理解的，其他的不理解不敢瞎写）：</p>
+<ol>
+<li>max-age=t,在t秒内不会再次请求此资源，当此项与Expires同时存在时，此项优先级高于Exprires。</li>
+<li>no-cache,不直接使用本地缓存，每次会去服务器验证有效性，所以可能会触发304 cache.</li>
+<li>no-store,完全不使用缓存。</li>
+<li>public,缓存所有资源。</li>
+</ol>
+<p><strong>Cache-Control与Expires同时设置时，Cache-Control的优先级高于Expires。</strong></p>
+<h3 id="Last-Modified-If-Modified-Since"><a href="#Last-Modified-If-Modified-Since" class="headerlink" title="Last-Modified/If-Modified-Since"></a>Last-Modified/If-Modified-Since</h3><p>如果服务器开启此功能，其运行机制如下：</p>
+<ol>
+<li>客户端第一次请求资源A时，返回资源A的 response-header 中有 Last-Modified字段</li>
+<li>第二次请求A资源，并且此资源过期（Expires的设置，或者Cache-Control设置），客户端发送一个带有If-Modified-Since字段的请求去服务器，服务器对比A资源的最后修改时间T与客户端发送过来的If-Modified-Since。如果T&gt;If-Modified-Since,返回状态码200，并完全返回资源A的数据。如果 T = If-Modified-Since，返回304，客户端从缓存中读取A的数据。如果T &lt; If-Modified-Since,那么这是个非法请求。</li>
+</ol>
+<h3 id="Etag-If-None-Match"><a href="#Etag-If-None-Match" class="headerlink" title="Etag/If-None-Match"></a>Etag/If-None-Match</h3><p>Etag与Last-Modified的机制一样，不同的是Etag有生成规则，用以区分同一文件在时间维度上的不同。Etag提出主要是解决以下Last-Modified不能解决的问题：</p>
+<ol>
+<li>Last-Modified只能精确到秒级，如果1秒内多次修改，可能造成缓存到客户端的不是最新的资源。</li>
+<li>某些文件定时更新，客户端关心的资源并没有变化，但Last-Modified改变了，将无法使用缓存。</li>
+<li>有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形。</li>
+</ol>
+<p>注意，当Etag和Last-Modified一起设置时，Etag的优先级高于Last-Modified，但并不是覆盖。</p>
+<h2 id="缓存应用流程图"><a href="#缓存应用流程图" class="headerlink" title="缓存应用流程图"></a>缓存应用流程图</h2><h3 id="客户端第一次请求资源"><a href="#客户端第一次请求资源" class="headerlink" title="客户端第一次请求资源"></a>客户端第一次请求资源</h3><p><img src="/image/first_request.png"></p>
+<h3 id="客户端第二次请求资源"><a href="#客户端第二次请求资源" class="headerlink" title="客户端第二次请求资源"></a>客户端第二次请求资源</h3><p><img src="/image/second_request.png"></p>
+<p>哈哈~，这两张图是盗的，来自于参考项的文章中。</p>
+<h2 id="关联知识"><a href="#关联知识" class="headerlink" title="关联知识"></a>关联知识</h2><ul>
+<li>GMT时间，格林尼治时间，北京时间是东八区，这个八就是相对格林尼治，所以北京时间减8个小时就是GMT。</li>
+<li>ngx_http_headers_module，此模块总是在response header上追加 Expires 和 Cache-Control字段，同时expires不设置为 off时，Expires和Cache-Control会因为expires的设置而被修改。参考:<a href="http://nginx.org/en/docs/http/ngx_http_headers_module.html#expires" target="_blank" rel="external">Module ngx_http_headers_module</a></li>
 </ul>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>这个劣质轮子的使用非常简单，我写了个<a href="https://github.com/magmaliang/simple_require" target="_blank" rel="external">demo</a>,一看便知。</p>
-<h3 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h3><p>前端性能优化肯定需要把所有依赖合并成一个文件，然后压缩。。。grunt里面有一个插件 grunt-contrib-requirejs就是干这事的。然后本地使用requirejs调试，根本不需要预编译（合并，压缩）,发布时直接跑下grunt任务（多数是在代码仓库端执行的），不得不说开发与发布都非常方便。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html" target="_blank" rel="external">http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html</a><br><a href="https://www.mnot.net/cache_docs/" target="_blank" rel="external">https://www.mnot.net/cache_docs/</a></p>
 
           
         
@@ -505,6 +655,141 @@
         })
     }
 </script>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/31/2016-10-31-simple-require-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/31/2016-10-31-simple-require-js/" itemprop="url">简述AMD的实现库: requirejs</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-31T00:00:00+08:00">
+                2016-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>requirejs是AMD的一种实现，主要通过按依赖顺序向html中插入scripts节点来实现模块的依赖加载。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>requirejs先加载入口文件，如果入口文件有依赖，则加载这些依赖文件，如果依赖还有自己的依赖…直到加载完所有的依赖。requrejs的define函数用来定义可加载的js模块，它的语法是这样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">define(id?,deps?,factory)</div></pre></td></tr></table></figure>
+<h3 id="requirejs的内部变量"><a href="#requirejs的内部变量" class="headerlink" title="requirejs的内部变量"></a>requirejs的内部变量</h3><p>id 和 deps都不是必选的，factory才是模块的内容。那么define到底做了什么事呢？这得说到requirejs内部的一些对象，下面的代码是requirejs一开始定义的变量，它秉承了先声明后使用的原则把内部所用的变量一股脑声明在了函数内部的最前面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> req, s, head, baseElement, dataMain, src,</div><div class="line">interactiveScript, currentlyAddingScript, mainScript, subPath,</div><div class="line">version = <span class="string">'2.3.2'</span>,</div><div class="line">commentRegExp = <span class="regexp">/\/\*[\s\S]*?\*\/|([^:"'=]|^)\/\/.*$/mg</span>,</div><div class="line">cjsRequireRegExp = <span class="regexp">/[^.]\s*require\s*\(\s*["']([^'"\s]+)["']\s*\)/g</span>,</div><div class="line">jsSuffixRegExp = <span class="regexp">/\.js$/</span>,</div><div class="line">currDirRegExp = <span class="regexp">/^\.\//</span>,</div><div class="line">op = <span class="built_in">Object</span>.prototype,</div><div class="line">ostring = op.toString,</div><div class="line">hasOwn = op.hasOwnProperty,</div><div class="line">isBrowser = !!(<span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> &amp;&amp; <span class="keyword">typeof</span> navigator !== <span class="string">'undefined'</span> &amp;&amp; <span class="built_in">window</span>.document),</div><div class="line">isWebWorker = !isBrowser &amp;&amp; <span class="keyword">typeof</span> importScripts !== <span class="string">'undefined'</span>,</div><div class="line"><span class="comment">//PS3 indicates loaded and complete, but need to wait for complete</span></div><div class="line"><span class="comment">//specifically. Sequence is 'loading', 'loaded', execution,</span></div><div class="line"><span class="comment">// then 'complete'. The UA check is unfortunate, but not sure how</span></div><div class="line"><span class="comment">//to feature test w/o causing perf issues.</span></div><div class="line">readyRegExp = isBrowser &amp;&amp; navigator.platform === <span class="string">'PLAYSTATION 3'</span> ?</div><div class="line">              <span class="regexp">/^complete$/</span> : <span class="regexp">/^(complete|loaded)$/</span>,</div><div class="line">defContextName = <span class="string">'_'</span>,</div><div class="line"><span class="comment">//Oh the tragedy, detecting opera. See the usage of isOpera for reason.</span></div><div class="line">isOpera = <span class="keyword">typeof</span> opera !== <span class="string">'undefined'</span> &amp;&amp; opera.toString() === <span class="string">'[object Opera]'</span>,</div><div class="line">contexts = &#123;&#125;,</div><div class="line">cfg = &#123;&#125;,</div><div class="line">globalDefQueue = [],</div><div class="line">useInteractive = <span class="literal">false</span>;</div></pre></td></tr></table></figure>
+<p>除了contexts之外，其他的类似于程序设计中的静态单例，或是辅助空间，所有的逻辑还是隐藏在了contexts中。在这个2.3.2的版本中，用来生成contexts实例的newContext函数从200行开始，直到1798行结束。。。所以没办法，我们打开newContext函数，把它的变量也扒出来。</p>
+<h3 id="newContext"><a href="#newContext" class="headerlink" title="newContext"></a>newContext</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> inCheckLoaded, Module, context, handlers,</div><div class="line">checkLoadedTimeoutId,</div><div class="line">config = &#123;</div><div class="line">    <span class="comment">//Defaults. Do not set a default for map</span></div><div class="line">    <span class="comment">//config to speed up normalize(), which</span></div><div class="line">    <span class="comment">//will run faster if there is no default.</span></div><div class="line">    waitSeconds: <span class="number">7</span>,</div><div class="line">    <span class="attr">baseUrl</span>: <span class="string">'./'</span>,</div><div class="line">    <span class="attr">paths</span>: &#123;&#125;,</div><div class="line">    <span class="attr">bundles</span>: &#123;&#125;,</div><div class="line">    <span class="attr">pkgs</span>: &#123;&#125;,</div><div class="line">    <span class="attr">shim</span>: &#123;&#125;,</div><div class="line">    <span class="attr">config</span>: &#123;&#125;</div><div class="line">&#125;,</div><div class="line">registry = &#123;&#125;,</div><div class="line"><span class="comment">//registry of just enabled modules, to speed</span></div><div class="line"><span class="comment">//cycle breaking code when lots of modules</span></div><div class="line"><span class="comment">//are registered, but not activated.</span></div><div class="line">enabledRegistry = &#123;&#125;,</div><div class="line">undefEvents = &#123;&#125;,</div><div class="line">defQueue = [],</div><div class="line">defined = &#123;&#125;,</div><div class="line">urlFetched = &#123;&#125;,</div><div class="line">bundlesMap = &#123;&#125;,</div><div class="line">requireCounter = <span class="number">1</span>,</div><div class="line">unnormalizedCounter = <span class="number">1</span>;</div></pre></td></tr></table></figure>
+<p>通过官方文档我们知道入口文件用 requirejs.config 来启动的，这个函数执行时即开始加载依赖，我们把这个入口文件叫做依赖树的根——尽管存在一个文件可能被好几个上级资源依赖的情况，这里为叙述方便仍称其为树。除了根之外节点都会被构建为Module（newContext内部定义的模块对象）对象，临时存放于<strong>enabledRegistry</strong>这个变量中。需要注意的是，只是刚刚激活的模块才会在这个变量中短暂停留，随后就会被清除，它的作用像是一个buffer。</p>
+<h3 id="define函数的作用"><a href="#define函数的作用" class="headerlink" title="define函数的作用"></a>define函数的作用</h3><p>我们回到前面的问题，define到底做了什么？</p>
+<p>define将模块格式化为一个数组：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[id,deps,factory]</div></pre></td></tr></table></figure>
+<p>并将其 push 进全局变量 globalDefQueue 中 —— 上面说过，这是个缓冲池。然后contexts会从其中拿数据并构建为Module对象存放于自己内部变量中,Module对象主要模式如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">exports</span>:define中factory执行返回的对象，如果factory不是可执行函数则直接返回factory</div><div class="line">    ,<span class="attr">factory</span>:即define中的factory</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当此Module被上层函数依赖时，则返回其exports到上层函数的arguments中，执行这个操作的关键函数为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">/**</span></div><div class="line"> * Executes a module callback function. Broken out as a separate function</div><div class="line"> * solely to allow the build system to sequence the files in the built</div><div class="line"> * layer in the right sequence.</div><div class="line"> *</div><div class="line"> * @private</div><div class="line"> */</div><div class="line">execCb: <span class="function"><span class="keyword">function</span> (<span class="params">name, callback, args, exports</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> callback.apply(exports, args);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="简单的requirejs实现"><a href="#简单的requirejs实现" class="headerlink" title="简单的requirejs实现"></a>简单的requirejs实现</h2><p>好了，专业库因为要考虑很多方面，不容易直接洞察其主要逻辑。其实我些年的经验时，需求是最好的文档，当你了解需求，直接读源码就行了——甚至直接去造轮子了。下面我们就造个劣质小轮子 —— 这是了解一个库最好的方式了。</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> define,<span class="built_in">require</span>;</div><div class="line"><span class="built_in">require</span> = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>)</span>&#123;</div><div class="line">	<span class="keyword">let</span> &#123;entry,baseUrl&#125; = options;</div><div class="line">	<span class="comment">//存放所有生成的模块</span></div><div class="line">	<span class="keyword">var</span> modules  = &#123;&#125;,</div><div class="line">		unLoadedModules = [];<span class="comment">//每当有script_onload触发时，则shift一个模块，生成Module</span></div><div class="line"></div><div class="line">	<span class="comment">//根据id加载一个模块，数据结构如下</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">loadModule</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> node = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">        node.setAttribute(<span class="string">'data-modid'</span>, id);</div><div class="line">        node.src = baseUrl+id+<span class="string">".js"</span>;</div><div class="line"></div><div class="line">    	node.addEventListener(<span class="string">'load'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">    		<span class="comment">//当前脚本加载的模块名</span></div><div class="line">    		<span class="keyword">var</span> id = e.target.getAttribute(<span class="string">"data-modid"</span>);</div><div class="line">    		completeLoaded(id);</div><div class="line"></div><div class="line">    		<span class="comment">//对所有可以导出export的模块进行导出</span></div><div class="line">    		tryLoading()</div><div class="line">    	&#125;, <span class="literal">false</span>);</div><div class="line"></div><div class="line">    	<span class="built_in">document</span>.head.appendChild(node);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/*   *   *   *   *   *   *   *   *   *   *</span></div><div class="line">	 *  Module用于构建存放于modules中的模块实例    </div><div class="line">	 *   *   *   *   *   *   *   *   *   *   */</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">Module</span>(<span class="params">id,deps,factory</span>)</span>&#123;</div><div class="line">		<span class="keyword">this</span>.id = id;</div><div class="line">		<span class="keyword">this</span>.deps = deps;<span class="comment">//["a","b"]</span></div><div class="line">		<span class="keyword">this</span>.factory = factory;</div><div class="line">		<span class="keyword">this</span>.loaded = <span class="literal">false</span>;</div><div class="line">		<span class="keyword">this</span>.export = <span class="literal">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	Module.prototype = &#123;</div><div class="line">		<span class="attr">getExport</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="comment">//如果export不存在，则构建</span></div><div class="line">			<span class="keyword">if</span> (!<span class="keyword">this</span>.export) &#123;</div><div class="line">				<span class="keyword">var</span> _args = <span class="keyword">this</span>.deps.map(<span class="function"><span class="params">item</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">return</span> modules[item].export;</div><div class="line">				&#125;)</div><div class="line">				<span class="keyword">this</span>.export = <span class="keyword">this</span>.factory.apply(<span class="literal">null</span>,_args);</div><div class="line">				<span class="keyword">this</span>.loaded = <span class="literal">true</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.export;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//当一个远程脚本完成加载时,从unLoadedModules中左移出一个模块.</span></div><div class="line">	<span class="comment">//将此模块格式化成Module对象，存放于modules中</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">completeLoaded</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (unLoadedModules.length) &#123;</div><div class="line">			<span class="keyword">var</span> mod = unLoadedModules.shift();</div><div class="line">			mod[<span class="number">0</span>] = id;</div><div class="line"></div><div class="line">			modules[id] = <span class="keyword">new</span> Module(mod[<span class="number">0</span>],mod[<span class="number">1</span>],mod[<span class="number">2</span>]);</div><div class="line"></div><div class="line">			<span class="comment">//如果是无依赖模块，则立即得到它的export()</span></div><div class="line">			<span class="keyword">if</span> (mod[<span class="number">1</span>].length == <span class="number">0</span>) &#123;</div><div class="line">				modules[id].getExport()</div><div class="line">			&#125;</div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//尝试对modules中依赖加载完成的模块生成export</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">tryLoading</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> _modsname = <span class="built_in">Object</span>.keys(modules);</div><div class="line"></div><div class="line">		_modsname.map(<span class="function"><span class="params">modname</span>=&gt;</span>&#123;</div><div class="line">			<span class="keyword">var</span> __Mod = modules[modname];</div><div class="line"></div><div class="line">			<span class="keyword">var</span> deps = __Mod.deps;</div><div class="line">			<span class="keyword">var</span> canExport = <span class="literal">true</span>;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">				<span class="comment">//检测是否所有依赖都已完成加载</span></div><div class="line">				deps.map(<span class="function"><span class="params">depname</span>=&gt;</span>&#123;</div><div class="line">					<span class="keyword">if</span> (!modules[depname] || modules[depname].loaded == <span class="literal">false</span>) &#123;</div><div class="line">						canExport = <span class="literal">false</span>;</div><div class="line">					&#125;</div><div class="line">				&#125;)</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (canExport &amp;&amp; __Mod.loaded == <span class="literal">false</span>) &#123;</div><div class="line">				__Mod.getExport()</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//两个参数都是必须的</span></div><div class="line">	define = <span class="function"><span class="keyword">function</span>(<span class="params">deps,factory</span>)</span>&#123;</div><div class="line">		unLoadedModules.push([<span class="literal">null</span>,deps,factory]);</div><div class="line">		<span class="keyword">if</span> (deps.length&gt;<span class="number">0</span>) &#123;</div><div class="line">			deps.map(<span class="function"><span class="params">_mod</span>=&gt;</span>&#123;</div><div class="line">				loadModule(_mod);</div><div class="line">			&#125;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//从入口启动</span></div><div class="line">	loadModule(entry)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">waitForEntry</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span> (modules[entry] &amp;&amp; modules[entry].loaded == <span class="literal">false</span>) &#123;</div><div class="line">			tryLoading();</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			setTimeout(waitForEntry,<span class="number">50</span>)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	waitForEntry()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实现requirejs有几个重要的点</p>
+<ul>
+<li>在根据名称加载依赖时，依赖的define未知。即依赖的名称如何与返回的脚本定义绑定。当然可以在定义的时候把id也写上，但是这样就需要跟文件名再来一次绑定，增加了复杂度。上面这个例子中利用插入script标签的顺序，和这些标签的onload事件触发的顺序完成一致这个特性来完成绑定的。<strong>如果当中有标签加载失败，则会导致它们的顺序错乱而对应不上。</strong></li>
+<li>其次只有一个模块的依赖全部加载完，才能执行factory生成export。上面这个简单的例子，是每次有一个模块load完的时候，就检测所有模块是否具有执行factory的条件。这显然不是一个好方法。而且最后的入口模块无法检测（所以我写了个循环，waitForEntry）。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>这个劣质轮子的使用非常简单，我写了个<a href="https://github.com/magmaliang/simple_require" target="_blank" rel="external">demo</a>,一看便知。</p>
+<h3 id="延伸"><a href="#延伸" class="headerlink" title="延伸"></a>延伸</h3><p>前端性能优化肯定需要把所有依赖合并成一个文件，然后压缩。。。grunt里面有一个插件 grunt-contrib-requirejs就是干这事的。然后本地使用requirejs调试，根本不需要预编译（合并，压缩）,发布时直接跑下grunt任务（多数是在代码仓库端执行的），不得不说开发与发布都非常方便。</p>
+
           
         
       
@@ -736,139 +1021,6 @@
         
           
             <p>占位</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-19-responsive-design/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/19/2016-09-19-responsive-design/" itemprop="url">响应式设计</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T00:00:00+08:00">
-                2016-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="/image/responsive_web_design.png" alt="jif"></p>
-<p>在很长的时间里，我讨厌新名词、术语，因为极大多数是宣传装逼需要 —— 我只想记住小番茄，不想再来一个圣女果，我希望它们就是一回事，这是一种浪费认知精力的无聊行为。然而外行人总是基于表面——例如名字来区分事物和创新，资本需要奴役他们，必然投其所好。</p>
-<p>以上说的都是废话，我现在不这么认为了。在知识系统复杂的过程中，必然会变的越来越专业，植物学发展的初期就是命名，给它们归类给它们起名，细微的差别都通过名字来区别，这是基础。</p>
-<p>比如我听闻 响应式设计，自适应设计 很久了，对它们的认知仅停留在从名字上推论出的结果 —— 很显然更深层次的理解不可能有。然而当我理解了它们确切的含意，我觉得如果移动端的 web 设计需要从零到现在这样是在一天之内提出的，然后让设计人员提出可行的方案——那么十有八九，不同的人提出了不同名称的方案，但是，它们必然是围绕着 “响应式” 和 “自适应” 展开的。</p>
-<p>那么我们是需要知道这些别人提出的名称的确切含意，需要把移动端设计里每种设计的方式提炼到纯粹的纯度来理解 —— 没办法，这是深入理解必然要经历的过程，分而理解再糅合才能运用自如。</p>
-<h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>响应式是设计是用一套伸缩性的设计来适配不同的设备（主要是宽度），经常使用等比缩放的方式来描述元素的大小和位置，它就像狡猾狡猾滴小猫咪，总是给你相对的属性，它千变万化，在每种环境中以独特的面目视人，其实它只有一个本尊。</p>
-<blockquote>
-<p>我更倾向于定义其为一种概念、理念，一种对设计需求的描述，而非一种特定的技术。然后，所以能为此理念添砖加瓦的技艺都可以用上，没有界定。</p>
-</blockquote>
-<h2 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h2><p>前面已经废话过了，主要是为了适应多种设备。目前新开发的网站多数使用响应式设计。</p>
-<h2 id="HOW"><a href="#HOW" class="headerlink" title="HOW"></a>HOW</h2><p>响应式设计实现的技术点主要如下</p>
-<h3 id="布局要求"><a href="#布局要求" class="headerlink" title="布局要求"></a>布局要求</h3><ul>
-<li>减少无用dom层级，减少无用dom层级，减少无用dom层级！</li>
-<li>使用相对数值描述布局容器的大小和位置。</li>
-<li>对于集合、列表这种单一组件重复的复合组件，使用流式设计。</li>
-<li>不使用内联元素，因为它们的高宽都不可控。</li>
-</ul>
-<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>有条件的使用多种尺寸的图片。</p>
-<h3 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h3><p>断点就是设备尺寸的临界值，在临界值分割的区间中应用特定样式 —— 使用媒体查询。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://blog.jobbole.com/30648/" target="_blank" rel="external">http://blog.jobbole.com/30648/</a>,不得不说伯乐在线文章的质量相当高。</li>
-</ul>
 
           
         
@@ -1165,6 +1317,139 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-19-responsive-design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/19/2016-09-19-responsive-design/" itemprop="url">响应式设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T00:00:00+08:00">
+                2016-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/image/responsive_web_design.png" alt="jif"></p>
+<p>在很长的时间里，我讨厌新名词、术语，因为极大多数是宣传装逼需要 —— 我只想记住小番茄，不想再来一个圣女果，我希望它们就是一回事，这是一种浪费认知精力的无聊行为。然而外行人总是基于表面——例如名字来区分事物和创新，资本需要奴役他们，必然投其所好。</p>
+<p>以上说的都是废话，我现在不这么认为了。在知识系统复杂的过程中，必然会变的越来越专业，植物学发展的初期就是命名，给它们归类给它们起名，细微的差别都通过名字来区别，这是基础。</p>
+<p>比如我听闻 响应式设计，自适应设计 很久了，对它们的认知仅停留在从名字上推论出的结果 —— 很显然更深层次的理解不可能有。然而当我理解了它们确切的含意，我觉得如果移动端的 web 设计需要从零到现在这样是在一天之内提出的，然后让设计人员提出可行的方案——那么十有八九，不同的人提出了不同名称的方案，但是，它们必然是围绕着 “响应式” 和 “自适应” 展开的。</p>
+<p>那么我们是需要知道这些别人提出的名称的确切含意，需要把移动端设计里每种设计的方式提炼到纯粹的纯度来理解 —— 没办法，这是深入理解必然要经历的过程，分而理解再糅合才能运用自如。</p>
+<h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>响应式是设计是用一套伸缩性的设计来适配不同的设备（主要是宽度），经常使用等比缩放的方式来描述元素的大小和位置，它就像狡猾狡猾滴小猫咪，总是给你相对的属性，它千变万化，在每种环境中以独特的面目视人，其实它只有一个本尊。</p>
+<blockquote>
+<p>我更倾向于定义其为一种概念、理念，一种对设计需求的描述，而非一种特定的技术。然后，所以能为此理念添砖加瓦的技艺都可以用上，没有界定。</p>
+</blockquote>
+<h2 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h2><p>前面已经废话过了，主要是为了适应多种设备。目前新开发的网站多数使用响应式设计。</p>
+<h2 id="HOW"><a href="#HOW" class="headerlink" title="HOW"></a>HOW</h2><p>响应式设计实现的技术点主要如下</p>
+<h3 id="布局要求"><a href="#布局要求" class="headerlink" title="布局要求"></a>布局要求</h3><ul>
+<li>减少无用dom层级，减少无用dom层级，减少无用dom层级！</li>
+<li>使用相对数值描述布局容器的大小和位置。</li>
+<li>对于集合、列表这种单一组件重复的复合组件，使用流式设计。</li>
+<li>不使用内联元素，因为它们的高宽都不可控。</li>
+</ul>
+<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>有条件的使用多种尺寸的图片。</p>
+<h3 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h3><p>断点就是设备尺寸的临界值，在临界值分割的区间中应用特定样式 —— 使用媒体查询。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://blog.jobbole.com/30648/" target="_blank" rel="external">http://blog.jobbole.com/30648/</a>,不得不说伯乐在线文章的质量相当高。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/18/2016-09-18-adaptive-vs-responsive/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1287,282 +1572,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/14/2016-09-14-browser-kernel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/14/2016-09-14-browser-kernel/" itemprop="url">浏览器内核</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-14T00:00:00+08:00">
-                2016-09-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>程序语言的UI模块向来比较复杂，且因为依赖操作系统的具体呈现，在跨平台下更为难搞。C 语言就是因为如此一直没有UI模块。处理数据的模块可以抽象，可以运用各种高阶技艺，但是呈现出的UI相对来说比较具体，如何设计的优雅简单，我个人觉得需要的智慧不亚于操作系统（KDE的代码量已经达到400万行，linux内核有370万行）。</p>
-<p>和其他规模大到一定程度需要标准和流程一样，UI也是如此。无论是 cs 还是 bs，在 UI 的呈现上其实有很多共通之处，就像各种程序语言之间的关系一样。桌面 UI 与浏览器的 UI(html css) 之间有着基本一致的设计。例如基于 KDE 的 webcore(webkit中的排版模块) 被选为 chrome 和 safari 的排版引擎，但是它最初是为了 *inux 的桌面系统而设计的。</p>
-<p>java 在操作系统之上铺一层 jvm 实现跨平台，对于 web 程序来讲，浏览器就是它们的虚拟机。<strong>而浏览器内核就是呈现网页应用的核心模块，它一般包括两部分 —— 渲染排版模块和 js 解析模块，即渲染引擎和 js 引擎</strong>。</p>
-<h2 id="内核和引擎的区别"><a href="#内核和引擎的区别" class="headerlink" title="内核和引擎的区别"></a>内核和引擎的区别</h2><p><em>我在 google 里搜索 brower kernel 并没有结果。</em></p>
-<p>中文社区经常会说到浏览器内核，然而内核与渲染引擎经常混用，我一直傻傻分不清，极度混淆，于是在今天使劲撸了一把，得出结论：</p>
-<blockquote>
-<p><strong>由于web出现的早期是没有js的，内核的功能仅仅是排版渲染，所以渲染引擎的模块一开始与内核是等价的，后来再加入的js模块多数有自己的模块名。—— 所以渲染引擎的名称几乎与内核一样，但是内核包含一些有自己名称的 js 引擎</strong></p>
-</blockquote>
-<h2 id="渲染引擎分类-rendering-engine-or-layout-engine"><a href="#渲染引擎分类-rendering-engine-or-layout-engine" class="headerlink" title="渲染引擎分类(rendering engine or layout engine)"></a>渲染引擎分类(rendering engine or layout engine)</h2><blockquote>
-<p>读取标记语言(HTML,XML)和一些格式信息排版渲染成UI界面的程序， 我们平时所说的浏览器引擎一般指渲染引擎。</p>
-</blockquote>
-<table><br>    <thead><br>        <tr><th style="width:100px">名称</th><th>简介</th></tr><br>    </thead><br>    <tbody><br>        <tr><td>Trident</td><td>IE 开发使用的内核。360 早期仅使用 Trident，后来又引入 chromium 成为双内核浏览器。</td></tr><br>        <tr><td>Webkit</td><td>起源于 KDE。webkit 是目前最屌的内核，chrome 和 safari 以及几乎所有的移动端浏览器都是在 webkit 的的基础上衍生的。chrome 28+之后，使用基于webkit开发的 <a href="https://en.wikipedia.org/wiki/Blink_(web_engine)" target="_blank" rel="external">Blink</a></td></tr><br>        <tr><td>Gecko</td><td>由 Netscape 开发。继承衣钵的 FirFox 自然采用了此内核。</td></tr><br>        <tr><td>Presto</td><td>Opera 浏览器采用的渲染引擎，不过 opera software 在2013年已经放弃它了，决定使用webkit + v8。</td></tr><br>    </tbody><br></table>
-
-<h2 id="js-引擎分类"><a href="#js-引擎分类" class="headerlink" title="js 引擎分类"></a>js 引擎分类</h2><blockquote>
-<p>读取执行 JavaScript 代码的程序。</p>
-</blockquote>
-<table><br>    <thead><br>        <tr><th style="width:200px">名称</th><th>采用程序</th><th>备注</th></tr><br>    </thead><br>    <tbody><br>        <tr><td>V8</td><td>Google Chrome，Node.js,V8.NET</td><td></td>chrome使用的渲染引擎是webkit</tr><br>        <tr><td>Chakra(JScript engine)</td><td>IE9~IE11</td><td>MIT 开源</td></tr><br>        <tr><td>Chakra(JavaScript engine)</td><td>Microsoft Edge</td><td>对你没有看错，微软就是样子多,这是JScript engine的一个fork，MIT开源</td></tr><br>        <tr><td>Carakan</td><td>Opera</td><td>2013年 Opera15 正式采用 V8,放弃Carakan</td></tr><br>        <tr><td>SpiderMonkey</td><td>FireFox</td><td></td></tr><br>        <tr><td>JavaScriptCore</td><td>大名鼎鼎的webkit内核使用的js引擎</td><td></td></tr><br>        <tr><td>Tamarin</td><td>Adobe Flash</td><td></td></tr><br>        <tr><td>Nashore</td><td>JDK 8+</td><td></td></tr><br>    </tbody><br></table>
-
-
-<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><ul>
-<li><a href="https://en.wikipedia.org/wiki/Comparison_of_layout_engines_(HTML" target="_blank" rel="external">https://en.wikipedia.org/wiki/Comparison_of_layout<em>engines</em>(HTML)</a>)</li>
-<li><a href="https://en.wikipedia.org/wiki/Web_browser_engine" target="_blank" rel="external">https://en.wikipedia.org/wiki/Web_browser_engine</a></li>
-<li><a href="https://en.wikipedia.org/wiki/List_of_ECMAScript_engines" target="_blank" rel="external">https://en.wikipedia.org/wiki/List_of_ECMAScript_engines</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/2016-08-02-value-assign/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/08/02/2016-08-02-value-assign/" itemprop="url">js 引用类型的赋值</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T00:00:00+08:00">
-                2016-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>基本数据类型存放在栈上，引用类型存放于堆上。在js中这种差别最直观的显现在赋值和比较上。</p>
-</blockquote>
-<h3 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h3><p>赋值的问题很迷人，想当年我高一的时候参加编程兴趣班，老师说等号是用来赋值的，我愤而走人（现在十分后悔），老子各种等式方程解的出神入化，只知道等号就是两边相等。然后到了大学，第一堂计算机课老师说起等号的赋值行为一大群人懵逼，我心中又充满自豪，“老子高一的时候就知道等号在编程语言里的赋值意义！”</p>
-<p>后来的很多次我都以为自己最终真正掌握了赋值的真谛…</p>
-<p>前一次我写的文章在<a href="http://blog.csdn.net/longjuesi/article/details/39694497" target="_blank" rel="external">这里</a>，以我现在的眼光来看并没有错，但是并没有提到我本人的盲点，每个人的盲点都不一样。</p>
-<p>在学校的时候我已经理解了堆栈的区别，指针变量与其他变量的区别，什么传值、传引用、传地址张口就能扯，对数据存储传递（赋值）行为了解的十分深入。然后我在两年前接触到js时，基本没学，就是稍微看了下变量、基本语法，大概两三个小时就开始写web前端了——直接迁移了c语言的概念。</p>
-<p>但是这样带来了隐患：</p>
-<h4 id="例子A"><a href="#例子A" class="headerlink" title="例子A"></a>例子A</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">arr</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> _arr = arr;</div><div class="line">	_arr.push(<span class="number">2</span>);</div><div class="line">&#125;</div><div class="line">foo(a);</div><div class="line"><span class="built_in">console</span>.log(a)</div><div class="line"><span class="comment">//问：打印出的结果是什么</span></div></pre></td></tr></table></figure>
-<p>形参相当于一种占位符，在函数实现调用的时候被实参传值，js中没有传引用和地址，只有传值。但是传值也是耐人寻味的。在上面的中，输出的a其实是<strong>[1,2,3,2]</strong>。</p>
-<p>如果是c语言它应当还是<strong>[1,2,3]</strong>。</p>
-<p>就像我上面贴的文章里描述的，引用类型存放于堆上，<strong>var a = [1,2,3];</strong> 这句赋值的过程是这样的：</p>
-<ol>
-<li>在当前运行的环境栈上声名一个空间，索引名为a</li>
-<li>新建一个对象[1,2,3]，存放于堆上空白地址xxxx中</li>
-<li>将xxxx这个地址数赋值给a</li>
-</ol>
-<p>当<strong>foo(a)</strong>执行时，传给arr的并不是[1,2,3]这个对象，而是xxxx这个地址号。在需要使用arr的时候，js解释器才会根据这个地址号去找到[1,2,3]。</p>
-<p>你看，虽然美其名曰只有传值，但是人家引用类型变量的值实际就是地址。</p>
-<p>以上的结论虽然我很早就理解了，但是下面这种情况一度让我懵逼：</p>
-<h4 id="例子B"><a href="#例子B" class="headerlink" title="例子B"></a>例子B</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = &#123;<span class="attr">name</span>:<span class="string">"mike"</span>&#125;;</div><div class="line"><span class="keyword">var</span> b = a;</div><div class="line">b = &#123;<span class="attr">name</span>:<span class="string">"jobs"</span>&#125;;</div><div class="line"><span class="built_in">console</span>.log(a);</div><div class="line"><span class="comment">//问：打印出a的值是什么</span></div></pre></td></tr></table></figure>
-<p>我之前虽然知道a的值是什么，但是用我上面那套理解推断不出这个结果，我的推断是这样的（错误的推断）:</p>
-<p>只解释第三行 <strong>=&gt;</strong>  找到b中存放的地址所对应的堆上的具体的对象 {name:”mike”}，用 {name:”jobs”} 替换这原先的值，所以a的值就是{name:”jobs”}</p>
-<p>我的推断是不是很完美？</p>
-<p>然而事实是下面的推断也很完美，并且js解释器就是这么做的：</p>
-<p>b = {name:”jobs”} <strong>=&gt;</strong>  新建一个对象 {name:”jobs”} 存放于堆上地址为xyz的地方，将xyz赋值给b。所以a中依然存放着指向 {name:”mike”} 的地址，值并没有因为b的重新赋值而有所改变。</p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>如果我用汇编，非常容易就能发现内部实现的细节：<strong>js中，引用对象在赋值时，都是地址在玩，跟原对象屁关系都没有。</strong></p>
-<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><p>还是上面那句话，稍微变下：<strong>js中，引用对象在比较时，都是地址在玩，跟原对象屁关系都没有。</strong></p>
-<p>当年我才毕业用c#时，翔实被这坑了下。当年基本就钻研透了，至今并没有发现理解有偏差的地方。</p>
-<p>希望这是我最后一次理解了赋值的真谛，以后不要再发现什么新的盲点了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1612,7 +1621,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
