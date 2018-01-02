@@ -100,7 +100,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/29/2017-08-29-instanceof/index.html">
 <meta property="og:site_name" content="magma&#39;s fe blog">
 <meta property="og:description" content="写这篇文章的原因，是因为对于“prototype”这个概念有些理解上的偏差。 发现偏差的契机来源于一次手贱写的代码。前几天我在控制台里面打开node的命令行环境，无聊写下下面一段代码： 1234567var a = function ()&amp;#123;&amp;#125;;var obj = &amp;#123;&amp;#125;;obj.__proto__.constructor = a;obj instanceof">
-<meta property="og:updated_time" content="2017-10-18T08:05:36.000Z">
+<meta property="og:updated_time" content="2017-11-29T07:31:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js-原型">
 <meta name="twitter:description" content="写这篇文章的原因，是因为对于“prototype”这个概念有些理解上的偏差。 发现偏差的契机来源于一次手贱写的代码。前几天我在控制台里面打开node的命令行环境，无聊写下下面一段代码： 1234567var a = function ()&amp;#123;&amp;#125;;var obj = &amp;#123;&amp;#125;;obj.__proto__.constructor = a;obj instanceof">
@@ -337,12 +337,14 @@
 <h2 id="proto-与-prototype"><a href="#proto-与-prototype" class="headerlink" title="proto 与 prototype"></a><strong>proto</strong> 与 prototype</h2><p><strong>proto</strong>是js引擎实现时内部的属性，便于完成原型链式的访问，某些浏览器（例如chrome）暴露出来通过js可访问，es5开始有一个api可以获取对象的原型：Object.getPrototypeOf(O)。<br>所以所有具有原型链机制的对象均有<strong>proto</strong>属性。而prototype是函数的属性，当函数被用作constructor时用于构建<strong>proto</strong>。</p>
 <p>构建时直接将<strong>proto</strong>指向constructor的prototype:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line"></div><div class="line">(<span class="keyword">new</span> a).__proto__ === a.prototype; <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
 <h2 id="以function声明的函数是Function的实例"><a href="#以function声明的函数是Function的实例" class="headerlink" title="以function声明的函数是Function的实例"></a>以function声明的函数是Function的实例</h2><p>通过以下代码可以证明：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line"></div><div class="line">a.__proto__ === <span class="built_in">Function</span>.prototype; <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
-<p>注意<strong>a.prototype 与 a.<strong>proto</strong> </strong> 并不是一回事，在上一节中已经说明: 只有函数才具有 prototype 这个属性，被用作constructor(使用new 构建)时，将新对象的<strong>proto</strong> 设置为函数的prototype。</p>
+<p>注意 <strong>a.prototype 与 a.<strong>proto</strong></strong> 并不是一回事，在上一节中已经说明: 只有函数才具有 prototype 这个属性，被用作constructor(使用new 构建)时，将新对象的 <strong>proto</strong> 设置为函数的prototype。</p>
 <h2 id="instanceof"><a href="#instanceof" class="headerlink" title="instanceof"></a>instanceof</h2><blockquote>
 <p>object instanceof constructor<br>instanceof 用于检测 constructor.prototype 是否存在于object的原型链上。所以回到开头的问题，instancof 检测的是 [[prototype]] 这个引用，与constructor无关。</p>
-<h2 id="Object-instanceof-Object"><a href="#Object-instanceof-Object" class="headerlink" title="Object instanceof Object"></a>Object instanceof Object</h2><p>这个表达式返回true，原因在于：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>)) === <span class="built_in">Object</span>.prototype;</div></pre></td></tr></table></figure></p>
 </blockquote>
-<p>至于为什么会设计成这样，还没弄清楚。通过以下代码可以生成一个类似效果的函数；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function A()&#123;&#125;;</div><div class="line">function B()&#123;&#125;;</div><div class="line">var t = &#123;&#125;;</div><div class="line"></div><div class="line">A.prototype = B.prototype = t; </div><div class="line">A.__proto__ = new B();</div><div class="line"></div><div class="line">A instanceof A // 返回true</div></pre></td></tr></table></figure></p>
+<h2 id="Object-instanceof-Object"><a href="#Object-instanceof-Object" class="headerlink" title="Object instanceof Object"></a>Object instanceof Object</h2><p>这个表达式返回true，原因在于：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>)) === <span class="built_in">Object</span>.prototype;</div></pre></td></tr></table></figure>
+<p>至于为什么会设计成这样，还没弄清楚。通过以下代码可以生成一个类似效果的函数；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function A()&#123;&#125;;</div><div class="line">function B()&#123;&#125;;</div><div class="line">var t = &#123;&#125;;</div><div class="line"></div><div class="line">A.prototype = B.prototype = t; </div><div class="line">A.__proto__ = new B();</div><div class="line"></div><div class="line">A instanceof A // 返回true</div></pre></td></tr></table></figure>
 <h2 id="终级答案"><a href="#终级答案" class="headerlink" title="终级答案"></a>终级答案</h2><p>今天终于搞明白了，我在stackoverflow上问了一个问题，过了好久有个人回答了我，<a href="https://stackoverflow.com/questions/45936000/how-to-explain-object-instanceof-object-returns-true-in-javascript?noredirect=1#comment78831774_45936000" target="_blank" rel="external">问题</a></p>
 <p>原因并非是它们被设计成这样，这并非目的，而是因为Function和Object的定义（设计）规则，造成了这一结果:</p>
 <p><strong>Object是个function, 所有的function都是对象，所有对象继承自Object.prototype</strong></p>
@@ -475,7 +477,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -546,7 +548,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
