@@ -43,16 +43,22 @@ var a = function(){};
 a.__proto__ === Function.prototype; // true
 ```
 
-注意**a.prototype 与 a.__proto__ ** 并不是一回事，在上一节中已经说明: 只有函数才具有 prototype 这个属性，被用作constructor(使用new 构建)时，将新对象的__proto__ 设置为函数的prototype。
+注意 **a.prototype 与 a.__proto__** 并不是一回事，在上一节中已经说明: 只有函数才具有 prototype 这个属性，被用作constructor(使用new 构建)时，将新对象的 __proto__ 设置为函数的prototype。
+
 ## instanceof
+
 > object instanceof constructor
 instanceof 用于检测 constructor.prototype 是否存在于object的原型链上。所以回到开头的问题，instancof 检测的是 [[prototype]] 这个引用，与constructor无关。
+
 ## Object instanceof Object
 这个表达式返回true，原因在于：
+
 ```js
 Object.getPrototypeOf(Object.getPrototypeOf(Object)) === Object.prototype;
 ```
+
 至于为什么会设计成这样，还没弄清楚。通过以下代码可以生成一个类似效果的函数；
+
 ```
 function A(){};
 function B(){};
