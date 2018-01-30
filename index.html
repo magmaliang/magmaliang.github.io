@@ -263,7 +263,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/18/2017-10-18.subjective-thingking/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/04/2018-01-04-node-canvas/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="magma">
@@ -282,7 +282,626 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/18/2017-10-18.subjective-thingking/" itemprop="url">主观性思考</a></h1>
+                <a class="post-title-link" href="/2018/01/04/2018-01-04-node-canvas/" itemprop="url">node canvas</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-04T00:00:00+08:00">
+                2018-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>node-canvas是基于cairo用node实现的Canvas。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>图形图像库的依赖都比较复杂，node-canvas有一系列依赖，直接npm-install是不行的，需要经过以下预热：</p>
+<p><a href="https://www.npmjs.com/package/canvas" target="_blank" rel="external">依赖安装</a></p>
+<p>mac上可以使用brew直接安装：</p>
+<blockquote>
+<p>brew install pkg-config cairo libpng jpeg giflib</p>
+</blockquote>
+<p>## </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/03/2018-01-03-canvas/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/03/2018-01-03-canvas/" itemprop="url">canvas基础用法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T00:00:00+08:00">
+                2018-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>回忆起一个事实，编程相关的东西（尤其是API）,看是没什么用的，只有写下来才会记忆深刻，所谓“言之无文，行而不远”，所以以后这种基础的小白文也要不断地去写，权当作记忆工作。</p>
+</blockquote>
+<h2 id="canvas元素"><a href="#canvas元素" class="headerlink" title="canvas元素"></a>canvas元素</h2><p>canvas元素作为view容器存在，绑定了一些特殊的api。</p>
+<h2 id="绘画上下文"><a href="#绘画上下文" class="headerlink" title="绘画上下文"></a>绘画上下文</h2><p>通过canvas元素的getContext方法获取对应的绘画环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">const ctx = canvasnode.getContext(&apos;2d&apos;)// 2d, webgl, webgl2</div></pre></td></tr></table></figure>
+<h2 id="基本API"><a href="#基本API" class="headerlink" title="基本API"></a>基本API</h2><p>canvas元素提供的画布有一个坐标系统，原点在左上角，横轴是x轴。绘画的基本元素就是矩形，三角形，直线，曲线——虽然能想通，但是用这些东西画出烟雾、水波效果还是感觉到不可思议，就是对计算机的不自信，我一直没有在此更进一步。</p>
+<h3 id="矩形"><a href="#矩形" class="headerlink" title="矩形"></a>矩形</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 绘制一个矩形</span></div><div class="line">cxt.fillRect(<span class="number">10</span>,<span class="number">10</span>,<span class="number">30</span>,<span class="number">30</span>)<span class="comment">// x, y, width, height</span></div></pre></td></tr></table></figure>
+<h3 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h3><p><strong>直线</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ctx.beginPath()</div><div class="line">ctx.moveTo(<span class="number">10</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">10</span>,<span class="number">100</span>)</div><div class="line">ctx.closePath()</div></pre></td></tr></table></figure></p>
+<p>这里强调下beginPath和closePath的意义。<br>beginPath表示开启新的路径绘画。什么叫新的路径？stroke和fill所影响的对象就是一个路径，如果我们不用beginPath绘制了两条路径，对它们分别stroke，就会发现后一次的stroke也影响了前面的路径，如下面的例子，第一条线变成了红色与绿色的混合色：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line">ctx.beginPath()</div><div class="line">ctx.moveTo(<span class="number">10</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">10</span>,<span class="number">100</span>)</div><div class="line">ctx.strokeStyle = <span class="string">'red'</span></div><div class="line">ctx.stroke()</div><div class="line"></div><div class="line">ctx.moveTo(<span class="number">20</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">20</span>,<span class="number">100</span>)</div><div class="line">ctx.strokeStyle = <span class="string">'green'</span></div><div class="line">ctx.stroke()</div></pre></td></tr></table></figure>
+<p>而closePath表示闭合路径，例如你绘制了三角形的两边的路径再调用closePath则会生成一个三角形的路径：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line">ctx.beginPath()</div><div class="line">ctx.moveTo(<span class="number">10</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">10</span>,<span class="number">100</span>)</div><div class="line">ctx.lineTo(<span class="number">50</span>,<span class="number">100</span>)</div><div class="line">ctx.closePath()</div><div class="line">ctx.stroke()</div></pre></td></tr></table></figure></p>
+<p><strong>圆弧</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 圆心位于（x,y）,半径为radius，覆盖角度为startAngle到endAngle, 时针方向为anticlockwise(bool值)</span></div><div class="line">arc(x, y, radius, startAngle, endAngle, anticlockwise)</div></pre></td></tr></table></figure>
+<p><strong>贝塞尔曲线</strong></p>
+<p>展示一个动态的二次besier曲线, 控制点就是鼠标的位置<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;canvas id=<span class="string">'canvas'</span> height=<span class="string">'400'</span> width=<span class="string">"400"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span></div><div class="line">&lt;script&gt;</div><div class="line">	<span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line">	<span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">drowBesier</span>(<span class="params">x,y</span>)</span>&#123;</div><div class="line">		ctx.clearRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">400</span>, <span class="number">400</span>)</div><div class="line">		ctx.beginPath()</div><div class="line">		ctx.moveTo(<span class="number">10</span>, <span class="number">10</span>)</div><div class="line">		ctx.quadraticCurveTo(x, y, <span class="number">100</span>, <span class="number">10</span>)</div><div class="line">		ctx.stroke()</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// besier二次曲线</span></div><div class="line">	canvas.addEventListener(<span class="string">'mousemove'</span>, (e)=&gt;&#123;</div><div class="line">		drowBesier(e.layerX, e.layerY)</div><div class="line">	&#125;)</div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="设置样式"><a href="#设置样式" class="headerlink" title="设置样式"></a>设置样式</h3><p>样式类似于环境变量，除非你改变它，否则影响所有的形状绘制。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cxt.fillStyle = <span class="string">"rgb(0,0,255,0.5)"</span></div></pre></td></tr></table></figure>
+<h3 id="Path2D"><a href="#Path2D" class="headerlink" title="Path2D"></a>Path2D</h3><p>Path2D可以保存一个路径，在以后进行绘制<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>)</div><div class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> Path2D()</div><div class="line">circle.arc(<span class="number">50</span>,<span class="number">50</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="built_in">Math</span>.PI*<span class="number">2</span>,<span class="literal">false</span>)</div><div class="line"></div><div class="line">ctx.stroke(circle)</div></pre></td></tr></table></figure></p>
+<h3 id="绘制文本"><a href="#绘制文本" class="headerlink" title="绘制文本"></a>绘制文本</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ctx.font = <span class="string">'17px serif'</span></div><div class="line">ctx.fillText(<span class="string">'Are you kidding?'</span>,<span class="number">50</span>,<span class="number">50</span>)</div></pre></td></tr></table></figure>
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>canvas作为一张画布，绘制的各种图形和路径与html元素不同，html元素都有对应的js映射对象，可以方便地被操作与绑定。而对于canvas只能有两种方案：</p>
+<p>其一是通过绑定鼠标事件，计算鼠标在canvas上的坐标（有一对非标准的属性，layerX、layerY可以直接用），进而进行相关的反馈，如下是一个跟随鼠标移动画笔的功能：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">'canvas'</span> <span class="attr">height</span>=<span class="string">'400'</span> <span class="attr">width</span>=<span class="string">"400"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">	<span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line">	<span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">drawDot</span>(<span class="params">x,y</span>)</span>&#123;</div><div class="line">		ctx.beginPath()</div><div class="line">		ctx.moveTo(x,y)</div><div class="line">		ctx.lineTo(x+<span class="number">1</span>,y)</div><div class="line">		ctx.stroke()</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// besier二次曲线</span></div><div class="line">	canvas.addEventListener(<span class="string">'mousemove'</span>, (e)=&gt;&#123;</div><div class="line">		drawDot(e.layerX, e.layerY)</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>这只是一个需求非常简单的例子。对于实际的应用绘制了很多图形，图形之间有重叠遮挡，我们要做的很可能是实现与浏览器元素的各种事件机制（比如冒泡）接近的功能，这要求非常专业全面的设计。</p>
+<p>其二是使用官方的api（截止2018年1月没有浏览器实现），设定点击区域，在绘制完一个路径或者图形之后，可以使用 <strong>ctx.addHitRegion({id: “name”});</strong> 的方式注册区域。</p>
+<h2 id="图形被拉伸"><a href="#图形被拉伸" class="headerlink" title="图形被拉伸"></a>图形被拉伸</h2><p>如果使用css的方式去设置canvas元素的height和width，会导致canvas被拉伸。解决办法是直接设置canvas元素的height和width attributes.</p>
+<h2 id="图形模糊解决方案"><a href="#图形模糊解决方案" class="headerlink" title="图形模糊解决方案"></a>图形模糊解决方案</h2><p>原因是啥还没有研究，解决方案是绘图时使用ctx.scale(2,2)放大，而对于canvas元素使用transform scale缩小一倍。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/2018-01-02-crawler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/02/2018-01-02-crawler/" itemprop="url">爬虫小记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T00:00:00+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近交接了同事一些爬虫的工作，虽然只是些定时任务，但本着既然涉入了就要了解一番的习惯，对爬虫作了些研究。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="模拟登录"><a href="#模拟登录" class="headerlink" title="模拟登录"></a>模拟登录</h3><p>这是很多爬虫最难的地方，对于不设防的数据，基本就是些字符解析(比如html,xml)提取入库。但很多网站不登录不能抓数据，所以基于爬与反爬衍生了很多技术。常见用于反爬虫的技术有：</p>
+<ul>
+<li>为每个请求登录的页面分配一些随机码，作为登录时额外的参数，随机码有可能在前端生成，而前端代码经过混淆。</li>
+<li>各种验证码识别，更是催生了“极验”这类专门的公司</li>
+<li>频率控制，爬虫推断，封禁IP</li>
+</ul>
+<p>限于本人技术，只能处理上面第一点的情况，这是我写的关于 <a href="https://bitbucket.org" target="_blank" rel="external">https://bitbucket.org</a> 这个网站的模拟登录：<br>(开始是用node写，<strong>但是一直遇到问题，没有解决</strong>，后改成了python) —— 还是要花时间弄清楚node的模拟登录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding:utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="comment"># bs4用于html解析，选择</span></div><div class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</div><div class="line"></div><div class="line">url = <span class="string">'https://bitbucket.org/account/signin/'</span></div><div class="line"></div><div class="line"></div><div class="line">session = requests.session()</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_post_headers</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="string">'Host'</span>: <span class="string">'bitbucket.org'</span>,</div><div class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'</span>,</div><div class="line">        <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate, br'</span>,</div><div class="line">        <span class="string">'Accept-Language'</span>: <span class="string">'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'</span>,</div><div class="line">        <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'</span>,</div><div class="line">        <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>,</div><div class="line">        <span class="string">'Referer'</span>: <span class="string">'https://bitbucket.org/account/signin/'</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_request_params</span><span class="params">()</span>:</span></div><div class="line">    login_html = session.get(url).text</div><div class="line">    soup = BeautifulSoup(login_html, <span class="string">'html.parser'</span>)</div><div class="line">    csrf = soup.find(attrs=&#123;<span class="string">'name'</span>: <span class="string">'csrfmiddlewaretoken'</span>&#125;)[<span class="string">'value'</span>]</div><div class="line">    <span class="comment"># 请输入正确的用户名密码</span></div><div class="line">    <span class="keyword">return</span> dict(csrfmiddlewaretoken=csrf, username=<span class="string">'xxx'</span>, password=<span class="string">'xxx'</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></div><div class="line">    session.post(url, data=get_request_params(), headers=get_post_headers())</div><div class="line">    <span class="keyword">return</span> session</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span>  __name__ == <span class="string">"__main__"</span>:</div><div class="line">    s = login()</div><div class="line">    home_page = <span class="string">'https://bitbucket.org/'</span></div><div class="line">    resp = s.get(home_page, headers=<span class="string">''</span>)</div><div class="line">    sp = BeautifulSoup(resp.text, <span class="string">'html.parser'</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 输出登录后页面的title元素</span></div><div class="line">    print(sp.title)</div></pre></td></tr></table></figure></p>
+<p>具体的python代码知识在此不赘述。</p>
+<p>另外，对于验证码复杂的部分，可以使用人工验证的方式登录获取cookie，交取爬虫接着执行。一般使用selnium + chrome/phantomjs.</p>
+<h3 id="解析关键信息"><a href="#解析关键信息" class="headerlink" title="解析关键信息"></a>解析关键信息</h3><p>web爬虫基本就是解析html，也是本人技术栈的原因，介绍python和node方面的两个库</p>
+<h4 id="python-bs4"><a href="#python-bs4" class="headerlink" title="python bs4"></a>python bs4</h4><p>bs4在上面的例子里已经使用过了</p>
+<h4 id="node-cheerio"><a href="#node-cheerio" class="headerlink" title="node cheerio"></a>node cheerio</h4><p>有前端经验的对于使用cheerio会非常爽，因为选择器就是jQuery那一套</p>
+<h4 id="js渲染"><a href="#js渲染" class="headerlink" title="js渲染"></a>js渲染</h4><p>基于前后端分离开发的web页面，html元素都是由js生成的，以http请求返回的页面是没有什么意义的。这时候可以使用phantomjs,它是一个没有UI的浏览器，可以构建执行js的环境，生成完整页面，进而进行抓取。</p>
+<h3 id="并发控制"><a href="#并发控制" class="headerlink" title="并发控制"></a>并发控制</h3><p>爬虫另一个关键的地方，是执行控制，多数使用多个队列来管理，待续。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/17/2017-11-17-ss-out-of-wall/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/17/2017-11-17-ss-out-of-wall/" itemprop="url">shadowsocks 配置 ubuntu</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-17T00:00:00+08:00">
+                2017-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在很久之前自己花了一个通宵部署过一台shadowsocks server,当时本想写一遍攻略来着，因为从网上找到各种带坑的（因为随着时间的推移，环境和软件都有所变化）。但是坐在那沉思了一会，觉得整个过程了然于胸，没有写的必要了。</p>
+<p>纵然此情景坑过我无数次，但总归于我是个性情中人，十分愿意审时度势、活在当下。</p>
+<p>然后就到了今天，新买了一台虚机，结果一个ss硬是搞了一个下午——一部分原因是自己装逼没有选择自己一直熟悉的ubuntu，装了centos。所以最终是吃了个大亏，所以今天拼着周五不提前下班，也要给这玩意写了……最后还是认怂换成了ubuntu。。。</p>
+<h2 id="shadowsocks与shadowsocks-libev"><a href="#shadowsocks与shadowsocks-libev" class="headerlink" title="shadowsocks与shadowsocks-libev"></a>shadowsocks与shadowsocks-libev</h2><p>我记忆不大清楚，以为shadowsocks升级了，照着shadowsocks-libev装，结果在centos上装了一下午没成，多数是因为各种说 package 不存在。</p>
+<p>原来shadowsocks-libev是几个新的人贱贱地弄出来的……</p>
+<p>以后一定要不图急，收集了解好信息再下手。（关键我搜shadowsocks排在第一的竟然是shadowsocks-libev）</p>
+<h2 id="使用pip安装"><a href="#使用pip安装" class="headerlink" title="使用pip安装"></a>使用pip安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install shadowsocks;</div></pre></td></tr></table></figure>
+<p>使用pip装最省事，我使用其他都特别费力，还有让我下包下来自己编译执行的，然后我照着做又出来什么autoconf需要升级，autoconf升级不了。。。反正是连环阵。</p>
+<p>以后我就记着，装shadowsocks我只认<strong>pip</strong></p>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p>shadowsocks安装后，会注册一个ssserver的命令，除了要写下配置文件，基本这个命令就搞定一切了:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssserver -c 配置文件 -d start/stop/reload</div></pre></td></tr></table></figure></p>
+<h2 id="同步文件命令：-rsync"><a href="#同步文件命令：-rsync" class="headerlink" title="同步文件命令： rsync"></a>同步文件命令： rsync</h2><p>我是vim渣，修改几个字符还可以，写整个文件这种事我实在干不出来——就算是一个shadowsocks.json</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rsync -rv /usr/local/var/www/* root@xx.xx.xx.xx:/usr/share/nginx/www/mytest/</div></pre></td></tr></table></figure>
+<h2 id="免密登录"><a href="#免密登录" class="headerlink" title="免密登录"></a>免密登录</h2><p>每次登录同步远程机器也是麻烦，以前的时候是手动copy rsa_pub去远程机器，这几天发现了更高级的玩意：专属命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># -p 是 port</div><div class="line">ssh-copy-id -p 8129 user@remote</div><div class="line">ssh-copy-id user@remote</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/23/2017-10-23-the-advantage-case/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/23/2017-10-23-the-advantage-case/" itemprop="url">项目经验</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-23T00:00:00+08:00">
+                2017-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>准备共时间好好写下简历，主要是想给自己五年的工作做个总结，这里先对项目做些总结。</p>
+<h2 id="ERP"><a href="#ERP" class="headerlink" title="ERP"></a>ERP</h2><h2 id="PASS平台"><a href="#PASS平台" class="headerlink" title="PASS平台"></a>PASS平台</h2><h2 id="美团保险"><a href="#美团保险" class="headerlink" title="美团保险"></a>美团保险</h2><h2 id="美团业务平台"><a href="#美团业务平台" class="headerlink" title="美团业务平台"></a>美团业务平台</h2>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/18/2017-10-18-subjective-thingking/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/18/2017-10-18-subjective-thingking/" itemprop="url">主观性思考</a></h1>
         
 
         <div class="post-meta">
@@ -333,7 +952,7 @@
           
             <h1 id="主观观点"><a href="#主观观点" class="headerlink" title="主观观点"></a>主观观点</h1><h2 id="三十而立"><a href="#三十而立" class="headerlink" title="三十而立"></a>三十而立</h2><p>最近开始思考一个人的价值。</p>
 <p>实际上我一直在思考：什么样的人是对社会对亲人朋友有用？很多不同的场景下我得出不同的答案，然而它们会自相矛盾。拔开层层迷雾，得到最终真理的过程一定是不断地自我否定、破而后立。写到这里我才明白三十而立的立为何意。</p>
-<p>所谓三十而立，我想应该就是一个人的三观已经和谐统一，对于世界有了一个自我我认识，这个认知是系统性的一致性的。</p>
+<p>所谓三十而立，我想应该就是一个人的三观已经和谐统一，对于世界有了一个自我认识，这个认知是系统性的一致性的。</p>
 <h2 id="寻求主观的统一"><a href="#寻求主观的统一" class="headerlink" title="寻求主观的统一"></a>寻求主观的统一</h2><p>在我过往的人生中，总觉得唯心是个贬义词，唯心主观与事实脱节，与宇宙真理背道而驰。于是总是追寻客观的事实，从实践中反馈不足并改正，排斥自己的主观感觉，避免主观性的思考。</p>
 <p>然而我渐渐地发现主观思想才是人与人区别开来的因素，主观力量是内功。客观的世界有自我矛盾的地方，使用客观的方法与思想无法达成统一，没有容错与自我校正的能力，纯客观的世界机器就能完成所有的工作。人的价值在于主观理念的不同，只有抽象程度高的主观思想才能驱动客观因素的变化。</p>
 <p>为了融入周围，我曾经像变色龙一样放弃主观色彩，尽一切客观地对待所有事物，这导致了我成了一个自物矛盾的人。</p>
@@ -341,15 +960,17 @@
 <p>因为我真是在临近这个年纪的时候，开始思考人生的价值，开始试图统一自我对于经历和社会的认知，开始意识到矛盾的客观思想对一个人人格统一的干扰，希望自己对世界更加的兼容、对自己更加的纯粹——希望有一个简单纯粹的理论来指引自己的人生，释放自己的精力。</p>
 <h2 id="人生的境界"><a href="#人生的境界" class="headerlink" title="人生的境界"></a>人生的境界</h2><p>从某种意义上讲，我是个守旧派。所有的守旧派接受新的思想和态度并非是因为喜欢，或者说直接点：并非是因为追寻真理，只是识时务者为俊杰。我已经沉默了很久（实际上从我发现争论的烦恼之后一直沉默），不想去争论真理。只是想说，胜出的、风行天下的未必是真理，就像《三体》中说的降维攻击，曾经的十维才是真理。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">我们是谁？</div><div class="line">我们从哪里来？</div><div class="line">我们要去哪里？</div></pre></td></tr></table></figure>
-<p>这三个总是对大多数人来说没有什么意义，我们就像草原上的羊，追逐着水草、躲避着肉食动物，然后一生落幕——短短的一生，我们扮演着自己的角色，入戏太深，一个接着一个的困难，全部是衣食住行性，然而就精尽人亡了。</p>
+<p>这三个总是对大多数人来说没有什么意义，我们就像草原上的羊，追逐着水草、躲避着肉食动物，然后一生落幕——短短的一生，我们扮演着自己的角色，入戏太深，一个接着一个的困难，全部是衣食住行性，然后就精尽人亡了。</p>
 <p>其实人生的境界、人生的意义 —— 对于我们动物的部分，客观的世界没有任何意义。</p>
 <h2 id="眼下才有诗和远方？"><a href="#眼下才有诗和远方？" class="headerlink" title="眼下才有诗和远方？"></a>眼下才有诗和远方？</h2><p>“生活不止眼前的苟且，还有诗和远方。”</p>
-<p>当你看的足够远，其实都是沙漠、虚无。多数人都是在娱乐他人，你如果想知道自己是否在娱乐他人就问自己一个问题：</p>
+<p>当你看的足够远，其实都是沙漠、虚无。多数人的人生都是在娱乐他人，只是在间隙中偶尔休息，你如果想知道自己是否在娱乐他人就问自己一个问题：</p>
 <blockquote>
 <p>如果世界上只剩下自己一个人，你现在做的事情还有多少你会继续做？</p>
 </blockquote>
 <p>答案估计充满了悲观的色彩，我们在海中才是一滴水，离开了海什么都不是——当你思考作为个人的终极的人生意义，其实就是这个答案：没有什么意义，你就像工蚁一样。</p>
 <h2 id="责任和集体主义"><a href="#责任和集体主义" class="headerlink" title="责任和集体主义"></a>责任和集体主义</h2><p>所以大海才是我们生存的全部意义，去和别人水乳交融吧，去帮助别人吧！</p>
+<p>我算不上聪明人，因为我总是对抗潮流，以及持续性地观望却不去做什么事去改变那些不喜欢的东西。我对我现在取得的成就——如果可以称之为成就——其实挺满意，但是都是被逼出来的，我娶妻生子，要在人群中活的人模狗样，至少不能太特例。这些念头像一条野狗不断地追着我，让我在一条不知道什么样的路上不断地跑……至于我是否开心，我一直觉得是个哲学问题。</p>
+<p>人的能力到了什么程度，才能游刃有余地安排好自己的责任，去追求内心最渴望的东西？第一层次的财富自由就已经阻断了99%以上的人，事实上集体生存的生物永远不会获得真正的自由，它是毒品，一旦脱离集体主义不再为集体贡献力量，也就意味着死亡。</p>
 
           
         
@@ -461,9 +1082,158 @@
       
         
           
-            <h2 id="big-picture"><a href="#big-picture" class="headerlink" title="big picture"></a>big picture</h2><h2 id="react-redux"><a href="#react-redux" class="headerlink" title="react-redux"></a>react-redux</h2><p>redux是数据管理库，和react结合使用时，需要“衔接器” —— react-redux。它的作用就是将store的数据连接到react组件的props上，并在react组件中可以访问store。</p>
-<h3 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h3><h3 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h3><p>Provider是个容器组件，是个无UI的盒子，它的功能是让容器内部的React组件可以通过context访问store。</p>
+            <h2 id="big-picture"><a href="#big-picture" class="headerlink" title="big picture"></a>big picture</h2><h2 id="redux"><a href="#redux" class="headerlink" title="redux"></a>redux</h2><p>redux的概念非常简单，以下的代码可以说明它主要的概念：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;createStore&#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</div><div class="line"></div><div class="line"><span class="comment">// reducer</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducers</span>(<span class="params">store=&#123;a:<span class="number">0</span>&#125;, action</span>) </span>&#123;</div><div class="line">	<span class="keyword">switch</span>(action.type)&#123;</div><div class="line">		<span class="keyword">case</span> <span class="string">"INCREMENT"</span> :</div><div class="line">			++store.a</div><div class="line">			<span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, store);</div><div class="line">		<span class="keyword">case</span> <span class="string">"DECREMENT"</span>:</div><div class="line">			--store.a;</div><div class="line">			<span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, store);</div><div class="line">		<span class="keyword">default</span>:</div><div class="line">			<span class="built_in">console</span>.warn(<span class="string">"unknow action: "</span> + action.type)</div><div class="line">			<span class="keyword">return</span> store;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> store = createStore(reducers);</div><div class="line"></div><div class="line">store.subscribe(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(store.getState())</div><div class="line">&#125;)</div><div class="line"></div><div class="line">store.dispatch(&#123;<span class="attr">type</span>: <span class="string">"INCREMENT"</span>, <span class="attr">data</span>: &#123;&#125;&#125;)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>createStore用于创建store对象，store对象封装全部的数据及对数据的操作。</li>
+<li>store初始化的数据是reducers，它是一个function，主要是数据的操作变化。</li>
+<li>store.dispatch派发action, reducer根据action进行case update.</li>
+<li>subscribe侦听store中数据的变化，每次执行action之后都会回调subscribe注册的回调函数。</li>
+</ul>
+<h3 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h3><p>中间件思想是redux除了上面基本的概念外，另一个重要的部分（放心，这是最后的部分）。来看一看一个简单的中间件的定义：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> middleware = <span class="function"><span class="params">store</span> =&gt;</span> next =&gt; <span class="function"><span class="params">action</span> =&gt;</span> &#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"before action"</span>)</div><div class="line">	next(action)</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"after action"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>是不是被吓尿了——“这是什么鬼？”不用怕，我们先忘记中间件这个词，我给你整成一个面试题：</p>
+<h4 id="一个简单解释中间件的例子"><a href="#一个简单解释中间件的例子" class="headerlink" title="一个简单解释中间件的例子"></a>一个简单解释中间件的例子</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 我们有一个function，如下</div><div class="line">function foo()&#123;console.log(“我是一个快乐的foo”)&#125;</div><div class="line"></div><div class="line">// 我们还有一个function ,如下</div><div class="line">// aopa和aopb都是函数</div><div class="line">function aop(aopa, aopb)&#123;</div><div class="line">	// 但是我没有实现它，哈哈哈...</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 需求来了: 我要求aop(aopa,aopb)(foo)返回一个新的函数，当这个函数被调用时，aopa和aopb的代码按照它们传入的顺序执行</div><div class="line">// 并且（如果你关心主逻辑，这个需求可以不看）：aopa和aopb有beforefoo和afterfoo的概念</div></pre></td></tr></table></figure>
+<p>先思考一下，下面贴一个答案：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// 传入aop的函数，因为有before,after的概念，所以before和after的target肯定要传入这个aopa中</div><div class="line">// tip: 看下面的代码是一个典型的aop方式，返回一个新的函数，对原函数进行包裹</div><div class="line">function aopa(foo)&#123;</div><div class="line">	return () =&gt; &#123;</div><div class="line">		console.log(&quot;before&quot;)</div><div class="line">		foo()</div><div class="line">		console.log(&quot;after&quot;)</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line">var aop = (...func) =&gt; (foo) =&gt; &#123;</div><div class="line">	var wrap = foo;</div><div class="line">	// 使用 func 传入的aop进行反复包裹</div><div class="line">	func.map(f =&gt;&#123;</div><div class="line">		wrap = f(wrap)</div><div class="line">	&#125;)</div><div class="line"></div><div class="line">	return wrap;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以所谓的中间件就是在关键逻辑foo的执行前后插入数个自定义的过程，这些个自定义的过程就是中间件，结合redux还有如下思考：</p>
+<ul>
+<li>为了在中间件中可以获取store这个上下文，需要将store传入中间件中</li>
+<li>reducer是带参数的（store, action），也就是我们的foo需要传入参数，上面的模拟需求并没有参数</li>
+<li>redux对外公布了dispatch这个派发事件的API，使用无侵入的方式能对此函数进行包裹</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> aopa = <span class="function">(<span class="params">next, store</span>) =&gt;</span> action =&gt; &#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"before"</span>)</div><div class="line">	next(action)</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"after"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> aop = <span class="function">(<span class="params">...func</span>) =&gt;</span> (store) =&gt; &#123;</div><div class="line">	<span class="keyword">let</span> dispatch = store.dispatch;</div><div class="line">	<span class="comment">// 使用 func 传入的aop进行反复包裹</span></div><div class="line">	func.map(<span class="function"><span class="params">f</span> =&gt;</span>&#123;</div><div class="line">		dispatch = f(dispatch, store)</div><div class="line">	&#125;)</div><div class="line"></div><div class="line">	<span class="comment">// 更改store的dispatch</span></div><div class="line">	<span class="keyword">return</span> <span class="built_in">Object</span>.assign(store, &#123;dispatch&#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 这是我为了演示概念定义的超简redux-store !-_-</span></div><div class="line"><span class="keyword">var</span> store = &#123;</div><div class="line">	<span class="attr">dispatch</span>: <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"disp 了个大 tch!"</span>)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> myStore = aop(aopa,aopa)(store);</div><div class="line"></div><div class="line"><span class="comment">// 查看效果</span></div><div class="line">myStore.dispatch(&#123;<span class="attr">type</span>: <span class="string">'嘿嘿嘿'</span>&#125;)</div></pre></td></tr></table></figure>
+<h4 id="真实的中间件"><a href="#真实的中间件" class="headerlink" title="真实的中间件"></a>真实的中间件</h4><p>以上是我看了中间件的使用demo后以<strong>极快的速度</strong>瞎写的demo——甚至连参数都没对上, 真实的源码当然有所不同（不过都是细节上，我不禁暗自高兴了一把：原来我是如此地接近大神的思维——最特么烦人问我源码，我都能猜出来大致是怎么回事，为么非要我去看源码啊啊啊~！）</p>
+<p>我还是直接注释源码吧：</p>
+<p>（看到这些一眼看不懂的代码，我总是意淫：这决不是一次写成的！肯定经过了多次的精简改动！）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 用以联结中间件</span></div><div class="line"><span class="comment">// reduce的地方比较精彩</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params">...funcs</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (funcs.length === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="params">arg</span> =&gt;</span> arg</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (funcs.length === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> funcs[<span class="number">0</span>]</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// 这个reduce会将所有的middleware层叠串成链，但是最后一个middleware执行时next是没有的，在applyMiddleware中加进去</span></div><div class="line">  <span class="keyword">return</span> funcs.reduce(<span class="function">(<span class="params">a, b</span>) =&gt;</span> (...args) =&gt; a(b(...args)))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">applyMiddleware</span>(<span class="params">...middlewares</span>) </span>&#123;</div><div class="line">  <span class="comment">// 外层参数传入的直接是createStore</span></div><div class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">createStore</span>) =&gt;</span> (...args) =&gt; &#123;</div><div class="line">    <span class="keyword">const</span> store = createStore(...args)</div><div class="line">    <span class="keyword">let</span> dispatch = store.dispatch</div><div class="line">    <span class="keyword">let</span> chain = []</div><div class="line"></div><div class="line">    <span class="comment">// 对中间件仅仅暴露了getState和dispatch两个方法</span></div><div class="line">    <span class="keyword">const</span> middlewareAPI = &#123;</div><div class="line">      <span class="attr">getState</span>: store.getState,</div><div class="line">      <span class="attr">dispatch</span>: <span class="function">(<span class="params">...args</span>) =&gt;</span> dispatch(...args)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 将中间件的函数嵌套拆一层，传入了阉割后的store</span></div><div class="line">    chain = middlewares.map(<span class="function"><span class="params">middleware</span> =&gt;</span> middleware(middlewareAPI))</div><div class="line">    <span class="comment">// 反复包裹dispatch，以便dispatch时中间件可链式调用</span></div><div class="line">    dispatch = compose(...chain)(store.dispatch)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">      ...store,</div><div class="line">      dispatch</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 一个调用中间件的例子</span></div><div class="line"><span class="keyword">var</span> middleware = <span class="function"><span class="params">store</span> =&gt;</span> next =&gt; <span class="function"><span class="params">action</span> =&gt;</span> &#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"before action"</span>)</div><div class="line">	<span class="keyword">let</span> rs = next(action)</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">"after action"</span>)</div><div class="line">	<span class="keyword">return</span> rs;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> createStoreWithMiddleware = applyMiddleware(middleware)(createStore);</div><div class="line"></div><div class="line"><span class="keyword">var</span> store = createStoreWithMiddleware(<span class="function"><span class="keyword">function</span>(<span class="params">state=&#123;&#125;, action</span>)</span>&#123;</div><div class="line">	<span class="keyword">switch</span>(action.type)&#123;</div><div class="line">		<span class="keyword">case</span> <span class="string">"ACTION_A"</span>:</div><div class="line">			<span class="keyword">return</span> state;</div><div class="line">		<span class="keyword">default</span>:</div><div class="line">			<span class="keyword">return</span> state;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// 现在这个store dispatch action时就会经过中间件。</span></div></pre></td></tr></table></figure>
+<h2 id="react-redux"><a href="#react-redux" class="headerlink" title="react-redux"></a>react-redux</h2><p>redux是数据管理库，和react结合使用时，需要“衔接器” —— react-redux。它的作用就是将store的数据连接到react组件的props上，并在react组件中可以访问store。它有两个重要的概念：</p>
+<ul>
+<li>connext</li>
+<li>Provider</li>
+</ul>
+<h3 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h3><p>在react中UI组件刷新的时机是store发生了变化，如何将这个变化通知到react组件，只有通过subscribe方法 —— 而connect是这个基本思路的优雅实现。connect是一个高阶组件——其实我挺讨厌有的人不断地发明新的名词，高阶组做的原理和我们上面middleware链是一致的，就是包裹原来的函数（组件）添加额外的逻辑形成新的函数（组件），是设计模式中装饰器模式的实现。</p>
+<p>connect的语法是这样的：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</div><div class="line"><span class="keyword">import</span> &#123; RootComponent &#125;  <span class="keyword">from</span> <span class="string">'./root-component'</span>;</div><div class="line"></div><div class="line"><span class="comment">// 指定哪些state下的数据被连接到react组件上</span></div><div class="line"><span class="keyword">var</span> mapStateToProps = <span class="function"><span class="keyword">function</span>(<span class="params">state</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		<span class="attr">form</span>: state.form</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 指定哪些action被连接到react组件上</span></div><div class="line"><span class="keyword">var</span> mapDispatchToProps = <span class="function"><span class="keyword">function</span>(<span class="params">dispatch</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		<span class="attr">actionA</span>: <span class="function"><span class="params">()</span>=&gt;</span>dispatch(&#123;<span class="attr">type</span>: <span class="string">"ACTION_A"</span>&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">connect(mapStateToProps, mapDispatchToProps)(RootComponent)</div><div class="line"></div><div class="line"><span class="comment">// 经过这些步骤之后，store相关数据节点的变化即可引发RootComponent rerender</span></div></pre></td></tr></table></figure></p>
+<h4 id="原理——关键代码"><a href="#原理——关键代码" class="headerlink" title="原理——关键代码"></a>原理——关键代码</h4><p>react-redux的代码复杂度超过了redux。这里我按着源码的逻辑介绍关键的逻辑。</p>
+<p><strong>subscribe</strong><br>在redux源码中，<strong>src/utils/Subscribtion.js</strong>（下面是这个文件的主要代码）这个文件定义了store与props的绑定函数：<strong>trySubscribe</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Subscription</span> </span>&#123;</div><div class="line">  <span class="comment">// onStateChange很重要，就是store.subscribe注册的回调，具体逻辑见下面的trySubscribe</span></div><div class="line">  <span class="keyword">constructor</span>(store, parentSub, onStateChange) &#123;</div><div class="line">    <span class="keyword">this</span>.store = store</div><div class="line">    <span class="keyword">this</span>.parentSub = parentSub</div><div class="line">    <span class="keyword">this</span>.onStateChange = onStateChange</div><div class="line">    <span class="keyword">this</span>.unsubscribe = <span class="literal">null</span></div><div class="line">    <span class="keyword">this</span>.listeners = nullListeners</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  addNestedSub(listener) &#123;</div><div class="line">    <span class="keyword">this</span>.trySubscribe()</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.listeners.subscribe(listener)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  notifyNestedSubs() &#123;</div><div class="line">    <span class="keyword">this</span>.listeners.notify()</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  isSubscribed() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Boolean</span>(<span class="keyword">this</span>.unsubscribe)</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 绑定逻辑</span></div><div class="line">  trySubscribe() &#123;</div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.unsubscribe) &#123;</div><div class="line">      <span class="keyword">this</span>.unsubscribe = <span class="keyword">this</span>.parentSub</div><div class="line">        ? <span class="keyword">this</span>.parentSub.addNestedSub(<span class="keyword">this</span>.onStateChange)</div><div class="line">        : <span class="keyword">this</span>.store.subscribe(<span class="keyword">this</span>.onStateChange)</div><div class="line"></div><div class="line">      <span class="keyword">this</span>.listeners = createListenerCollection()</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  tryUnsubscribe() &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.unsubscribe) &#123;</div><div class="line">      <span class="keyword">this</span>.unsubscribe()</div><div class="line">      <span class="keyword">this</span>.unsubscribe = <span class="literal">null</span></div><div class="line">      <span class="keyword">this</span>.listeners.clear()</div><div class="line">      <span class="keyword">this</span>.listeners = nullListeners</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>调用的代码写在<strong>src/components/connectAdvanced.js</strong>中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">initSubscription() &#123;</div><div class="line">	if (!shouldHandleStateChanges) return</div><div class="line"></div><div class="line">	// 创建 Subscription时，即执行完了store的观察回调，回调逻辑为onStateChange</div><div class="line">	this.subscription = new Subscription(this.store, parentSub, this.onStateChange.bind(this))</div><div class="line"></div><div class="line">	this.notifyNestedSubs = this.subscription.notifyNestedSubs.bind(this.subscription)</div><div class="line">&#125;</div><div class="line">onStateChange() &#123;</div><div class="line">	// 这个selector.run 会设置this.selector.shouldComponentUpdate的值</div><div class="line">    this.selector.run(this.props)</div><div class="line"></div><div class="line">    if (!this.selector.shouldComponentUpdate) &#123;</div><div class="line">      this.notifyNestedSubs()</div><div class="line">    &#125; else &#123;</div><div class="line">      // 如果this.selector.shouldComponentUpdate 为真，则调用this.setState引起组件update的流程</div><div class="line">      this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate</div><div class="line">      this.setState(dummyState)</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h3><p>Provider是个容器组件，是个无UI的盒子，它的功能是让容器内部的React组件（connect生成的组件）可以获得store，并且可以通过context访问store。</p>
+<p>这里看下Provider的源码就明白了，它比较简单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">export function createProvider(storeKey = &apos;store&apos;, subKey) &#123;</div><div class="line">    const subscriptionKey = subKey || `$&#123;storeKey&#125;Subscription`</div><div class="line"></div><div class="line">    class Provider extends Component &#123;</div><div class="line">        // store 存在context中，所以可以被Provider下所有的子组件通过定义contextType拿到</div><div class="line">        getChildContext() &#123;</div><div class="line">          return &#123; [storeKey]: this[storeKey], [subscriptionKey]: null &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        constructor(props, context) &#123;</div><div class="line">          super(props, context)</div><div class="line">          this[storeKey] = props.store;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        render() &#123;</div><div class="line">          return Children.only(this.props.children)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (process.env.NODE_ENV !== &apos;production&apos;) &#123;</div><div class="line">      Provider.prototype.componentWillReceiveProps = function (nextProps) &#123;</div><div class="line">        if (this[storeKey] !== nextProps.store) &#123;</div><div class="line">          warnAboutReceivingStore()</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Provider.propTypes = &#123;</div><div class="line">        store: storeShape.isRequired,</div><div class="line">        children: PropTypes.element.isRequired,</div><div class="line">    &#125;</div><div class="line">    Provider.childContextTypes = &#123;</div><div class="line">        [storeKey]: storeShape.isRequired,</div><div class="line">        [subscriptionKey]: subscriptionShape,</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return Provider</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default createProvider()</div></pre></td></tr></table></figure>
+<p>connect通过contextType拿到store，再经过mapStateToProps，则完成了数据的传递。</p>
+<h2 id="full-example"><a href="#full-example" class="headerlink" title="full example"></a>full example</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line">import React ,&#123;Component&#125; from &apos;react&apos;;</div><div class="line">import &#123;render&#125; from &apos;react-dom&apos;;</div><div class="line">import &#123;Provider, connect&#125; from &apos;react-redux&apos;;</div><div class="line">import &#123;createStore, applyMiddleware&#125; from &apos;redux&apos;;</div><div class="line"></div><div class="line">class SubComponent extends Component &#123;</div><div class="line">  constructor(options)&#123;</div><div class="line">    super(options)</div><div class="line">  &#125;</div><div class="line">  render()&#123;</div><div class="line">    return &lt;div className=&quot;sub-component&quot;&gt;&#123;this.props.value&#125;&lt;/div&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class App extends Component &#123;</div><div class="line">  constructor(options)&#123;</div><div class="line">    super(options)</div><div class="line">    this</div><div class="line">  &#125;</div><div class="line">  render()&#123;</div><div class="line">    return &lt;div&gt;</div><div class="line">      &#123;this.props.number&#125;&lt;br /&gt;</div><div class="line">      &lt;input onClick=&#123;this.click&#125; value=&quot;increase&quot; type=&quot;button&quot;/&gt;</div><div class="line">      &lt;br /&gt;</div><div class="line">      &lt;input onClick=&#123;this.forceUpdate&#125; value=&quot;forceUpdate&quot; type=&quot;button&quot;/&gt;</div><div class="line">      &lt;SubComponent value=&#123;this.props.number&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &#125;</div><div class="line">  componentWillReceiveProps(nextprops)&#123;</div><div class="line">    console.log(&quot;app componentWillReceiveProps:&quot; + JSON.stringify(nextprops))</div><div class="line">  &#125;</div><div class="line">  click = ()=&gt;&#123;</div><div class="line">    this.props.increase()</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">//1. redux create</div><div class="line">const reducers = (state, action)=&gt;&#123;</div><div class="line">  switch(action.type)&#123;</div><div class="line">    case &quot;A&quot;:</div><div class="line">      state.num++;</div><div class="line">      return Object.assign(&#123;&#125;, state);</div><div class="line">    default:</div><div class="line">      return &#123;num:0&#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">// 应用中间件</div><div class="line">const createStoreWithMiddleware = applyMiddleware(store =&gt; next =&gt; action =&gt; &#123;</div><div class="line">  console.log(&quot;store.num:&quot; + store.getState().num)</div><div class="line">  var rs = next(action)</div><div class="line">  return rs</div><div class="line">&#125;)(createStore)</div><div class="line"></div><div class="line">var store = createStoreWithMiddleware(reducers)</div><div class="line"></div><div class="line">//2. react-redux 连接</div><div class="line">const mapStateToProps = (state) =&gt; &#123;</div><div class="line">  return &#123;</div><div class="line">    number: state.num</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const mapDispatchToProps = (dispatch) =&gt; &#123;</div><div class="line">  return &#123;</div><div class="line">    increase: ()=&gt;dispatch(&#123;type: &quot;A&quot;&#125;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const AppProxy = connect(mapStateToProps, mapDispatchToProps)(App)</div><div class="line"></div><div class="line">window.xxx = render(&lt;Provider store=&#123;store&#125;&gt;&lt;AppProxy/&gt;&lt;/Provider&gt;, document.getElementById(&quot;container&quot;))</div></pre></td></tr></table></figure>
 
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/09/2017-10-09-router && react-router/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/09/2017-10-09-router && react-router/" itemprop="url">router && react-router</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T00:00:00+08:00">
+                2017-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>SPA较之普通网页，router是基础设施。</p>
+</blockquote>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2>
           
         
       
@@ -581,12 +1351,14 @@
 <h2 id="proto-与-prototype"><a href="#proto-与-prototype" class="headerlink" title="proto 与 prototype"></a><strong>proto</strong> 与 prototype</h2><p><strong>proto</strong>是js引擎实现时内部的属性，便于完成原型链式的访问，某些浏览器（例如chrome）暴露出来通过js可访问，es5开始有一个api可以获取对象的原型：Object.getPrototypeOf(O)。<br>所以所有具有原型链机制的对象均有<strong>proto</strong>属性。而prototype是函数的属性，当函数被用作constructor时用于构建<strong>proto</strong>。</p>
 <p>构建时直接将<strong>proto</strong>指向constructor的prototype:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line"></div><div class="line">(<span class="keyword">new</span> a).__proto__ === a.prototype; <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
 <h2 id="以function声明的函数是Function的实例"><a href="#以function声明的函数是Function的实例" class="headerlink" title="以function声明的函数是Function的实例"></a>以function声明的函数是Function的实例</h2><p>通过以下代码可以证明：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</div><div class="line"></div><div class="line">a.__proto__ === <span class="built_in">Function</span>.prototype; <span class="comment">// true</span></div></pre></td></tr></table></figure></p>
-<p>注意<strong>a.prototype 与 a.<strong>proto</strong> </strong> 并不是一回事，在上一节中已经说明: 只有函数才具有 prototype 这个属性，被用作constructor(使用new 构建)时，将新对象的<strong>proto</strong> 设置为函数的prototype。</p>
+<p>注意 <strong>a.prototype 与 a.<strong>proto</strong></strong> 并不是一回事，在上一节中已经说明: 只有函数才具有 prototype 这个属性，被用作constructor(使用new 构建)时，将新对象的 <strong>proto</strong> 设置为函数的prototype。</p>
 <h2 id="instanceof"><a href="#instanceof" class="headerlink" title="instanceof"></a>instanceof</h2><blockquote>
 <p>object instanceof constructor<br>instanceof 用于检测 constructor.prototype 是否存在于object的原型链上。所以回到开头的问题，instancof 检测的是 [[prototype]] 这个引用，与constructor无关。</p>
-<h2 id="Object-instanceof-Object"><a href="#Object-instanceof-Object" class="headerlink" title="Object instanceof Object"></a>Object instanceof Object</h2><p>这个表达式返回true，原因在于：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>)) === <span class="built_in">Object</span>.prototype;</div></pre></td></tr></table></figure></p>
 </blockquote>
-<p>至于为什么会设计成这样，还没弄清楚。通过以下代码可以生成一个类似效果的函数；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function A()&#123;&#125;;</div><div class="line">function B()&#123;&#125;;</div><div class="line">var t = &#123;&#125;;</div><div class="line"></div><div class="line">A.prototype = B.prototype = t; </div><div class="line">A.__proto__ = new B();</div><div class="line"></div><div class="line">A instanceof A // 返回true</div></pre></td></tr></table></figure></p>
+<h2 id="Object-instanceof-Object"><a href="#Object-instanceof-Object" class="headerlink" title="Object instanceof Object"></a>Object instanceof Object</h2><p>这个表达式返回true，原因在于：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>.getPrototypeOf(<span class="built_in">Object</span>)) === <span class="built_in">Object</span>.prototype;</div></pre></td></tr></table></figure>
+<p>至于为什么会设计成这样，还没弄清楚。通过以下代码可以生成一个类似效果的函数；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function A()&#123;&#125;;</div><div class="line">function B()&#123;&#125;;</div><div class="line">var t = &#123;&#125;;</div><div class="line"></div><div class="line">A.prototype = B.prototype = t; </div><div class="line">A.__proto__ = new B();</div><div class="line"></div><div class="line">A instanceof A // 返回true</div></pre></td></tr></table></figure>
 <h2 id="终级答案"><a href="#终级答案" class="headerlink" title="终级答案"></a>终级答案</h2><p>今天终于搞明白了，我在stackoverflow上问了一个问题，过了好久有个人回答了我，<a href="https://stackoverflow.com/questions/45936000/how-to-explain-object-instanceof-object-returns-true-in-javascript?noredirect=1#comment78831774_45936000" target="_blank" rel="external">问题</a></p>
 <p>原因并非是它们被设计成这样，这并非目的，而是因为Function和Object的定义（设计）规则，造成了这一结果:</p>
 <p><strong>Object是个function, 所有的function都是对象，所有对象继承自Object.prototype</strong></p>
@@ -750,789 +1522,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/12/2017-06-12-big-fes-tools/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/12/2017-06-12-big-fes-tools/" itemprop="url">前端相关工具集</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T00:00:00+08:00">
-                2017-06-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>见过用过很多优秀的工具，很多都是惊艳一时，但是实际的工作用的不多，渐渐就忘了。这是一个持续更新的文档，记录见过的精美亦或可以提高工作效率的工具。</p>
-<h2 id="drawio"><a href="#drawio" class="headerlink" title="drawio"></a><a href="https://www.draw.io/" target="_blank" rel="external">drawio</a></h2><p>在线图表绘制工具，种类丰富，可以导出为各种格式。从我使用的体验来感觉，基本可以替代visio。</p>
-<h2 id="balsamiq-mockup"><a href="#balsamiq-mockup" class="headerlink" title="balsamiq mockup"></a><a href="https://balsamiq.com/?gclid=CjwKEAjw1PPJBRDq9dGHivbXmhcSJAATZd_BZH-1JhwM0tfTXx4vHdxYQLqsK862YzUHM6jihFbYwBoC257w_wcB" target="_blank" rel="external">balsamiq mockup</a></h2><p>非常“草”的草图软件，其实挺萌化的，据我观察，尤为后端同学所钟爱，速度快，内置模板还可以。</p>
-<h2 id="sketch"><a href="#sketch" class="headerlink" title="sketch"></a><a href="http://www.sketchcn.com/" target="_blank" rel="external">sketch</a></h2><p>虽然没有 photoshop 强大, 但专注 web 界面设计的工具，切图复用、方便快捷，配合插件可以快速标记导出成型的html文件。</p>
-<h2 id="lighthouse"><a href="#lighthouse" class="headerlink" title="lighthouse"></a><a href="https://github.com/GoogleChrome/lighthouse" target="_blank" rel="external">lighthouse</a></h2><p>Lighthouse analyzes web apps and web pages, collecting modern performance metrics and insights on developer best practices.</p>
-<p>网页分析工具，多个维度，可以生成易读的html文档。</p>
-<h2 id="jekyll-hexo"><a href="#jekyll-hexo" class="headerlink" title="jekyll, hexo"></a>jekyll, hexo</h2><p>静态博客编译工具有很多，这两个是我稍有研究的。jekyll 是 ruby 写的， hexo 是 node 写的。</p>
-<p>今天（2017/06/18 凌晨）刚从 jekyll 换成了 hexo，感觉 hexo 有点麻烦，因为 gitpage 支持 jekyll, 所以直接提交仓库即可。但 hexo 需要在本地编译好才能发布。</p>
-<p>这位同学写了一个比较全面的对比 <a href="http://blog.csdn.net/scythe666/article/details/51956821" target="_blank" rel="external">jekyll vs hexo</a></p>
-<h2 id="switchhosts"><a href="#switchhosts" class="headerlink" title="switchhosts"></a>switchhosts</h2><p>切换host非常方便的小工具，<a href="https://github.com/oldj/SwitchHosts/releases" target="_blank" rel="external">switchhosts</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/2017-05-23-fe-server-side-rendering/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/19/2017-05-23-fe-server-side-rendering/" itemprop="url">直出</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-19T00:00:00+08:00">
-                2017-05-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>直出是前端性能优化的一种方案，主要思想是在后端直接请求页面中所需的数据，完成部分或全部渲染后再传给前端。它减少的时间主要来自于两次或者多次http请求的建联时间：尤其对于如今前后端分离方式造成的性能问题——先把html和js发送到客户端，然后js再请求接口，拿到数据后和模版合并渲染。</p>
-<h2 id="两种直出方案"><a href="#两种直出方案" class="headerlink" title="两种直出方案"></a>两种直出方案</h2><p>直出分为以下两种，逐渐增强。</p>
-<h3 id="A-数据直出"><a href="#A-数据直出" class="headerlink" title="A. 数据直出"></a>A. 数据直出</h3><p>后端将页面渲染所需要的数据取出，但并不执行js渲染页面，取出的数据存放在页面内——插入全局js对象，或者是直接存放在Dom节点上。</p>
-<h3 id="B-服务端渲染"><a href="#B-服务端渲染" class="headerlink" title="B. 服务端渲染"></a>B. 服务端渲染</h3><p>服务端渲染完整的页面。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这种优化一般针对功能复杂的首页，入口页，首先让页面渲染出来，达到可交互的状态。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000005641012" target="_blank" rel="external">https://segmentfault.com/a/1190000005641012</a><br><a href="http://web.jobbole.com/86412/" target="_blank" rel="external">http://web.jobbole.com/86412/</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/19/2017-06-02-data-bind/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/19/2017-06-02-data-bind/" itemprop="url">Vue Data bind</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-19T00:00:00+08:00">
-                2017-05-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>MDV 数据驱动视图是现代前端框架基本的设计思想，但是原生javascript对此并没有提供足够的能力。较老的框架（argular,Ember）使用观察者模式：使用内置的方法更新数据，数据更新后调用刷新视图的方法。</p>
-<p>vue 作为新的框架，没有历史包袱，直接使用setter, getter追踪数据的变化。</p>
-<h2 id="Object-observe"><a href="#Object-observe" class="headerlink" title="Object.observe"></a>Object.observe</h2><p>其实曾经有个 Object.observe 的方法，实现了对对象所有行为的追踪，但因为性能问题最后又废弃了。下面这篇文章，描述了详细的历史和原因：</p>
-<p><a href="https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html" target="_blank" rel="external">https://mail.mozilla.org/pipermail/es-discuss/2015-November/044684.html</a>。</p>
-<h2 id="Object-defineProperty"><a href="#Object-defineProperty" class="headerlink" title="Object.defineProperty"></a>Object.defineProperty</h2>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/09/2017-05-09-webpack-optimizing/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/09/2017-05-09-webpack-optimizing/" itemprop="url">webpack打包优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-09T00:00:00+08:00">
-                2017-05-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>程序的编译基本都是<strong>链接转化合并压缩</strong>，有这过程中有很多可以优化的地方。js虽然是轻量的脚本语言，但近几年的发展让它已经有了开发大型程序的能力，webpack 引入了后端高级语言的编译打包功能，其构建流程已经成为了前端的标准。对于后端同学，这没有什么神奇的地方，但对于前端，打包的逻辑还是挺新鲜的。本文总结webpack打包时一些的一些优化配置。</p>
-<p>写了个demo说明以下所有的优化： <a href="https://github.com/magmaliang/webpack-package-optimize" target="_blank" rel="external">https://github.com/magmaliang/webpack-package-optimize</a></p>
-<h2 id="code-splitting"><a href="#code-splitting" class="headerlink" title="code splitting"></a>code splitting</h2><p>代码切割分包，主要是为提取公共代码，优化加载。其主要分为 code-spilitting-cs 和 code-splitiing-js。</p>
-<h3 id="css"><a href="#css" class="headerlink" title="css"></a>css</h3><p>如果将css和js包混在一起打成一个大包，则需要等待主包加载完才会插入js。这样主要有两个弊端：</p>
-<ol>
-<li>在css的模块加载完之前，界面上无法应用样式。</li>
-<li>没有利用浏览器并发加载资源的特性。css这种和js无关的资源其实分开加载较好，它并没有什么依赖。</li>
-</ol>
-<p>extract-text-webpack-plugin 可以将所有css单独抽离打成一个包，配置如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">'extract-text-webpack-plugin'</span>);</div><div class="line"></div><div class="line"><span class="comment">// module 的rules结点</span></div><div class="line">rules: [</div><div class="line">    &#123;</div><div class="line">        <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,</div><div class="line">        <span class="attr">use</span>: ExtractTextPlugin.extract(&#123;</div><div class="line">            <span class="attr">use</span>: <span class="string">'css-loader'</span></div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">    , &#123;</div><div class="line">        <span class="attr">test</span>: <span class="regexp">/\.scss$/</span>,</div><div class="line">        <span class="attr">use</span>: ExtractTextPlugin.extract(&#123;</div><div class="line">            <span class="attr">fallbackLoader</span>: <span class="string">"style-loader"</span>,</div><div class="line">            <span class="attr">loader</span>: <span class="string">"css-loader!sass-loader"</span>,</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">]</div><div class="line"></div><div class="line"><span class="comment">// plugins 结点 </span></div><div class="line">plugins: [<span class="keyword">new</span> ExtractTextPlugin(<span class="string">'styles.css'</span>)]</div></pre></td></tr></table></figure>
-<h3 id="js"><a href="#js" class="headerlink" title="js"></a>js</h3><p>所有以 import(‘module_name’).then 或者 require.ensure 引入的模块，webpack 在打包时会将其打成额外的 bundle。主包中会定义 webpackJsonP 函数，子包以 webpackJsonP 包裹。在代码运行的时候异步加载。</p>
-<p>编译前后的异步引入 module 的代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 编译前</span></div><div class="line"><span class="built_in">require</span>.ensure([<span class="string">'./App'</span>,<span class="string">'./cmps/cmpa'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> App = <span class="built_in">require</span>(<span class="string">'./App'</span>);</div><div class="line">	<span class="keyword">var</span> CmpA = <span class="built_in">require</span>(<span class="string">'./cmps/cmpa'</span>);</div><div class="line">	ReactDom.render(</div><div class="line">		<span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></div><div class="line">			<span class="tag">&lt;<span class="name">CmpA</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">App</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		, </div><div class="line">		<span class="built_in">document</span>.getElementById(<span class="string">'container'</span>));</div><div class="line">&#125;)</div><div class="line"><span class="comment">// 编译后</span></div><div class="line">__webpack_require__.e <span class="comment">/* require.ensure */</span> (<span class="number">0</span>).then((<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> App = __webpack_require__(<span class="number">51</span>);</div><div class="line">    <span class="keyword">var</span> CmpA = __webpack_require__(<span class="number">52</span>);</div><div class="line">    _reactDom2.default.render(_react2.default.createElement(</div><div class="line">        <span class="string">'div'</span>,</div><div class="line">        <span class="literal">null</span>,</div><div class="line">        _react2.default.createElement(CmpA, <span class="literal">null</span>),</div><div class="line">        _react2.default.createElement(App, <span class="literal">null</span>)</div><div class="line">    ), <span class="built_in">document</span>.getElementById(<span class="string">'container'</span>));</div><div class="line">&#125;).bind(<span class="literal">null</span>, __webpack_require__)).catch(__webpack_require__.oe);</div></pre></td></tr></table></figure>
-<p>单独打包的子包结构</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">webpackJsonp([<span class="number">0</span>], &#123;</div><div class="line">    <span class="number">84</span>:</div><div class="line">        (<span class="function"><span class="keyword">function</span>(<span class="params">module, exports, __webpack_require__</span>) </span>&#123;</div><div class="line">            <span class="built_in">module</span>.exports = CmpB;</div><div class="line">        &#125;)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>主要的逻辑在 webpackJsonP 和 <strong>webpack_require</strong>.e 定义。</p>
-<h2 id="externals"><a href="#externals" class="headerlink" title="externals"></a>externals</h2><p>externals 可以让引用的模块不被打包，主要适用于这样的场景：多个bundle依赖于同一个common库，这些bundle在打包的时候并不能都将common打进去 —— 因为每个项目可能引入多个bundle，而这些bundle又是单独维护的。</p>
-<p>externals 按如下的方式配置：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// webpack.config.json</span></div><div class="line">externals:&#123;</div><div class="line">    <span class="string">"jquery"</span>: <span class="string">"jQuery"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="CommonsChunkPlugin"><a href="#CommonsChunkPlugin" class="headerlink" title="CommonsChunkPlugin"></a>CommonsChunkPlugin</h2><p>externals 解决的问题和externals一样，如果不嫌麻烦，用 externals 也能解决 commonsChunkPlugin 能解决的问题。假设有这样的场景，非单页面的应用中，多个entry中有相当一些公用的代码，这些代码即非jQuery、React这类第三方常用的库，也非稳定的约定范围的代码。但是我们又希望把这部分代码独立出来，以便利用浏览器的缓存。</p>
-<p>这就是commonsChunkPlugin 解决的问题。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 在webpack的配置中plugins数组中添加以下代码即可</span></div><div class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(options)</div><div class="line"></div><div class="line"><span class="comment">// options有以下参数</span></div><div class="line">&#123;</div><div class="line">    <span class="attr">name</span>: <span class="comment">// 导出的bundle名，string or string[]</span></div><div class="line">    ,<span class="attr">filename</span>: <span class="comment">// 和output的filename命名规则一样</span></div><div class="line">    ,<span class="attr">minChunks</span>: <span class="comment">// 定义多少个entry共用才被定义为 commonsChunk，数质在[2,x]，x为entry的数量</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="tree-shaking"><a href="#tree-shaking" class="headerlink" title="tree-shaking"></a>tree-shaking</h2><p>这尼玛的不好翻译，就叫树筛选吧。webpack2 在打包时会给没有用的模块内部对象打上标记，然后在执行webpack命令的时候使用 –optimize-minimize 这个选项，压缩之后的代码便没有多余的模块。</p>
-<p>在本项目中，入口文件 src/main.js 中只引用了 src/common/utils 的部分对象，执行 npm start 后观察 release下的main.js可以发现，只打包了utils中的部分代码。</p>
-<p>ps: 和babel结合使用的时候比较恶心，请看这篇文章 <a href="http://2ality.com/2015/12/webpack-tree-shaking.html" target="_blank" rel="external">http://2ality.com/2015/12/webpack-tree-shaking.html</a></p>
-<h2 id="Scope-Hoisting"><a href="#Scope-Hoisting" class="headerlink" title="Scope Hoisting"></a>Scope Hoisting</h2><p>Scope Hoisting 是 webpack3 的主要功能。他的思想是可以合并的module在打包时尽量合并，假设有以下代码：</p>
-<blockquote>
-<p>a 模块在 enrty 文件中只引用了一次，那么使用 Scope Hoisting 之后，a模块的代码会直接放在 entry 的 module中</p>
-</blockquote>
-<p>它的使用很简单，只需在plugins结点中添加如下代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimize.ModuleConcatenationPlugin()</div></pre></td></tr></table></figure>
-<p>PS: 请注意这是webpack3才有的功能</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://webpack.js.org/guides/code-splitting-css/#components/sidebar/sidebar.jsx" target="_blank" rel="external">https://webpack.js.org/guides/code-splitting-css/#components/sidebar/sidebar.jsx</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/2017-05-02-react-stack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/02/2017-05-02-react-stack/" itemprop="url">使用webpack+babel搭建react开发项目</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-02T00:00:00+08:00">
-                2017-05-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>写了两月 vue, 忽然之间 react 忘记了一些东西。人们总是说：“学习是与遗忘做斗争的过程”，但是我并不这么认为，我忘记的应该只是一些不重要的东西——就像现在我已经完全了解 webpack babel,react 一整套的原理，但是具体的 api，具体搭建项目时的配置，我还是得去查下。也许当我们储备了足够的知识，有自己的技术观时，我们的学习其实是印证修正自己技术观的过程，这正是快速学习的前提。</p>
-</blockquote>
-<h2 id="脚手架"><a href="#脚手架" class="headerlink" title="脚手架"></a>脚手架</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">// react</div><div class="line">npm install react --save-dev</div><div class="line">npm install react-dom  --save-dev</div><div class="line"></div><div class="line">// babel</div><div class="line">npm install babel-loader --save-dev</div><div class="line">npm install babel-core --save-dev</div><div class="line">npm install babel-preset-es2015 --save-dev</div><div class="line">npm install babel-preset-react --save-dev</div><div class="line"></div><div class="line">// webpack</div><div class="line">npm install webpack --save-dev</div><div class="line">npm install webpack-dev-server --save-dev</div><div class="line"></div><div class="line">// sass</div><div class="line">npm install node-sass --save-dev</div><div class="line">npm install sass-loader --save-dev</div></pre></td></tr></table></figure>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="wepack"><a href="#wepack" class="headerlink" title="wepack"></a>wepack</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">	<span class="attr">entry</span>:<span class="string">"./src/main.js"</span></div><div class="line">	,<span class="attr">output</span>:&#123;</div><div class="line">		<span class="attr">path</span>: path.resolve(__dirname, <span class="string">"./release"</span>)</div><div class="line">		,<span class="attr">filename</span>:<span class="string">"[name].bundle.js"</span></div><div class="line">		,<span class="attr">libraryTarget</span>:<span class="string">"umd"</span></div><div class="line">	&#125;</div><div class="line">	,<span class="attr">module</span>: &#123;</div><div class="line">        <span class="comment">//加载器配置</span></div><div class="line">        rules: [</div><div class="line">            &#123; <span class="attr">test</span>: <span class="regexp">/\.css$/</span>, <span class="attr">loader</span>: <span class="string">'style-loader!css-loader'</span> &#125;,</div><div class="line">			&#123;</div><div class="line">				<span class="attr">test</span>: <span class="regexp">/\.jsx?$/</span>,</div><div class="line">				<span class="attr">exclude</span>: <span class="regexp">/node_modules/</span>,</div><div class="line">				<span class="attr">loader</span>: <span class="string">'babel-loader'</span></div><div class="line">			&#125;</div><div class="line">           </div><div class="line">        ]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>webpack2的文档有了长足的进步，这对我很有启发，以前我设计一个项目的时候总是先做文档，这对于一个程序员不是一个很好的方式，因为文档写的过于详细很快就消耗完了精力。这是webpack2配置说明，包含所有配置节点：</p>
-<p><a href="https://webpack.js.org/configuration/" target="_blank" rel="external">https://webpack.js.org/configuration/</a></p>
-<h3 id="babel"><a href="#babel" class="headerlink" title="babel"></a>babel</h3><p>babel的选项有两种配置方法</p>
-<p>一种是查询字符串：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">loaders: [</div><div class="line">	&#123;</div><div class="line">		<span class="attr">test</span>: <span class="regexp">/\.jsx?$/</span>,</div><div class="line">		<span class="attr">exclude</span>: <span class="regexp">/node_modules/</span>,</div><div class="line">		<span class="attr">loader</span>: <span class="string">'babel?preset[]=es2015'</span></div><div class="line">	&#125;</div><div class="line">   </div><div class="line">]</div></pre></td></tr></table></figure>
-<p>一种是设置query 节点：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">loaders: [</div><div class="line">	&#123;</div><div class="line">		<span class="attr">test</span>: <span class="regexp">/\.jsx?$/</span>,</div><div class="line">		<span class="attr">exclude</span>: <span class="regexp">/node_modules/</span>,</div><div class="line">		<span class="attr">loader</span>: <span class="string">'babel-loader'</span>,</div><div class="line">		<span class="attr">options</span>: &#123;</div><div class="line">			<span class="attr">presets</span>: [<span class="string">'es2015'</span>, <span class="string">'react'</span>]</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">   </div><div class="line">]</div></pre></td></tr></table></figure></p>
-<p>还有就是将 options 写在 .babelrc 中：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">presets</span>: [<span class="string">'es2015'</span>, <span class="string">'react'</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><strong>babel-preset-env</strong> 插件， 转化出支持特定环境的代码。</p>
-<p>例如：打包出的代码仅支持chrome52<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="string">"presets"</span>: [</div><div class="line">    [<span class="string">"env"</span>, &#123;</div><div class="line">      <span class="string">"targets"</span>: &#123;</div><div class="line">        <span class="string">"chrome"</span>: <span class="number">52</span></div><div class="line">      &#125;</div><div class="line">    &#125;]</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h2><p>配置完了，把文件路径什么的在webpack中同步好，直接执行 webpack 命令就ok了。 对于react 说个题外话。</p>
-<p>很多新同学接手项目的时候，入口基本都被本地化的框架接手了，所以做的都是路由以下的事情，react的入口一般是这样的：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> &#123; render &#125; <span class="keyword">from</span> <span class="string">'react-dom'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> &#123; Router, Route, IndexRoute, Link, hashHistory &#125; <span class="keyword">from</span> <span class="string">'react-router'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> App = React.createClass(&#123;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;h1&gt;App&lt;/h1&gt;</div><div class="line">        &#123;/* change the &lt;a&gt;s to &lt;Link&gt;s */&#125;</div><div class="line">        &lt;ul&gt;</div><div class="line">          &lt;li&gt;&lt;Link to="/about"&gt;About&lt;/Link&gt;&lt;/li&gt;</div><div class="line">          &lt;li&gt;&lt;Link to="/inbox"&gt;Inbox&lt;/Link&gt;&lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line"></div><div class="line">        &#123;/*</div><div class="line">          next we replace `&lt;Child&gt;` with `this.props.children`</div><div class="line">          the router will figure out the children for us</div><div class="line">        */&#125;</div><div class="line">        &#123;this.props.children&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">render((</div><div class="line">  &lt;Router history=&#123;hashHistory&#125;&gt;</div><div class="line">    &lt;Route path="/" component=&#123;App&#125;&gt;</div><div class="line">      &lt;IndexRoute component=&#123;Home&#125; /&gt;</div><div class="line">      &lt;Route path="about" component=&#123;About&#125; /&gt;</div><div class="line">      &lt;Route path="inbox" component=&#123;Inbox&#125; /&gt;</div><div class="line">    &lt;/Route&gt;</div><div class="line">  &lt;/Router&gt;</div><div class="line">), document.body)</div></pre></td></tr></table></figure>
-<p>react在某个版本自己分离成了react + react-dom，我之前一直在关注react，中间突然分开着实坑了我一把 —— 这也让我设计规划的时候更加大胆，更改api和模块结构也在所不惜，因为我发现很多开源库都这样 —— 为了更好，再所不惜。</p>
-<h2 id="redux-与高阶组件"><a href="#redux-与高阶组件" class="headerlink" title="redux 与高阶组件"></a>redux 与高阶组件</h2><h2 id="备注（以下为碎片，尚未总结）"><a href="#备注（以下为碎片，尚未总结）" class="headerlink" title="备注（以下为碎片，尚未总结）"></a>备注（以下为碎片，尚未总结）</h2><h3 id="dom-操作"><a href="#dom-操作" class="headerlink" title="dom 操作"></a>dom 操作</h3><p>所有的MV*前端框架都不提倡dom操作，但是有些时候避免不了，比如手动触发某些元素的原生事件。这个时候就需要对原生dom使用ref引用到React环境,看官方的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomTextInput</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">    <span class="keyword">this</span>.focus = <span class="keyword">this</span>.focus.bind(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  focus() &#123;</div><div class="line">    <span class="comment">// Explicitly focus the text input using the raw DOM API</span></div><div class="line">    <span class="keyword">this</span>.textInput.focus();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="comment">// Use the `ref` callback to store a reference to the text input DOM</span></div><div class="line">    <span class="comment">// element in an instance field (for example, this.textInput).</span></div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;input</div><div class="line">          type="text"</div><div class="line">          ref=&#123;(input) =&gt; &#123; this.textInput = input; &#125;&#125; /&gt;</div><div class="line">        &lt;input</div><div class="line">          type="button"</div><div class="line">          value="Focus the text input"</div><div class="line">          onClick=&#123;this.focus&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="频繁使用setState"><a href="#频繁使用setState" class="headerlink" title="频繁使用setState"></a>频繁使用setState</h3><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://github.com/ReactTraining/react-router/blob/v3/docs/Introduction.md" target="_blank" rel="external">https://github.com/ReactTraining/react-router/blob/v3/docs/Introduction.md</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/17/2017-01-19-nginx-rewrite/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/01/17/2017-01-19-nginx-rewrite/" itemprop="url">nginx的rewrite</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-17T00:00:00+08:00">
-                2017-01-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>在开发环境，经常使用nginx将首页的静态资料重定向到本地，用的多了，总结下各种重定向的手艺。</p>
-</blockquote>
-<h2 id="location"><a href="#location" class="headerlink" title="location"></a>location</h2><p>location 并不能完成重定向，它只是一个辅助，主要起过滤作用，所以它可以多层嵌套。可以使用正则来匹配url。比较重要的是多规则匹配遵循以下优先级：<br>1.以=号开头的规则，匹配上，中止搜索。<br>2.所有剩下的普通字符串匹配（非正则），匹配越精确的就使用，与规则的顺序无关。如果匹配到以^~开头的规则，中止搜索。<br>3.正则表达式规则，按它们在配置文件中定义的顺序。<br>4.如果第三步有匹配结果，则使用。否则，使用第二步的结果。</p>
-<h2 id="proxy-pass"><a href="#proxy-pass" class="headerlink" title="proxy_pass"></a>proxy_pass</h2><p>proxy_pass 可以重定向域名。例如：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将所有js后缀的请求代理到http://www.proxy.com下</span></div><div class="line">location /*.js &#123;</div><div class="line">	proxy_pass http:<span class="regexp">//www</span>.proxy.com;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>原始url: <a href="http://www.source.com/rs/js/main.js" target="_blank" rel="external">http://www.source.com/rs/js/main.js</a><br>实际访问地址：<a href="http://www.proxy.com/rs/js/main.js" target="_blank" rel="external">http://www.proxy.com/rs/js/main.js</a></p>
-<h2 id="return"><a href="#return" class="headerlink" title="return"></a>return</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Syntax:	return code [text];</div><div class="line">		return code URL;</div><div class="line">		return URL;</div><div class="line">Default:	—</div><div class="line">Context:	server, location, if</div></pre></td></tr></table></figure>
-<p>Context表示当前命令可以使用的环境。return 主要是返回状态码，虽然也可以直接return url，但这不是它的特色。</p>
-<h2 id="rewrite"><a href="#rewrite" class="headerlink" title="rewrite"></a>rewrite</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rewrite regex url [flag]</div></pre></td></tr></table></figure>
-<p>regex匹配上$url时，则执行重写。url中可以使用regex中捕获的子组。</p>
-<h2 id="try-files"><a href="#try-files" class="headerlink" title="try_files"></a>try_files</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">try_files url...url;</div></pre></td></tr></table></figure>
-<p>try_files会从左到右地尝试所有路径，直到它找到一个实际存在的资源，将它返回。这可以方便地设置优先级相关的逻辑。</p>
-<h2 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Syntax:	alias path;</div><div class="line">Default:	—</div><div class="line">Context:	location</div></pre></td></tr></table></figure>
-<p>alias其实是一个replace，它在location命中后，直接返回指定的path资源。</p>
-<h2 id="正则"><a href="#正则" class="headerlink" title="正则"></a>正则</h2><p>nginx编译的时候需要 pcre（Perl Compatible Regular Expressions），这个库由 Philip Hazel开发，它作为非常完善的正则表达式模块被很多其他工具和语言所使用。</p>
-<p>下面这个网站记录了正则的工业标准和各种语言的支持程度。</p>
-<p><a href="http://www.regular-expressions.info/" target="_blank" rel="external">http://www.regular-expressions.info/</a></p>
-<p>pcre的语法与各语言相似，如果你精通其他语言的正则，那么只需要一个小时就能掌握pcre的正则。因为我对javascript的正则较了解，所以只拿这二者作了下比较。</p>
-<p>pcre比js中的正则多出的功能有以下几点：</p>
-<ul>
-<li><p>自定义捕获组名，(?P<name>aaa),如果这个正则捕获成功，那么在下文中可以使用$name进行读取（在perl中你得使用$+{name}，我也不明白为啥nginx中这样可以）。</name></p>
-</li>
-<li><p>Lookbehinds ,/(?&lt;=b)aaa/,匹配baaa中的aaa。javascript中只有向前查找。</p>
-</li>
-<li><p>多出的环境变量，如$`等。</p>
-</li>
-</ul>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://www.nginx.com/blog/creating-nginx-rewrite-rules/" target="_blank" rel="external">创建nginx重写规则</a></li>
-</ul>
-<p>一篇超级棒的英文，我准备抽时间翻译下。</p>
-<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p>这是nginx官方的一个<a href="https://www.nginx.com/resources/wiki/start/topics/examples/fullexample2/" target="_blank" rel="external">config full example</a>。</p>
-<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div></pre></td><td class="code"><pre><div class="line">user  www www;</div><div class="line">worker_processes  <span class="number">2</span>;</div><div class="line">pid /var/run/nginx.pid;</div><div class="line"></div><div class="line"><span class="comment"># [ debug | info | notice | warn | error | crit ]</span></div><div class="line">error_log  /var/<span class="keyword">log</span>/nginx.error_log  info;</div><div class="line"></div><div class="line">events &#123;</div><div class="line">  worker_connections   <span class="number">2000</span>;</div><div class="line">  <span class="comment"># use [ kqueue | rtsig | epoll | /dev/poll | select | poll ] ;</span></div><div class="line">  <span class="keyword">use</span> kqueue;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">  include       conf/mime.types;</div><div class="line">  default_type  application/octet-stream;</div><div class="line"></div><div class="line">  log_format main      <span class="string">'$remote_addr - $remote_user [$time_local]  '</span></div><div class="line">    <span class="string">'"$request" $status $bytes_sent '</span></div><div class="line">    <span class="string">'"$http_referer" "$http_user_agent" '</span></div><div class="line">    <span class="string">'"$gzip_ratio"'</span>;</div><div class="line"></div><div class="line">  log_format download  <span class="string">'$remote_addr - $remote_user [$time_local]  '</span></div><div class="line">    <span class="string">'"$request" $status $bytes_sent '</span></div><div class="line">    <span class="string">'"$http_referer" "$http_user_agent" '</span></div><div class="line">    <span class="string">'"$http_range" "$sent_http_content_range"'</span>;</div><div class="line"></div><div class="line">  client_header_timeout  <span class="number">3</span><span class="keyword">m</span>;</div><div class="line">  client_body_timeout    <span class="number">3</span><span class="keyword">m</span>;</div><div class="line">  send_timeout           <span class="number">3</span><span class="keyword">m</span>;</div><div class="line"></div><div class="line">  client_header_buffer_size    <span class="number">1</span>k;</div><div class="line">  large_client_header_buffers  <span class="number">4</span> <span class="number">4</span>k;</div><div class="line"></div><div class="line">  gzip on;</div><div class="line">  gzip_min_length  <span class="number">1100</span>;</div><div class="line">  gzip_buffers     <span class="number">4</span> <span class="number">8</span>k;</div><div class="line">  gzip_types       text/plain;</div><div class="line"></div><div class="line">  output_buffers   <span class="number">1</span> <span class="number">32</span>k;</div><div class="line">  postpone_output  <span class="number">1460</span>;</div><div class="line"></div><div class="line">  sendfile         on;</div><div class="line">  tcp_nopush       on;</div><div class="line"></div><div class="line">  tcp_nodelay      on;</div><div class="line">  send_lowat       <span class="number">12000</span>;</div><div class="line"></div><div class="line">  keepalive_timeout  <span class="number">75</span> <span class="number">20</span>;</div><div class="line"></div><div class="line">  <span class="comment"># lingering_time     30;</span></div><div class="line">  <span class="comment"># lingering_timeout  10;</span></div><div class="line">  <span class="comment"># reset_timedout_connection  on;</span></div><div class="line"></div><div class="line"></div><div class="line">  server &#123;</div><div class="line">    <span class="keyword">listen</span>        one.example.com;</div><div class="line">    server_name   one.example.com  www.one.example.com;</div><div class="line"></div><div class="line">    access_log   /var/<span class="keyword">log</span>/nginx.access_log  main;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">      proxy_pass         http:<span class="regexp">//</span><span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span>/;</div><div class="line">      proxy_redirect     off;</div><div class="line"></div><div class="line">      proxy_set_header   Host             $host;</div><div class="line">      proxy_set_header   X-Real-IP        $remote_addr;</div><div class="line">      <span class="comment"># proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;</span></div><div class="line"></div><div class="line">      client_max_body_size       <span class="number">10</span><span class="keyword">m</span>;</div><div class="line">      client_body_buffer_size    <span class="number">128</span>k;</div><div class="line"></div><div class="line">      client_body_temp_path      /var/nginx/client_body_temp;</div><div class="line"></div><div class="line">      proxy_connect_timeout      <span class="number">90</span>;</div><div class="line">      proxy_send_timeout         <span class="number">90</span>;</div><div class="line">      proxy_read_timeout         <span class="number">90</span>;</div><div class="line">      proxy_send_lowat           <span class="number">12000</span>;</div><div class="line"></div><div class="line">      proxy_buffer_size          <span class="number">4</span>k;</div><div class="line">      proxy_buffers              <span class="number">4</span> <span class="number">32</span>k;</div><div class="line">      proxy_busy_buffers_size    <span class="number">64</span>k;</div><div class="line">      proxy_temp_file_write_size <span class="number">64</span>k;</div><div class="line"></div><div class="line">      proxy_temp_path            /var/nginx/proxy_temp;</div><div class="line"></div><div class="line">      charset  koi8-r;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    error_page  <span class="number">404</span>  /<span class="number">404</span>.html;</div><div class="line"></div><div class="line">    location /<span class="number">404</span>.html &#123;</div><div class="line">      root  /spool/www;</div><div class="line"></div><div class="line">      charset         on;</div><div class="line">      source_charset  koi8-r;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location /old_stuff/ &#123;</div><div class="line">      rewrite   ^<span class="regexp">/old_stuff/</span>(.*)$  /new_stuff/$1  permanent;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location /download/ &#123;</div><div class="line">      valid_referers  none  blocked  server_names  *.example.com;</div><div class="line"></div><div class="line">      <span class="keyword">if</span> ($invalid_referer) &#123;</div><div class="line">        <span class="comment">#rewrite   ^/   http://www.example.com/;</span></div><div class="line">        <span class="keyword">return</span>   <span class="number">403</span>;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="comment"># rewrite_log  on;</span></div><div class="line">      <span class="comment"># rewrite /download/*/mp3/*.any_ext to /download/*/mp3/*.mp3</span></div><div class="line">      rewrite ^<span class="regexp">/(download/</span>.*)/mp3/(.*)\..*$ /$1/mp3/$2.mp3 <span class="keyword">break</span>;</div><div class="line"></div><div class="line">      root         /spool/www;</div><div class="line">      <span class="comment"># autoindex    on;</span></div><div class="line">      access_log   /var/<span class="keyword">log</span>/nginx-download.access_log  download;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location ~* ^.+\.(jpg|jpeg|gif)$ &#123;</div><div class="line">      root         /spool/www;</div><div class="line">      access_log   off;</div><div class="line">      expires      <span class="number">30</span>d;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="备注-1"><a href="#备注-1" class="headerlink" title="备注"></a>备注</h2><p>今天 2017、07、04 使用nginx解决CORS问题时遇到一个有趣的问题，OPTIONS请求发出去直接403，经过分析应该是服务器对OPTIONS处理有问题所致。开发环境又是无所谓的，前端能解决就解决吧。解决的办法是，直接在 nginx里对OPTIONS返回200，因为CORS的两个请求基本是由浏览器控制的，骗骗浏览器就行了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">location / &#123; </div><div class="line">        proxy_pass http://www.target.com;</div><div class="line">        add_header Access-Control-Allow-Origin http://localhost.target.com:8080 always;</div><div class="line">        add_header Access-Control-Allow-Credentials true;</div><div class="line">        add_header Access-Control-Allow-Headers &apos;Content-Type, Origin, Accept, Cookie&apos;;</div><div class="line"></div><div class="line">        if ($request_method = OPTIONS) &#123;</div><div class="line">            return 200;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>参考：<a href="http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/" target="_blank" rel="external">http://blog.rogeriopvl.com/archives/nginx-and-the-http-options-method/</a><br><br><br><a href="https://enable-cors.org/server_nginx.html" target="_blank" rel="external">https://enable-cors.org/server_nginx.html</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1577,7 +1571,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1632,7 +1626,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

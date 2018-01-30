@@ -102,7 +102,7 @@
 <meta property="og:description" content="这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。  环境、前提 以下测试阐述用例使用的是nginx 1.8.1。  Expires资源的过期时间，">
 <meta property="og:image" content="http://yoursite.com/image/first_request.png">
 <meta property="og:image" content="http://yoursite.com/image/second_request.png">
-<meta property="og:updated_time" content="2017-06-17T15:00:43.000Z">
+<meta property="og:updated_time" content="2017-12-27T03:53:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="服务器配置静态资源的缓存策略">
 <meta name="twitter:description" content="这篇源自上篇博客，在调研chrome的cache comporessed的时候发现自己对服务器设置各种缓存策略不是很了解。你可能已经注意到这个标题有些奇怪，我本来的名字是【浏览器缓存策略】，但是容易与cookie、session，甚至是localstorage之流混为一谈，所以起了个有些复杂的名字。  环境、前提 以下测试阐述用例使用的是nginx 1.8.1。  Expires资源的过期时间，">
@@ -364,7 +364,7 @@
 <li>某些文件定时更新，客户端关心的资源并没有变化，但Last-Modified改变了，将无法使用缓存。</li>
 <li>有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形。</li>
 </ol>
-<p>注意，当Etag和Last-Modified一起设置时，Etag的优先级高于Last-Modified，但并不是覆盖。</p>
+<p>注意，当Etag和Last-Modified一起设置时，服务器会综合判断，只有当两者都认为资源有效时才会返回304.</p>
 <h2 id="缓存应用流程图"><a href="#缓存应用流程图" class="headerlink" title="缓存应用流程图"></a>缓存应用流程图</h2><h3 id="客户端第一次请求资源"><a href="#客户端第一次请求资源" class="headerlink" title="客户端第一次请求资源"></a>客户端第一次请求资源</h3><p><img src="/image/first_request.png"></p>
 <h3 id="客户端第二次请求资源"><a href="#客户端第二次请求资源" class="headerlink" title="客户端第二次请求资源"></a>客户端第二次请求资源</h3><p><img src="/image/second_request.png"></p>
 <p>哈哈~，这两张图是盗的，来自于参考项的文章中。</p>
@@ -415,8 +415,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/10/31/2016-10-31-simple-require-js/" rel="next" title="简述AMD的实现库: requirejs">
-                <i class="fa fa-chevron-left"></i> 简述AMD的实现库: requirejs
+              <a href="/2016/10/31/2016-11-01-introduction-to-chrome-cache-compress/" rel="next" title="chrome 缓存压缩--记一次脚本加载时间过长的分析">
+                <i class="fa fa-chevron-left"></i> chrome 缓存压缩--记一次脚本加载时间过长的分析
               </a>
             
           </div>
@@ -499,7 +499,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -570,7 +570,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

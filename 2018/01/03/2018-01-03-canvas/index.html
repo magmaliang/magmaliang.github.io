@@ -1,0 +1,716 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="回忆起一个事实，编程相关的东西（尤其是API）,看是没什么用的，只有写下来才会记忆深刻，所谓“言之无文，行而不远”，所以以后这种基础的小白文也要不断地去写，权当作记忆工作。  canvas元素canvas元素作为view容器存在，绑定了一些特殊的api。 绘画上下文通过canvas元素的getContext方法获取对应的绘画环境： 1const ctx = canvasnode.getConte">
+<meta name="keywords" content="编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="canvas基础用法">
+<meta property="og:url" content="http://yoursite.com/2018/01/03/2018-01-03-canvas/index.html">
+<meta property="og:site_name" content="magma&#39;s fe blog">
+<meta property="og:description" content="回忆起一个事实，编程相关的东西（尤其是API）,看是没什么用的，只有写下来才会记忆深刻，所谓“言之无文，行而不远”，所以以后这种基础的小白文也要不断地去写，权当作记忆工作。  canvas元素canvas元素作为view容器存在，绑定了一些特殊的api。 绘画上下文通过canvas元素的getContext方法获取对应的绘画环境： 1const ctx = canvasnode.getConte">
+<meta property="og:updated_time" content="2018-01-18T12:14:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="canvas基础用法">
+<meta name="twitter:description" content="回忆起一个事实，编程相关的东西（尤其是API）,看是没什么用的，只有写下来才会记忆深刻，所谓“言之无文，行而不远”，所以以后这种基础的小白文也要不断地去写，权当作记忆工作。  canvas元素canvas元素作为view容器存在，绑定了一些特殊的api。 绘画上下文通过canvas元素的getContext方法获取对应的绘画环境： 1const ctx = canvasnode.getConte">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/03/2018-01-03-canvas/"/>
+
+
+
+
+
+  <title>canvas基础用法 | magma's fe blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">magma's fe blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/03/2018-01-03-canvas/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">canvas基础用法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T00:00:00+08:00">
+                2018-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>回忆起一个事实，编程相关的东西（尤其是API）,看是没什么用的，只有写下来才会记忆深刻，所谓“言之无文，行而不远”，所以以后这种基础的小白文也要不断地去写，权当作记忆工作。</p>
+</blockquote>
+<h2 id="canvas元素"><a href="#canvas元素" class="headerlink" title="canvas元素"></a>canvas元素</h2><p>canvas元素作为view容器存在，绑定了一些特殊的api。</p>
+<h2 id="绘画上下文"><a href="#绘画上下文" class="headerlink" title="绘画上下文"></a>绘画上下文</h2><p>通过canvas元素的getContext方法获取对应的绘画环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">const ctx = canvasnode.getContext(&apos;2d&apos;)// 2d, webgl, webgl2</div></pre></td></tr></table></figure>
+<h2 id="基本API"><a href="#基本API" class="headerlink" title="基本API"></a>基本API</h2><p>canvas元素提供的画布有一个坐标系统，原点在左上角，横轴是x轴。绘画的基本元素就是矩形，三角形，直线，曲线——虽然能想通，但是用这些东西画出烟雾、水波效果还是感觉到不可思议，就是对计算机的不自信，我一直没有在此更进一步。</p>
+<h3 id="矩形"><a href="#矩形" class="headerlink" title="矩形"></a>矩形</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 绘制一个矩形</span></div><div class="line">cxt.fillRect(<span class="number">10</span>,<span class="number">10</span>,<span class="number">30</span>,<span class="number">30</span>)<span class="comment">// x, y, width, height</span></div></pre></td></tr></table></figure>
+<h3 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h3><p><strong>直线</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ctx.beginPath()</div><div class="line">ctx.moveTo(<span class="number">10</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">10</span>,<span class="number">100</span>)</div><div class="line">ctx.closePath()</div></pre></td></tr></table></figure></p>
+<p>这里强调下beginPath和closePath的意义。<br>beginPath表示开启新的路径绘画。什么叫新的路径？stroke和fill所影响的对象就是一个路径，如果我们不用beginPath绘制了两条路径，对它们分别stroke，就会发现后一次的stroke也影响了前面的路径，如下面的例子，第一条线变成了红色与绿色的混合色：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line">ctx.beginPath()</div><div class="line">ctx.moveTo(<span class="number">10</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">10</span>,<span class="number">100</span>)</div><div class="line">ctx.strokeStyle = <span class="string">'red'</span></div><div class="line">ctx.stroke()</div><div class="line"></div><div class="line">ctx.moveTo(<span class="number">20</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">20</span>,<span class="number">100</span>)</div><div class="line">ctx.strokeStyle = <span class="string">'green'</span></div><div class="line">ctx.stroke()</div></pre></td></tr></table></figure>
+<p>而closePath表示闭合路径，例如你绘制了三角形的两边的路径再调用closePath则会生成一个三角形的路径：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line">ctx.beginPath()</div><div class="line">ctx.moveTo(<span class="number">10</span>,<span class="number">10</span>)</div><div class="line">ctx.lineTo(<span class="number">10</span>,<span class="number">100</span>)</div><div class="line">ctx.lineTo(<span class="number">50</span>,<span class="number">100</span>)</div><div class="line">ctx.closePath()</div><div class="line">ctx.stroke()</div></pre></td></tr></table></figure></p>
+<p><strong>圆弧</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 圆心位于（x,y）,半径为radius，覆盖角度为startAngle到endAngle, 时针方向为anticlockwise(bool值)</span></div><div class="line">arc(x, y, radius, startAngle, endAngle, anticlockwise)</div></pre></td></tr></table></figure>
+<p><strong>贝塞尔曲线</strong></p>
+<p>展示一个动态的二次besier曲线, 控制点就是鼠标的位置<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;canvas id=<span class="string">'canvas'</span> height=<span class="string">'400'</span> width=<span class="string">"400"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span></div><div class="line">&lt;script&gt;</div><div class="line">	<span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line">	<span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">drowBesier</span>(<span class="params">x,y</span>)</span>&#123;</div><div class="line">		ctx.clearRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">400</span>, <span class="number">400</span>)</div><div class="line">		ctx.beginPath()</div><div class="line">		ctx.moveTo(<span class="number">10</span>, <span class="number">10</span>)</div><div class="line">		ctx.quadraticCurveTo(x, y, <span class="number">100</span>, <span class="number">10</span>)</div><div class="line">		ctx.stroke()</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// besier二次曲线</span></div><div class="line">	canvas.addEventListener(<span class="string">'mousemove'</span>, (e)=&gt;&#123;</div><div class="line">		drowBesier(e.layerX, e.layerY)</div><div class="line">	&#125;)</div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="设置样式"><a href="#设置样式" class="headerlink" title="设置样式"></a>设置样式</h3><p>样式类似于环境变量，除非你改变它，否则影响所有的形状绘制。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cxt.fillStyle = <span class="string">"rgb(0,0,255,0.5)"</span></div></pre></td></tr></table></figure>
+<h3 id="Path2D"><a href="#Path2D" class="headerlink" title="Path2D"></a>Path2D</h3><p>Path2D可以保存一个路径，在以后进行绘制<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>)</div><div class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> Path2D()</div><div class="line">circle.arc(<span class="number">50</span>,<span class="number">50</span>,<span class="number">10</span>,<span class="number">0</span>,<span class="built_in">Math</span>.PI*<span class="number">2</span>,<span class="literal">false</span>)</div><div class="line"></div><div class="line">ctx.stroke(circle)</div></pre></td></tr></table></figure></p>
+<h3 id="绘制文本"><a href="#绘制文本" class="headerlink" title="绘制文本"></a>绘制文本</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ctx.font = <span class="string">'17px serif'</span></div><div class="line">ctx.fillText(<span class="string">'Are you kidding?'</span>,<span class="number">50</span>,<span class="number">50</span>)</div></pre></td></tr></table></figure>
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>canvas作为一张画布，绘制的各种图形和路径与html元素不同，html元素都有对应的js映射对象，可以方便地被操作与绑定。而对于canvas只能有两种方案：</p>
+<p>其一是通过绑定鼠标事件，计算鼠标在canvas上的坐标（有一对非标准的属性，layerX、layerY可以直接用），进而进行相关的反馈，如下是一个跟随鼠标移动画笔的功能：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">'canvas'</span> <span class="attr">height</span>=<span class="string">'400'</span> <span class="attr">width</span>=<span class="string">"400"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">	<span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>);</div><div class="line">	<span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">drawDot</span>(<span class="params">x,y</span>)</span>&#123;</div><div class="line">		ctx.beginPath()</div><div class="line">		ctx.moveTo(x,y)</div><div class="line">		ctx.lineTo(x+<span class="number">1</span>,y)</div><div class="line">		ctx.stroke()</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// besier二次曲线</span></div><div class="line">	canvas.addEventListener(<span class="string">'mousemove'</span>, (e)=&gt;&#123;</div><div class="line">		drawDot(e.layerX, e.layerY)</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>这只是一个需求非常简单的例子。对于实际的应用绘制了很多图形，图形之间有重叠遮挡，我们要做的很可能是实现与浏览器元素的各种事件机制（比如冒泡）接近的功能，这要求非常专业全面的设计。</p>
+<p>其二是使用官方的api（截止2018年1月没有浏览器实现），设定点击区域，在绘制完一个路径或者图形之后，可以使用 <strong>ctx.addHitRegion({id: “name”});</strong> 的方式注册区域。</p>
+<h2 id="图形被拉伸"><a href="#图形被拉伸" class="headerlink" title="图形被拉伸"></a>图形被拉伸</h2><p>如果使用css的方式去设置canvas元素的height和width，会导致canvas被拉伸。解决办法是直接设置canvas元素的height和width attributes.</p>
+<h2 id="图形模糊解决方案"><a href="#图形模糊解决方案" class="headerlink" title="图形模糊解决方案"></a>图形模糊解决方案</h2><p>原因是啥还没有研究，解决方案是绘图时使用ctx.scale(2,2)放大，而对于canvas元素使用transform scale缩小一倍。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/02/2018-01-02-crawler/" rel="next" title="爬虫小记">
+                <i class="fa fa-chevron-left"></i> 爬虫小记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/04/2018-01-04-node-canvas/" rel="prev" title="node canvas">
+                node canvas <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="magma" />
+          <p class="site-author-name" itemprop="name">magma</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#canvas元素"><span class="nav-number">1.</span> <span class="nav-text">canvas元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绘画上下文"><span class="nav-number">2.</span> <span class="nav-text">绘画上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本API"><span class="nav-number">3.</span> <span class="nav-text">基本API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#矩形"><span class="nav-number">3.1.</span> <span class="nav-text">矩形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径"><span class="nav-number">3.2.</span> <span class="nav-text">路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置样式"><span class="nav-number">3.3.</span> <span class="nav-text">设置样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Path2D"><span class="nav-number">3.4.</span> <span class="nav-text">Path2D</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绘制文本"><span class="nav-number">3.5.</span> <span class="nav-text">绘制文本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件"><span class="nav-number">4.</span> <span class="nav-text">事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图形被拉伸"><span class="nav-number">5.</span> <span class="nav-text">图形被拉伸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图形模糊解决方案"><span class="nav-number">6.</span> <span class="nav-text">图形模糊解决方案</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magma</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

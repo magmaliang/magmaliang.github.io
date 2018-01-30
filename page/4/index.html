@@ -263,6 +263,799 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-20-settimeout/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/19/2016-09-20-settimeout/" itemprop="url">setTimeout 与 js单线程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T00:00:00+08:00">
+                2016-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>js是单线程的，所有的代码只会在一个线程上运行，串行执行任务。</p>
+<p>setTimeout在window环境下执行，this总是指向window(无论严格模式还是普通模式)。setTimeout会将作为参数传入的代码塞到js执行线程上，预设的时间过后再执行。但是要注意,<strong>并不是在setTimeout预设的时间后，一定轮到其塞入的代码执行:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
+<p><img src="/image/settimeout.png" alt="" style="width:70%"></p>
+<p>如图，假设fooa执行的时间超过100ms，那么纵使执行流上预定了在200ms之后执行foob也没用，必须等fooa执行完。我们可以检验下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">wait</span>(<span class="params">t</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"start wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">		<span class="keyword">var</span> start = <span class="built_in">Date</span>.now();</div><div class="line"></div><div class="line">		<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">			<span class="keyword">if</span>(<span class="built_in">Date</span>.now() - start &gt; t)&#123;</div><div class="line">				<span class="keyword">break</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"end wait "</span>+t+<span class="string">":"</span>+(<span class="built_in">Date</span>.now()-startT))</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> startT = <span class="built_in">Date</span>.now()</div><div class="line"></div><div class="line">fooa = wait(<span class="number">2000</span>);</div><div class="line">foob = wait(<span class="number">10</span>);</div><div class="line"></div><div class="line">setTimeout(fooa,<span class="number">100</span>);</div><div class="line">setTimeout(foob,<span class="number">200</span>);</div></pre></td></tr></table></figure>
+<p>在我的电脑上执行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">start wait 2000:104</div><div class="line">VM4557:11 end wait 2000:2106</div><div class="line">VM4557:3 start wait 10:2107</div><div class="line">VM4557:11 end wait 10:2118</div></pre></td></tr></table></figure>
+<p>可以看到，foob 并不是 200ms 后执行，它等 fooa 执行完了才执行。因为 fooa 在 js 执行线程上”预约”的时间早于foob;</p>
+<h2 id="实际的例子"><a href="#实际的例子" class="headerlink" title="实际的例子"></a>实际的例子</h2><p>今天稍有时间就查看了项目一直报错的一个bug，因为这个bug不影响使用，所以一直没人管。而我有强迫症，总希望控制台什么异常警告都没有。</p>
+<p>实际的例子较为复杂，这里在不丧失细节的情况做了抽象（原来的是react的项目）:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个组件的定义</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">cmp</span> </span>&#123;</div><div class="line">	<span class="keyword">constructor</span>(props)&#123;</div><div class="line">		<span class="keyword">this</span>.dom = &#123;&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	willReceiveProps(props)&#123;</div><div class="line">		setTimeout((<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">this</span>.dom.a=<span class="number">1</span></div><div class="line">		&#125;).bind(<span class="keyword">this</span>),<span class="number">0</span>)</div><div class="line">	&#125;</div><div class="line">	willUnmount()&#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">	_close()&#123;</div><div class="line">		<span class="keyword">delete</span> <span class="keyword">this</span>.dom;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//一个移除组件的方法，模仿react移除组件</span></div><div class="line"><span class="comment">//在移除组件之前，假设触发了willReceiveProps——</span></div><div class="line"><span class="comment">//实际上在复杂的应用中这是不可避免的，这个方法总是被不断地触发,如果你写了这个方法的话</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeCmp</span>(<span class="params">cmp</span>)</span>&#123;</div><div class="line">	cmp.willRecieveProps();</div><div class="line">	cmp._close();</div><div class="line">&#125;</div><div class="line"></div><div class="line">removeCmp(<span class="keyword">new</span> cmp())</div></pre></td></tr></table></figure>
+<p>这个代码是会报错的，<strong>虽然setTimeout的时间设置为0，但是推到执行流上的函数并没有立即执行，反而先执行了_close</strong>。原因在于（如下图）：</p>
+<p><img src="/image/20160921-01.png" alt="" style="width:70%"></p>
+<p>我们先调用的是removeCmp(上图山楂红部分)，_close是这个函数体的一部分，这玩意没执行完，如何轮到其内部setTimeout推上去的代码？</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-19-responsive-design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/19/2016-09-19-responsive-design/" itemprop="url">响应式设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T00:00:00+08:00">
+                2016-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/image/responsive_web_design.png" alt="jif"></p>
+<p>在很长的时间里，我讨厌新名词、术语，因为极大多数是宣传装逼需要 —— 我只想记住小番茄，不想再来一个圣女果，我希望它们就是一回事，这是一种浪费认知精力的无聊行为。然而外行人总是基于表面——例如名字来区分事物和创新，资本需要奴役他们，必然投其所好。</p>
+<p>以上说的都是废话，我现在不这么认为了。在知识系统复杂的过程中，必然会变的越来越专业，植物学发展的初期就是命名，给它们归类给它们起名，细微的差别都通过名字来区别，这是基础。</p>
+<p>比如我听闻 响应式设计，自适应设计 很久了，对它们的认知仅停留在从名字上推论出的结果 —— 很显然更深层次的理解不可能有。然而当我理解了它们确切的含意，我觉得如果移动端的 web 设计需要从零到现在这样是在一天之内提出的，然后让设计人员提出可行的方案——那么十有八九，不同的人提出了不同名称的方案，但是，它们必然是围绕着 “响应式” 和 “自适应” 展开的。</p>
+<p>那么我们是需要知道这些别人提出的名称的确切含意，需要把移动端设计里每种设计的方式提炼到纯粹的纯度来理解 —— 没办法，这是深入理解必然要经历的过程，分而理解再糅合才能运用自如。</p>
+<h2 id="WHAT"><a href="#WHAT" class="headerlink" title="WHAT"></a>WHAT</h2><p>响应式是设计是用一套伸缩性的设计来适配不同的设备（主要是宽度），经常使用等比缩放的方式来描述元素的大小和位置，它就像狡猾狡猾滴小猫咪，总是给你相对的属性，它千变万化，在每种环境中以独特的面目视人，其实它只有一个本尊。</p>
+<blockquote>
+<p>我更倾向于定义其为一种概念、理念，一种对设计需求的描述，而非一种特定的技术。然后，所以能为此理念添砖加瓦的技艺都可以用上，没有界定。</p>
+</blockquote>
+<h2 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h2><p>前面已经废话过了，主要是为了适应多种设备。目前新开发的网站多数使用响应式设计。</p>
+<h2 id="HOW"><a href="#HOW" class="headerlink" title="HOW"></a>HOW</h2><p>响应式设计实现的技术点主要如下</p>
+<h3 id="布局要求"><a href="#布局要求" class="headerlink" title="布局要求"></a>布局要求</h3><ul>
+<li>减少无用dom层级，减少无用dom层级，减少无用dom层级！</li>
+<li>使用相对数值描述布局容器的大小和位置。</li>
+<li>对于集合、列表这种单一组件重复的复合组件，使用流式设计。</li>
+<li>不使用内联元素，因为它们的高宽都不可控。</li>
+</ul>
+<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>有条件的使用多种尺寸的图片。</p>
+<h3 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h3><p>断点就是设备尺寸的临界值，在临界值分割的区间中应用特定样式 —— 使用媒体查询。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://blog.jobbole.com/30648/" target="_blank" rel="external">http://blog.jobbole.com/30648/</a>,不得不说伯乐在线文章的质量相当高。</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/2016-09-19-ssh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/19/2016-09-19-ssh/" itemprop="url">使用ssh无密码登录远程主机</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T00:00:00+08:00">
+                2016-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/image/ssh.png" alt=""></p>
+<h2 id="secure-shell"><a href="#secure-shell" class="headerlink" title="secure shell."></a>secure shell.</h2><p>ssh为 client-server 的网络在不安全的通道上提供安全的通道。它常被用户用来登录远程的主机。</p>
+<h2 id="登录命令"><a href="#登录命令" class="headerlink" title="登录命令"></a>登录命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@server</div></pre></td></tr></table></figure>
+<p>在client端输入以上命令后，会要求你输入user的密码，验证通过后将登入到server</p>
+<h2 id="login-without-passwd"><a href="#login-without-passwd" class="headerlink" title="login without passwd"></a>login without passwd</h2><ol>
+<li>在client端使用以下命令，生成rsa加密的公钥。生成过程中会告诉你它生成的id_rsa.pub的位置</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen</div></pre></td></tr></table></figure>
+<ol>
+<li>将公钥 id_rsa.pub 追加到 server 的 .ssh/authorized_keys中。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//使用cat命令追加</div><div class="line">cat ~/.ssh/id_rsa.pub | ssh user@remotehost <span class="string">'cat &gt;&gt; ~/.ssh/authorized_keys'</span></div></pre></td></tr></table></figure>
+<p>这个过程就像获得通行证一样，下次client端的ssh登录到server的时候，server端认为其已授权而无需密码。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://osxdaily.com/2012/05/25/how-to-set-up-a-password-less-ssh-login/" target="_blank" rel="external">how-to-set-up-a-password-less-ssh-login</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/18/2016-09-18-adaptive-vs-responsive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/18/2016-09-18-adaptive-vs-responsive/" itemprop="url">自适应设计 vs 响应式设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-18T00:00:00+08:00">
+                2016-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/image/RWD_vs_AWD.gif" alt="jif"></p>
+<blockquote>
+<p>这两个词都是随着移动端的爆发而火起来的。pc时代使用固宽和留白基本搞定了一切。移动设备尺寸众多且与pc端有本质区别，需要专业的技术和理论来构建。</p>
+</blockquote>
+<h2 id="自适应设计-adaptive-web-design，AWD"><a href="#自适应设计-adaptive-web-design，AWD" class="headerlink" title="自适应设计(adaptive web design，AWD)"></a>自适应设计(adaptive web design，AWD)</h2><blockquote>
+<p>自适应设计针对特定的设备，使用媒体查询技术，应用特定的样式。这里的适应指网页适应设备，并非指元素适应容器宽度。</p>
+</blockquote>
+<p>AWD 写多套特定尺寸的样式，可以对元素使用固定宽度。设备加载页面时只加载其中一套样式。因此，如果使用模拟的尺寸（比如用pc端浏览器模拟移动端），那么在变化尺寸时，样式不再发生变化。</p>
+<p>一些老的站点，比如只有pc端的，因为不想动旧的代码使用AWD是个不错的选择。因为是重新设计，使用AWD的网页应用在PC端和移动端上看起来可能差别非常之大 —— 自适应设计可能针对不同的设备尺寸，尝试展现更合理的内容和布局，这包括元素和功能的缺失增加。</p>
+<p>实际上 AWD 主要就是为老 PC 站点提供非 PC 端页面。</p>
+<h2 id="响应式设计-reponsive-web-design-RWD"><a href="#响应式设计-reponsive-web-design-RWD" class="headerlink" title="响应式设计(reponsive web design,RWD)"></a>响应式设计(reponsive web design,RWD)</h2><blockquote>
+<p>响应式设计主要针对屏幕宽度范围应用样式。很显然相对于 AWD 的点式针对，RWD是连续的。</p>
+</blockquote>
+<p>RWD 强调 fluid 和 flexibility，在页面宽度的变化过程中可以看到元素的排列变化。与 AWD 相比，它更强调元素在不同尺寸范围下的“响应”，不会有元素和功能的缺失增多，它们在内容上保持着高度的一致 —— 它只有一套样式一种设计，因为样式是流式和伸缩的，才在各种设备上变形。</p>
+<p>说 RWD 是一套设计有时候并不严格，因为在一些局部，比如导航条和列表上，实际是有不同的微设计，只是在整体上它基本还是一套样式，多套设备上的展现有非常高的相关相似性。</p>
+<h2 id="组合使用"><a href="#组合使用" class="headerlink" title="组合使用"></a>组合使用</h2><p>好的方案是多方相辅相成、互相妥协的合成物，超级纯粹的东西一般是为了研究需要。实际上媒体查询针对性地写样式，在流式伸缩性技法为主的 RWD 中也经常使用，比如上面提到的导航条处理：在空间充足的情况下横向排列，在空间逼仄时变为竖向。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://css-tricks.com/the-difference-between-responsive-and-adaptive-design/" target="_blank" rel="external">https://css-tricks.com/the-difference-between-responsive-and-adaptive-design/</a></li>
+<li><a href="https://www.interaction-design.org/literature/article/adaptive-vs-responsive-design" target="_blank" rel="external">https://www.interaction-design.org/literature/article/adaptive-vs-responsive-design</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/14/2016-09-14-browser-kernel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/09/14/2016-09-14-browser-kernel/" itemprop="url">浏览器内核</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-14T00:00:00+08:00">
+                2016-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>程序语言的UI模块向来比较复杂，且因为依赖操作系统的具体呈现，在跨平台下更为难搞。C 语言就是因为如此一直没有UI模块。处理数据的模块可以抽象，可以运用各种高阶技艺，但是呈现出的UI相对来说比较具体，如何设计的优雅简单，我个人觉得需要的智慧不亚于操作系统（KDE的代码量已经达到400万行，linux内核有370万行）。</p>
+<p>和其他规模大到一定程度需要标准和流程一样，UI也是如此。无论是 cs 还是 bs，在 UI 的呈现上其实有很多共通之处，就像各种程序语言之间的关系一样。桌面 UI 与浏览器的 UI(html css) 之间有着基本一致的设计。例如基于 KDE 的 webcore(webkit中的排版模块) 被选为 chrome 和 safari 的排版引擎，但是它最初是为了 *inux 的桌面系统而设计的。</p>
+<p>java 在操作系统之上铺一层 jvm 实现跨平台，对于 web 程序来讲，浏览器就是它们的虚拟机。<strong>而浏览器内核就是呈现网页应用的核心模块，它一般包括两部分 —— 渲染排版模块和 js 解析模块，即渲染引擎和 js 引擎</strong>。</p>
+<h2 id="内核和引擎的区别"><a href="#内核和引擎的区别" class="headerlink" title="内核和引擎的区别"></a>内核和引擎的区别</h2><p><em>我在 google 里搜索 brower kernel 并没有结果。</em></p>
+<p>中文社区经常会说到浏览器内核，然而内核与渲染引擎经常混用，我一直傻傻分不清，极度混淆，于是在今天使劲撸了一把，得出结论：</p>
+<blockquote>
+<p><strong>由于web出现的早期是没有js的，内核的功能仅仅是排版渲染，所以渲染引擎的模块一开始与内核是等价的，后来再加入的js模块多数有自己的模块名。—— 所以渲染引擎的名称几乎与内核一样，但是内核包含一些有自己名称的 js 引擎</strong></p>
+</blockquote>
+<h2 id="渲染引擎分类-rendering-engine-or-layout-engine"><a href="#渲染引擎分类-rendering-engine-or-layout-engine" class="headerlink" title="渲染引擎分类(rendering engine or layout engine)"></a>渲染引擎分类(rendering engine or layout engine)</h2><blockquote>
+<p>读取标记语言(HTML,XML)和一些格式信息排版渲染成UI界面的程序， 我们平时所说的浏览器引擎一般指渲染引擎。</p>
+</blockquote>
+<table><br>    <thead><br>        <tr><th style="width:100px">名称</th><th>简介</th></tr><br>    </thead><br>    <tbody><br>        <tr><td>Trident</td><td>IE 开发使用的内核。360 早期仅使用 Trident，后来又引入 chromium 成为双内核浏览器。</td></tr><br>        <tr><td>Webkit</td><td>起源于 KDE。webkit 是目前最屌的内核，chrome 和 safari 以及几乎所有的移动端浏览器都是在 webkit 的的基础上衍生的。chrome 28+之后，使用基于webkit开发的 <a href="https://en.wikipedia.org/wiki/Blink_(web_engine)" target="_blank" rel="external">Blink</a></td></tr><br>        <tr><td>Gecko</td><td>由 Netscape 开发。继承衣钵的 FirFox 自然采用了此内核。</td></tr><br>        <tr><td>Presto</td><td>Opera 浏览器采用的渲染引擎，不过 opera software 在2013年已经放弃它了，决定使用webkit + v8。</td></tr><br>    </tbody><br></table>
+
+<h2 id="js-引擎分类"><a href="#js-引擎分类" class="headerlink" title="js 引擎分类"></a>js 引擎分类</h2><blockquote>
+<p>读取执行 JavaScript 代码的程序。</p>
+</blockquote>
+<table><br>    <thead><br>        <tr><th style="width:200px">名称</th><th>采用程序</th><th>备注</th></tr><br>    </thead><br>    <tbody><br>        <tr><td>V8</td><td>Google Chrome，Node.js,V8.NET</td><td></td>chrome使用的渲染引擎是webkit</tr><br>        <tr><td>Chakra(JScript engine)</td><td>IE9~IE11</td><td>MIT 开源</td></tr><br>        <tr><td>Chakra(JavaScript engine)</td><td>Microsoft Edge</td><td>对你没有看错，微软就是样子多,这是JScript engine的一个fork，MIT开源</td></tr><br>        <tr><td>Carakan</td><td>Opera</td><td>2013年 Opera15 正式采用 V8,放弃Carakan</td></tr><br>        <tr><td>SpiderMonkey</td><td>FireFox</td><td></td></tr><br>        <tr><td>JavaScriptCore</td><td>大名鼎鼎的webkit内核使用的js引擎</td><td></td></tr><br>        <tr><td>Tamarin</td><td>Adobe Flash</td><td></td></tr><br>        <tr><td>Nashore</td><td>JDK 8+</td><td></td></tr><br>    </tbody><br></table>
+
+
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><ul>
+<li><a href="https://en.wikipedia.org/wiki/Comparison_of_layout_engines_(HTML" target="_blank" rel="external">https://en.wikipedia.org/wiki/Comparison_of_layout<em>engines</em>(HTML)</a>)</li>
+<li><a href="https://en.wikipedia.org/wiki/Web_browser_engine" target="_blank" rel="external">https://en.wikipedia.org/wiki/Web_browser_engine</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_ECMAScript_engines" target="_blank" rel="external">https://en.wikipedia.org/wiki/List_of_ECMAScript_engines</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/2016-08-02-value-assign/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/08/02/2016-08-02-value-assign/" itemprop="url">js 引用类型的赋值</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T00:00:00+08:00">
+                2016-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>基本数据类型存放在栈上，引用类型存放于堆上。在js中这种差别最直观的显现在赋值和比较上。</p>
+</blockquote>
+<h3 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h3><p>赋值的问题很迷人，想当年我高一的时候参加编程兴趣班，老师说等号是用来赋值的，我愤而走人（现在十分后悔），老子各种等式方程解的出神入化，只知道等号就是两边相等。然后到了大学，第一堂计算机课老师说起等号的赋值行为一大群人懵逼，我心中又充满自豪，“老子高一的时候就知道等号在编程语言里的赋值意义！”</p>
+<p>后来的很多次我都以为自己最终真正掌握了赋值的真谛…</p>
+<p>前一次我写的文章在<a href="http://blog.csdn.net/longjuesi/article/details/39694497" target="_blank" rel="external">这里</a>，以我现在的眼光来看并没有错，但是并没有提到我本人的盲点，每个人的盲点都不一样。</p>
+<p>在学校的时候我已经理解了堆栈的区别，指针变量与其他变量的区别，什么传值、传引用、传地址张口就能扯，对数据存储传递（赋值）行为了解的十分深入。然后我在两年前接触到js时，基本没学，就是稍微看了下变量、基本语法，大概两三个小时就开始写web前端了——直接迁移了c语言的概念。</p>
+<p>但是这样带来了隐患：</p>
+<h4 id="例子A"><a href="#例子A" class="headerlink" title="例子A"></a>例子A</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">arr</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> _arr = arr;</div><div class="line">	_arr.push(<span class="number">2</span>);</div><div class="line">&#125;</div><div class="line">foo(a);</div><div class="line"><span class="built_in">console</span>.log(a)</div><div class="line"><span class="comment">//问：打印出的结果是什么</span></div></pre></td></tr></table></figure>
+<p>形参相当于一种占位符，在函数实现调用的时候被实参传值，js中没有传引用和地址，只有传值。但是传值也是耐人寻味的。在上面的中，输出的a其实是<strong>[1,2,3,2]</strong>。</p>
+<p>如果是c语言它应当还是<strong>[1,2,3]</strong>。</p>
+<p>就像我上面贴的文章里描述的，引用类型存放于堆上，<strong>var a = [1,2,3];</strong> 这句赋值的过程是这样的：</p>
+<ol>
+<li>在当前运行的环境栈上声名一个空间，索引名为a</li>
+<li>新建一个对象[1,2,3]，存放于堆上空白地址xxxx中</li>
+<li>将xxxx这个地址数赋值给a</li>
+</ol>
+<p>当<strong>foo(a)</strong>执行时，传给arr的并不是[1,2,3]这个对象，而是xxxx这个地址号。在需要使用arr的时候，js解释器才会根据这个地址号去找到[1,2,3]。</p>
+<p>你看，虽然美其名曰只有传值，但是人家引用类型变量的值实际就是地址。</p>
+<p>以上的结论虽然我很早就理解了，但是下面这种情况一度让我懵逼：</p>
+<h4 id="例子B"><a href="#例子B" class="headerlink" title="例子B"></a>例子B</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = &#123;<span class="attr">name</span>:<span class="string">"mike"</span>&#125;;</div><div class="line"><span class="keyword">var</span> b = a;</div><div class="line">b = &#123;<span class="attr">name</span>:<span class="string">"jobs"</span>&#125;;</div><div class="line"><span class="built_in">console</span>.log(a);</div><div class="line"><span class="comment">//问：打印出a的值是什么</span></div></pre></td></tr></table></figure>
+<p>我之前虽然知道a的值是什么，但是用我上面那套理解推断不出这个结果，我的推断是这样的（错误的推断）:</p>
+<p>只解释第三行 <strong>=&gt;</strong>  找到b中存放的地址所对应的堆上的具体的对象 {name:”mike”}，用 {name:”jobs”} 替换这原先的值，所以a的值就是{name:”jobs”}</p>
+<p>我的推断是不是很完美？</p>
+<p>然而事实是下面的推断也很完美，并且js解释器就是这么做的：</p>
+<p>b = {name:”jobs”} <strong>=&gt;</strong>  新建一个对象 {name:”jobs”} 存放于堆上地址为xyz的地方，将xyz赋值给b。所以a中依然存放着指向 {name:”mike”} 的地址，值并没有因为b的重新赋值而有所改变。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>如果我用汇编，非常容易就能发现内部实现的细节：<strong>js中，引用对象在赋值时，都是地址在玩，跟原对象屁关系都没有。</strong></p>
+<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><p>还是上面那句话，稍微变下：<strong>js中，引用对象在比较时，都是地址在玩，跟原对象屁关系都没有。</strong></p>
+<p>当年我才毕业用c#时，翔实被这坑了下。当年基本就钻研透了，至今并没有发现理解有偏差的地方。</p>
+<p>希望这是我最后一次理解了赋值的真谛，以后不要再发现什么新的盲点了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/06/2016-07-06-two-tyle-of-learning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -778,252 +1571,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/02/21/2016-03-23-jekyll-for-gitpages/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/02/21/2016-03-23-jekyll-for-gitpages/" itemprop="url">使用jekyll搭建静态博客</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-21T00:00:00+08:00">
-                2015-02-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>jekyll 是 ruby 写的，通过 rubygem 安装，所以先安装 rubygem。</p>
-<p>安装完了rubygem,执行 gem install jekyll 来安装 jekyll,极有可能因为 SSL 的原因报错。<br>下面这个链接解决了 SSL 的问题：<a href="https://gist.github.com/fnichol/867550" target="_blank" rel="external">gem ssl的问题解决方法</a></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>这个年代什么第三方的搬运工都不如官方文档<br><a href="http://jekyll.bootcss.com/" target="_blank" rel="external">jekyll中文网</a></p>
-<h2 id="gitpages"><a href="#gitpages" class="headerlink" title="gitpages"></a>gitpages</h2><p>初始化之后的 jekyll 项目 push 到同名 github pages 项目上就可以访问了，github 天然支持 jekyll,所以只管 push 完整的 jekyll 项目。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/01/03/2015-01-03-alias/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="magma">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="magma's fe blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/01/03/2015-01-03-alias/" itemprop="url">alias</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-01-03T00:00:00+08:00">
-                2015-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="自定义命令alias"><a href="#自定义命令alias" class="headerlink" title="自定义命令alias"></a>自定义命令alias</h1><blockquote>
-<p>系统：mac/linux</p>
-</blockquote>
-<h2 id="临时命令"><a href="#临时命令" class="headerlink" title="临时命令"></a>临时命令</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alias gotodesktop=<span class="string">"cd ~/Desktop"</span>;</div></pre></td></tr></table></figure>
-<p>在终端中执行以上命令，再次执行 gotodesktop 命令时，其等同于等号右边的命令。</p>
-<p>系统重启后，gotodesktop 命令失效。</p>
-<h2 id="永久命令"><a href="#永久命令" class="headerlink" title="永久命令"></a>永久命令</h2><p>用户登录到 shell 的时候，会提前初始化，其中包括根据配置文件设置环境信息。这里的配置文件有两个：</p>
-<ul>
-<li>~/.bash_profile</li>
-<li>/etc/profile</li>
-</ul>
-<p>这里建议修改用户主目录下的配置文件：<br>在 .bash_profile（如果没有，可创建）中加入下面一段代码：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">source ~/.bashrc</div><div class="line">``` </div><div class="line"></div><div class="line">.bashrc文件中代码如下：</div><div class="line"></div><div class="line">```javascript</div><div class="line">alias gotodesktop="cd ~/Desktop"</div></pre></td></tr></table></figure>
-<p>这样 gotodesktop 命令就是永久的，不会因为系统重启而失效。</p>
-<h2 id="使用oh-my-zsh的用户"><a href="#使用oh-my-zsh的用户" class="headerlink" title="使用oh my zsh的用户"></a>使用oh my zsh的用户</h2><p>oh my zsh的终端启动配置文件是 <strong>~/.zshrc</strong>，其他同上面一样</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1068,7 +1620,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1123,7 +1675,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

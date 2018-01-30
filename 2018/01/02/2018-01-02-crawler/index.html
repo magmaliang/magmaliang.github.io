@@ -1,0 +1,705 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="最近交接了同事一些爬虫的工作，虽然只是些定时任务，但本着既然涉入了就要了解一番的习惯，对爬虫作了些研究。 基本概念模拟登录这是很多爬虫最难的地方，对于不设防的数据，基本就是些字符解析(比如html,xml)提取入库。但很多网站不登录不能抓数据，所以基于爬与反爬衍生了很多技术。常见用于反爬虫的技术有：  为每个请求登录的页面分配一些随机码，作为登录时额外的参数，随机码有可能在前端生成，而前端代码经过">
+<meta name="keywords" content="编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬虫小记">
+<meta property="og:url" content="http://yoursite.com/2018/01/02/2018-01-02-crawler/index.html">
+<meta property="og:site_name" content="magma&#39;s fe blog">
+<meta property="og:description" content="最近交接了同事一些爬虫的工作，虽然只是些定时任务，但本着既然涉入了就要了解一番的习惯，对爬虫作了些研究。 基本概念模拟登录这是很多爬虫最难的地方，对于不设防的数据，基本就是些字符解析(比如html,xml)提取入库。但很多网站不登录不能抓数据，所以基于爬与反爬衍生了很多技术。常见用于反爬虫的技术有：  为每个请求登录的页面分配一些随机码，作为登录时额外的参数，随机码有可能在前端生成，而前端代码经过">
+<meta property="og:updated_time" content="2018-01-04T02:38:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="爬虫小记">
+<meta name="twitter:description" content="最近交接了同事一些爬虫的工作，虽然只是些定时任务，但本着既然涉入了就要了解一番的习惯，对爬虫作了些研究。 基本概念模拟登录这是很多爬虫最难的地方，对于不设防的数据，基本就是些字符解析(比如html,xml)提取入库。但很多网站不登录不能抓数据，所以基于爬与反爬衍生了很多技术。常见用于反爬虫的技术有：  为每个请求登录的页面分配一些随机码，作为登录时额外的参数，随机码有可能在前端生成，而前端代码经过">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/02/2018-01-02-crawler/"/>
+
+
+
+
+
+  <title>爬虫小记 | magma's fe blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">magma's fe blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/2018-01-02-crawler/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="magma">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="magma's fe blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">爬虫小记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T00:00:00+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近交接了同事一些爬虫的工作，虽然只是些定时任务，但本着既然涉入了就要了解一番的习惯，对爬虫作了些研究。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="模拟登录"><a href="#模拟登录" class="headerlink" title="模拟登录"></a>模拟登录</h3><p>这是很多爬虫最难的地方，对于不设防的数据，基本就是些字符解析(比如html,xml)提取入库。但很多网站不登录不能抓数据，所以基于爬与反爬衍生了很多技术。常见用于反爬虫的技术有：</p>
+<ul>
+<li>为每个请求登录的页面分配一些随机码，作为登录时额外的参数，随机码有可能在前端生成，而前端代码经过混淆。</li>
+<li>各种验证码识别，更是催生了“极验”这类专门的公司</li>
+<li>频率控制，爬虫推断，封禁IP</li>
+</ul>
+<p>限于本人技术，只能处理上面第一点的情况，这是我写的关于 <a href="https://bitbucket.org" target="_blank" rel="external">https://bitbucket.org</a> 这个网站的模拟登录：<br>(开始是用node写，<strong>但是一直遇到问题，没有解决</strong>，后改成了python) —— 还是要花时间弄清楚node的模拟登录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding:utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="comment"># bs4用于html解析，选择</span></div><div class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</div><div class="line"></div><div class="line">url = <span class="string">'https://bitbucket.org/account/signin/'</span></div><div class="line"></div><div class="line"></div><div class="line">session = requests.session()</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_post_headers</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="string">'Host'</span>: <span class="string">'bitbucket.org'</span>,</div><div class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'</span>,</div><div class="line">        <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate, br'</span>,</div><div class="line">        <span class="string">'Accept-Language'</span>: <span class="string">'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'</span>,</div><div class="line">        <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'</span>,</div><div class="line">        <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>,</div><div class="line">        <span class="string">'Referer'</span>: <span class="string">'https://bitbucket.org/account/signin/'</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_request_params</span><span class="params">()</span>:</span></div><div class="line">    login_html = session.get(url).text</div><div class="line">    soup = BeautifulSoup(login_html, <span class="string">'html.parser'</span>)</div><div class="line">    csrf = soup.find(attrs=&#123;<span class="string">'name'</span>: <span class="string">'csrfmiddlewaretoken'</span>&#125;)[<span class="string">'value'</span>]</div><div class="line">    <span class="comment"># 请输入正确的用户名密码</span></div><div class="line">    <span class="keyword">return</span> dict(csrfmiddlewaretoken=csrf, username=<span class="string">'xxx'</span>, password=<span class="string">'xxx'</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></div><div class="line">    session.post(url, data=get_request_params(), headers=get_post_headers())</div><div class="line">    <span class="keyword">return</span> session</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span>  __name__ == <span class="string">"__main__"</span>:</div><div class="line">    s = login()</div><div class="line">    home_page = <span class="string">'https://bitbucket.org/'</span></div><div class="line">    resp = s.get(home_page, headers=<span class="string">''</span>)</div><div class="line">    sp = BeautifulSoup(resp.text, <span class="string">'html.parser'</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 输出登录后页面的title元素</span></div><div class="line">    print(sp.title)</div></pre></td></tr></table></figure></p>
+<p>具体的python代码知识在此不赘述。</p>
+<p>另外，对于验证码复杂的部分，可以使用人工验证的方式登录获取cookie，交取爬虫接着执行。一般使用selnium + chrome/phantomjs.</p>
+<h3 id="解析关键信息"><a href="#解析关键信息" class="headerlink" title="解析关键信息"></a>解析关键信息</h3><p>web爬虫基本就是解析html，也是本人技术栈的原因，介绍python和node方面的两个库</p>
+<h4 id="python-bs4"><a href="#python-bs4" class="headerlink" title="python bs4"></a>python bs4</h4><p>bs4在上面的例子里已经使用过了</p>
+<h4 id="node-cheerio"><a href="#node-cheerio" class="headerlink" title="node cheerio"></a>node cheerio</h4><p>有前端经验的对于使用cheerio会非常爽，因为选择器就是jQuery那一套</p>
+<h4 id="js渲染"><a href="#js渲染" class="headerlink" title="js渲染"></a>js渲染</h4><p>基于前后端分离开发的web页面，html元素都是由js生成的，以http请求返回的页面是没有什么意义的。这时候可以使用phantomjs,它是一个没有UI的浏览器，可以构建执行js的环境，生成完整页面，进而进行抓取。</p>
+<h3 id="并发控制"><a href="#并发控制" class="headerlink" title="并发控制"></a>并发控制</h3><p>爬虫另一个关键的地方，是执行控制，多数使用多个队列来管理，待续。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/17/2017-11-17-ss-out-of-wall/" rel="next" title="shadowsocks 配置 ubuntu">
+                <i class="fa fa-chevron-left"></i> shadowsocks 配置 ubuntu
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/03/2018-01-03-canvas/" rel="prev" title="canvas基础用法">
+                canvas基础用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="magma" />
+          <p class="site-author-name" itemprop="name">magma</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟登录"><span class="nav-number">1.1.</span> <span class="nav-text">模拟登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析关键信息"><span class="nav-number">1.2.</span> <span class="nav-text">解析关键信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#python-bs4"><span class="nav-number">1.2.1.</span> <span class="nav-text">python bs4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node-cheerio"><span class="nav-number">1.2.2.</span> <span class="nav-text">node cheerio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#js渲染"><span class="nav-number">1.2.3.</span> <span class="nav-text">js渲染</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发控制"><span class="nav-number">1.3.</span> <span class="nav-text">并发控制</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">magma</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
